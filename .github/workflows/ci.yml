@@ -1,0 +1,26 @@
+name: CI - Build and Test
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: ['auth', 'core']
+    name: ${{ matrix.project }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '21'
+      - name: Install dependencies
+        run: cd ${{ matrix.project }} && npm install
+      - name: Run unit tests
+        run: cd ${{ matrix.project }} && npm run test
+      - name: Run e2e tests
+        run: cd ${{ matrix.project }} && npm run test:e2e
