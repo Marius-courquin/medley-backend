@@ -1,37 +1,36 @@
-
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserService} from "./user.service";
-import { JwtService } from '@nestjs/jwt';
+import {Injectable, UnauthorizedException} from '@nestjs/common';
+import {UserService} from "./user.service";
+import {JwtService} from '@nestjs/jwt';
 import {User} from "../entities/user.entity";
-import hashing from "../utils/hashing";
+import {Hashing} from "../../utils/hashing";
 
 @Injectable()
 export class AuthService {
     constructor(
         private usersService: UserService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private hashing: Hashing
     ) {}
 
     async signIn(
-        username: string,
-        pass: string,
+        userToSignIn: User
     ): Promise<{ access_token: string }> {
-        const user = await this.usersService.find(username);
-        if (!user || hashing.comparePassword(pass, user.password) === false) {
+        const user = await this.usersService.find(userToSignIn.username);
+        if (!user || this.hashing.comparePassword(userToSignIn.password, user.password) === false) {
             throw new UnauthorizedException( 'Invalid credentials');
         }
-        const payload = { id: user.id, username: user.username };
+        const payload = { sub: user.id, id: user.id, username: user.username };
         return {
             access_token: await this.jwtService.signAsync(payload),
         };
     }
 
-    async signUp(username: string, password: string): Promise<void> {
-        const user = await this.usersService.find(username);
+    async signUp(userToSignUp: User): Promise<void> {
+        const user = await this.usersService.find(userToSignUp.username);
         if (user) {
             throw new UnauthorizedException( 'User already exists');
         }
-        await this.usersService.create(new User(username, hashing.hashPassword(password)));
+        await this.usersService.create(user);
     }
 
     async revoke(username: string): Promise<void> {

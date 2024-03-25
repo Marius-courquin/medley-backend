@@ -1,34 +1,37 @@
-
-import {Body, Controller, Post, HttpCode, HttpStatus, Delete} from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
-import {UserDto} from "./user.dto";
+import {Body, Controller, Delete, HttpCode, HttpStatus, Post} from '@nestjs/common';
+import {AuthService} from '../domain/services/auth.service';
+import {UserDto} from "./dtos/user.dto";
+import {UserDtoMapper} from "./mappers/user.dto.mapper";
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(
+        private service: AuthService,
+        private mapper: UserDtoMapper
+    ) {}
 
     @HttpCode(HttpStatus.OK)
     @Post('login')
     signIn(@Body() signInDto: UserDto) {
-        return this.authService.signIn(signInDto.username, signInDto.password);
+        return this.service.signIn(this.mapper.toModel(signInDto));
     }
 
     @HttpCode(HttpStatus.CREATED)
     @Post('signup')
-    signUp(@Body() signInDto: UserDto) {
-        return this.authService.signUp(signInDto.username, signInDto.password);
+    signUp(@Body() signUpDto: UserDto) {
+        return this.service.signUp(this.mapper.toModel(signUpDto));
     }
 
     @HttpCode(HttpStatus.OK)
     @Delete('revocation')
     revoke(@Body() signInDto: UserDto) {
-        return this.authService.revoke(signInDto.username);
+        return this.service.revoke(signInDto.username);
     }
 
     @HttpCode(HttpStatus.OK)
     @Post('validation')
     validateToken(@Body() body: Record<string, string>) {
-        return this.authService.validateToken(body.token);
+        return this.service.validateToken(body.token);
     }
 
 }

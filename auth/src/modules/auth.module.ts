@@ -1,9 +1,11 @@
 import {Module} from '@nestjs/common';
 import {AuthController} from '../controllers/auth.controller';
-import {AuthService} from '../services/auth.service';
+import {AuthService} from '../domain/services/auth.service';
 import {UserModule} from "./user.module";
 import {JwtModule} from "@nestjs/jwt";
-import {jwtConstants} from "../constants/auth.constants";
+import {jwtConstants} from "../infrastructure/constants/auth.constants";
+import {UserDtoMapper} from "../controllers/mappers/user.dto.mapper";
+import {Hashing} from "../utils/hashing";
 
 @Module({
     imports: [UserModule,
@@ -13,7 +15,11 @@ import {jwtConstants} from "../constants/auth.constants";
             signOptions: {expiresIn: '1d'},
         })],
     controllers: [AuthController],
-    providers: [AuthService],
+    providers: [
+        AuthService,
+        UserDtoMapper,
+        Hashing
+    ],
     exports: [AuthService],
 })
 export class AuthModule {

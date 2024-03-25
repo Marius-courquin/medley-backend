@@ -9,11 +9,12 @@ async function bootstrap(): Promise<void> {
       .setTitle('medley-authentication API')
       .setDescription('The medley-authentication API description')
       .setVersion('1.0')
-      .addTag('test')
+      .addTag('auth')
       .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   await app.listen(8081);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
 bootstrap();

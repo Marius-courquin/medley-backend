@@ -1,17 +1,15 @@
 import * as bcrypt from 'bcrypt';
 
-const saltRounds = 10;
 
-function hashPassword(password: string): string {
-    const salt = bcrypt.genSaltSync(saltRounds);
-    return bcrypt.hashSync(password, salt);
+export class Hashing {
+    private readonly saltRounds = 10;
+
+    hashPassword(password: string): string {
+        const salt = bcrypt.genSaltSync(this.saltRounds);
+        return bcrypt.hashSync(password, salt);
+    }
+
+    comparePassword(password: string, hash: string): boolean {
+        return bcrypt.compareSync(password, hash);
+    }
 }
-
-function comparePassword(password: string, hash: string): boolean {
-    return bcrypt.compareSync(password, hash);
-}
-
-export default {
-    hashPassword,
-    comparePassword,
-};
