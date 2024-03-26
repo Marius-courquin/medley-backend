@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
+    "@nestjs/config": "^3.2.1",
     "@nestjs/core": "^10.0.0",
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/platform-express": "^10.0.0",
@@ -74,6 +75,13 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1",
+      "^@domain/(.*)$": "<rootDir>/domain/$1",
+      "^@infrastructure/(.*)$": "<rootDir>/infrastructure/$1",
+      "^@modules/(.*)$": "<rootDir>/modules/$1",
+      "^@utils/(.*)$": "<rootDir>/utils/$1"
+    }
   }
 }

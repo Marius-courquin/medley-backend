@@ -1,6 +1,6 @@
-import {User} from "../../domain/entities/user.entity";
+import {User} from "@domain/entities/user.entity";
 import {UserDto} from "../dtos/user.dto";
-import {Mapper} from "../../base/mapper";
+import {Mapper} from "./mapper";
 
 export class UserDtoMapper extends Mapper<User, UserDto> {
     fromModel(user: User): UserDto {
