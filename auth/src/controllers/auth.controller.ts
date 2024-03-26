@@ -19,7 +19,8 @@ export class AuthController {
     @HttpCode(HttpStatus.CREATED)
     @Post('signup')
     signUp(@Body() signUpDto: UserDto) {
-        return this.service.signUp(this.mapper.toModel(signUpDto));
+        this.service.signUp(this.mapper.toModel(signUpDto))
+        return;
     }
 
     @HttpCode(HttpStatus.OK)

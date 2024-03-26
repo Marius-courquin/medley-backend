@@ -11,7 +11,8 @@ export class User {
     @Column({nullable: false})
     password: string;
 
-    constructor(username: string, password: string) {
+    constructor( username: string, password: string, id?: string) {
+        this.id = id ?? undefined;
         this.username = username;
         this.password = password;
     }

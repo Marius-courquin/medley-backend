@@ -25,12 +25,12 @@ export class AuthService {
         };
     }
 
-    async signUp(userToSignUp: User): Promise<void> {
+    async signUp(userToSignUp: User): Promise<User> {
         const user = await this.usersService.find(userToSignUp.username);
         if (user) {
             throw new UnauthorizedException( 'User already exists');
         }
-        await this.usersService.create(user);
+        return await this.usersService.create(user);
     }
 
     async revoke(username: string): Promise<void> {
