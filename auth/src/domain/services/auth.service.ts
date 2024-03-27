@@ -30,7 +30,8 @@ export class AuthService {
         if (user) {
             throw new UnauthorizedException( 'User already exists');
         }
-        return await this.usersService.create(user);
+        userToSignUp.password = this.hashing.hashPassword(userToSignUp.password);
+        return await this.usersService.create(userToSignUp);
     }
 
     async revoke(username: string): Promise<void> {

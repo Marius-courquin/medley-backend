@@ -1,8 +1,8 @@
 
-import {User} from "@/domain/entities/user.entity";
-import {UserDto} from "../../dtos/user.dto";
-import {AuthService} from "@/domain/services/auth.service";
-import {UserDtoMapper} from "@/infrastructure/mappers/user.dto.mapper"
+import {User} from "@domain/entities/user.entity";
+import {UserDto} from "@infrastructure/dtos/user.dto";
+import {AuthService} from "@domain/services/auth.service";
+import {UserDtoMapper} from "@infrastructure/mappers/user.dto.mapper"
 import {Test, TestingModule} from "@nestjs/testing";
 import {AuthController} from "@infrastructure/controllers/auth.controller";
 
