@@ -1,6 +1,6 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from '@/app.module';
-import {INestApplication} from "@nestjs/common";
+import {NestFactory} from '@nestjs/core';
+import {AppModule} from '@/app.module';
+import {INestApplication, VersioningType} from "@nestjs/common";
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 
 async function bootstrap(): Promise<void> {
@@ -13,6 +13,13 @@ async function bootstrap(): Promise<void> {
       .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
+  app.setGlobalPrefix('api')
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: ['1'],
+  });
+
   await app.listen(8081);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
