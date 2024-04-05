@@ -16,4 +16,9 @@ export class User {
         this.username = username;
         this.password = password;
     }
+
+    static of(username: string, password: string): User {
+        return new User(username, password);
+    }
+
 }

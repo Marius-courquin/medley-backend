@@ -1,6 +1,6 @@
 import {Module} from '@nestjs/common';
-import {UserModule} from "./modules/user.module";
-import {AuthModule} from "./modules/auth.module";
+import {UserModule} from "@modules/user.module";
+import {AuthModule} from "@modules/auth.module";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {ConfigModule} from "@nestjs/config";
 
@@ -18,7 +18,7 @@ import {ConfigModule} from "@nestjs/config";
             password: 'medley-auth',
             database: 'medley-db-auth',
             entities: [
-                __dirname + '/../entities/*.entity{.ts,.js}',
+                __dirname + '/domain/entities/*.entity{.ts,.js}',
             ],
             synchronize: true
         })],

@@ -12,11 +12,11 @@ export class UserService {
         return this.repository.save(user);
     }
 
-    async find(username: string): Promise<User | undefined> {
+    async findByUsername(username: string): Promise<User | undefined> {
         return this.repository.findByUsername(username);
     }
 
-    async delete(username: string): Promise<void> {
+    async deleteByUsername(username: string): Promise<void> {
         await this.repository.deleteByUsername(username);
     }
 }
