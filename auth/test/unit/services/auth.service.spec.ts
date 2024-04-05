@@ -77,7 +77,7 @@ describe('UserService', () => {
     describe('signIn', () => {
         it('should return a token', async () => {
             await expect(service.signIn(user)).resolves.toEqual({access_token: defaultToken});
-            expect(usersService.find).toHaveBeenCalled();
+            expect(usersService.findByUsername).toHaveBeenCalled();
             expect(jwtService.signAsync).toHaveBeenCalled();
         });
 
@@ -89,7 +89,7 @@ describe('UserService', () => {
     describe('signUp', () => {
         it('should return a user', async () => {
             await expect(service.signUp(userToCreate)).resolves.toEqual(existingUser);
-            expect(usersService.find).toHaveBeenCalled();
+            expect(usersService.findByUsername).toHaveBeenCalled();
             expect(usersService.create).toHaveBeenCalled();
         });
 
@@ -101,8 +101,8 @@ describe('UserService', () => {
     describe('revoke', () => {
         it('should delete a user', async () => {
             await expect(service.revoke(user.username)).resolves.not.toThrow();
-            expect(usersService.find).toHaveBeenCalled();
-            expect(usersService.delete).toHaveBeenCalled();
+            expect(usersService.findByUsername).toHaveBeenCalled();
+            expect(usersService.deleteByUsername).toHaveBeenCalled();
         });
 
         it('should throw an UnauthorizedException', async () => {

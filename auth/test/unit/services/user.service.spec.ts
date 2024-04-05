@@ -50,7 +50,7 @@ describe('UserService', () => {
 
     describe('find', () => {
         it('should return a user', async () => {
-            await expect(service.find(user.username)).resolves.toEqual(existingUser);
+            await expect(service.findByUsername(user.username)).resolves.toEqual(existingUser);
             expect(repository.findByUsername).toHaveBeenCalled();
             expect(repository.findByUsername).toHaveBeenCalledWith(user.username);
         });
@@ -58,7 +58,7 @@ describe('UserService', () => {
 
     describe('delete', () => {
         it('should delete a user', async () => {
-            await service.delete(user.username);
+            await service.deleteByUsername(user.username);
             expect(repository.deleteByUsername).toHaveBeenCalled();
             expect(repository.deleteByUsername).toHaveBeenCalledWith(user.username);
         });
