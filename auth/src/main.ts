@@ -21,7 +21,7 @@ async function bootstrap(): Promise<void> {
   });
 
   await app.listen(8081);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  console.log(`Application is running on: ${await app.getUrl() === 'http://[::1]:8081' ? 'http://localhost:8081' : await app.getUrl()}/api/v1`);
 }
 
 bootstrap();
