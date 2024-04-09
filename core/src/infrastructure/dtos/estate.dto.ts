@@ -1,75 +1,69 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
-import { Third } from '@domain/entities/third.entity';
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsDate, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+export class EstateDto {
 
-@Entity()
-export class Estate {
-
-    @PrimaryGeneratedColumn("uuid")
     @IsOptional()
     @IsUUID(4, { message: 'id must be a valid uuid' })
+    @ApiProperty()
     id?: string;
 
-    @Column({nullable: false, name : "street_number"})
     @IsString({ message: 'streetNumber must be a valid string' })
+    @ApiProperty()
     streetNumber: string;
 
-    @Column({nullable: false, name : "street_name"})
     @IsString({ message: 'streetName must be a valid string' })
+    @ApiProperty()
     streetName: string;
 
-    @Column({nullable: false, name : "zip_code"})
-    @IsString({ message: 'zipCode must be a valid string' })
+    @IsNumber({}, { message: 'zipCode must be a valid number' })
+    @ApiProperty()
     zipCode: number;
 
-    @Column({nullable: false, name : "city"})
     @IsString({ message: 'city must be a valid string' })
+    @ApiProperty()
     city: string;
 
-    @Column({nullable: false, name : "floor"})
     @IsNumber({}, { message: 'floor must be a valid number' })
+    @ApiProperty()
     floor: number;
 
-    @Column({nullable: false, name : "flat_number"})
     @IsNumber({}, { message: 'flatNumber must be a valid number' })
+    @ApiProperty()
     flatNumber: number;
 
-    @Column({nullable: false, name : "description"})
     @IsString({ message: 'description must be a valid string' })
+    @ApiProperty()
     description: string;
 
-    @Column({nullable: false, name : "living_space"})
     @IsNumber({}, { message: 'livingSpace must be a valid number' })
+    @ApiProperty()
     livingSpace: number;
 
-    @Column({nullable: false, name : "room_count"})
     @IsNumber({}, { message: 'roomCount must be a valid number' })
+    @ApiProperty()
     roomCount: number;
 
-    @Column({nullable: false, name : "type"})
     @IsString({ message: 'type must be a valid string' })
+    @ApiProperty()
     type: string;
 
-    @Column({nullable: false, name : "class"})
     @IsString({ message: 'class must be a valid string' })
+    @ApiProperty()
     class: string;
 
-    @Column({nullable: false, name : "heater_type"})
     @IsString({ message: 'heaterType must be a valid string' })
+    @ApiProperty()
     heaterType: string;
 
-    @Column({nullable: false, name : "water_heater_type"})
     @IsString({ message: 'waterHeaterType must be a valid string' })
+    @ApiProperty()
     waterHeaterType: string;
 
-    @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" , name : "created_at"})
-    createdAt: Date;
+    @IsString({ message: 'ownerId must be a valid string' })
+    @ApiProperty()
+    ownerId: string;
 
-    @ManyToOne(() => Third, third => third.id, {nullable: true, eager: true})
-    @IsOptional()
-    owner?: Third;
-
-    constructor( streetNumber: string, streetName: string, zipCode: number, city: string, floor: number, flatNumber: number, description: string, livingSpace: number, roomCount: number, type: string, classType: string, heaterType: string, waterHeaterType: string, owner?: Third, id?: string) {
+    constructor (id: string, streetNumber: string, streetName: string, zipCode: number, city: string, floor: number, flatNumber: number, description: string, livingSpace: number, roomCount: number, type: string, classType: string, heaterType: string, waterHeaterType: string, ownerId: string) {
         this.id = id ?? undefined;
         this.streetNumber = streetNumber;
         this.streetName = streetName;
@@ -84,7 +78,6 @@ export class Estate {
         this.class = classType;
         this.heaterType = heaterType;
         this.waterHeaterType = waterHeaterType;
-        this.owner = owner ?? undefined;
+        this.ownerId = ownerId;
     }
-    
 }

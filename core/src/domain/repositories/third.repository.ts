@@ -1,7 +1,9 @@
-import {Injectable} from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import {Third} from "../entities/third.entity";
 import {DataSource, Repository} from "typeorm";
 
+
+@Injectable()
 export class ThirdRepository extends Repository<Third>{
     constructor(
         private dataSource: DataSource)

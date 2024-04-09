@@ -11,8 +11,6 @@ export class EstateRepository extends Repository<Estate>{
         super(Estate, dataSource.createEntityManager());
     }
 
-
-
     async findByOwner(ownerId: string): Promise<Estate[]> {
         return this.createQueryBuilder("estate")
                     .leftJoinAndSelect("estate.owner", "owner")
