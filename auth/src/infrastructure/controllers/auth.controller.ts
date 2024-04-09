@@ -30,10 +30,4 @@ export class AuthController {
         return Promise.resolve();
     }
 
-    @HttpCode(HttpStatus.OK)
-    @Post('validation')
-    async validateToken(@Body() body: Record<string, string>) {
-        return this.service.validateToken(body.token);
-    }
-
 }

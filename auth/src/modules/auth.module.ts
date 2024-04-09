@@ -21,5 +21,4 @@ import {Hashing} from "@utils/hashing";
     ],
     exports: [AuthService],
 })
-export class AuthModule {
-}
+export class AuthModule {}

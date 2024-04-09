@@ -4,6 +4,7 @@ import {JwtService} from "@nestjs/jwt";
 import {AuthService} from "@domain/services/auth.service";
 import {User} from "@domain/entities/user.entity";
 import {UserService} from "@domain/services/user.service";
+import {UserRevocationDto} from "@infrastructure/dtos/userRevocation.dto";
 
 const defaultId: string = '8936c3a3-e7b2-47cf-b3cd-19e832bd450c';
 const defaultToken: string = 'access_token';
@@ -38,13 +39,13 @@ describe('UserService', () => {
                 {
                     provide: UserService,
                     useValue: {
-                        find: jest.fn().mockImplementation((username: string) => {
+                        findByUsername: jest.fn().mockImplementation((username: string) => {
                             return existingsUser.find(user => user.username === username);
                         }),
                         create: jest.fn().mockImplementation((user: User) => {
                             return existingUser;
                         }),
-                        delete: jest.fn(),
+                        deleteByUsername: jest.fn(),
                     },
                 },
                 {
@@ -100,21 +101,13 @@ describe('UserService', () => {
 
     describe('revoke', () => {
         it('should delete a user', async () => {
-            await expect(service.revoke(user.username)).resolves.not.toThrow();
+            await expect(service.revoke(new UserRevocationDto(wrongUser.username, wrongUser.password))).resolves.not.toThrow();
             expect(usersService.findByUsername).toHaveBeenCalled();
             expect(usersService.deleteByUsername).toHaveBeenCalled();
         });
 
         it('should throw an UnauthorizedException', async () => {
-            await expect(service.revoke(wrongUser2.username)).rejects.toThrow('User does not exist');
-        });
-    });
-
-    describe('validateToken', () => {
-        it('should return a user', async () => {
-            await expect(service.validateToken(defaultToken)).resolves.toEqual({id: defaultId});
-            expect(jwtService.verifyAsync).toHaveBeenCalled();
-            expect(jwtService.decode).toHaveBeenCalled();
+            await expect(service.revoke(new UserRevocationDto(wrongUser2.username, wrongUser2.password))).rejects.toThrow('User does not exist');
         });
     });
 });

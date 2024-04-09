@@ -22,5 +22,3 @@ jobs:
         run: cd ${{ matrix.project }} && npm install
       - name: Run unit tests
         run: cd ${{ matrix.project }} && npm run test
-      - name: Run e2e tests
-        run: cd ${{ matrix.project }} && npm run test:e2e

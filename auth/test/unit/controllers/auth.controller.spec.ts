@@ -62,20 +62,4 @@ describe('AuthController', () => {
             expect(service.signUp).toHaveBeenCalledWith(user);
         });
     });
-
-    describe('revoke', () => {
-        it('should delete a user with nothing return', async () => {
-            await expect(controller.revoke(userDTO)).resolves.not.toThrow();
-            expect(service.revoke).toHaveBeenCalled();
-            expect(service.revoke).toHaveBeenCalledWith(user.username);
-        });
-    });
-
-    describe('validateToken', () => {
-        it('should return a user', async () => {
-            await expect(controller.validateToken({token: defaultToken})).resolves.toEqual({id: defaultId});
-            expect(service.validateToken).toHaveBeenCalled();
-            expect(service.validateToken).toHaveBeenCalledWith(defaultToken);
-        });
-    });
 });

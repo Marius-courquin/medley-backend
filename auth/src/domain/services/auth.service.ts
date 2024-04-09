@@ -1,4 +1,4 @@
-import {Injectable, UnauthorizedException} from '@nestjs/common';
+import {Injectable, NotFoundException, UnauthorizedException} from '@nestjs/common';
 import {UserService} from "./user.service";
 import {JwtService} from '@nestjs/jwt';
 import {User} from "../entities/user.entity";
@@ -19,7 +19,10 @@ export class AuthService {
         userToSignIn: UserLoginDto
     ): Promise<{ access_token: string }> {
         const user = await this.usersService.findByUsername(userToSignIn.username);
-        if (!user || this.hashing.comparePassword(userToSignIn.password, user.password) === false) {
+        if (!user) {
+            throw new NotFoundException( 'User does not exist');
+        }
+        if (!this.hashing.comparePassword(userToSignIn.password, user.password)) {
             throw new UnauthorizedException( 'Invalid credentials');
         }
         const payload = { sub: user.id, id: user.id, username: user.username };
@@ -40,18 +43,9 @@ export class AuthService {
     async revoke(userToRevoke: UserRevocationDto): Promise<void> {
         const user = await this.usersService.findByUsername(userToRevoke.username);
         if (!user) {
-            throw new UnauthorizedException( 'User does not exist');
+            throw new NotFoundException( 'User does not exist');
         }
         await this.usersService.deleteByUsername(userToRevoke.username);
     }
 
-    async validateToken(token: string): Promise<{id: string}> {
-        try {
-            await this.jwtService.verifyAsync(token);
-            const payload = this.jwtService.decode(token);
-            return { id : payload.id };
-        } catch (e) {
-            throw new UnauthorizedException( 'Invalid token');
-        }
-    }
 }
