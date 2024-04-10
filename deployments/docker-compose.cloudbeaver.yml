@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  cloudbeaver:
+    container_name: cloudbeaver
+    image: dbeaver/cloudbeaver:latest
+    restart: always
+    ports:
+      - "8978:8978"
+    environment:
+      - CB_LOG_LEVEL=info
+      - CB_JAVA_OPTS=-Xmx2g
+    volumes:
+      - cloudbeaver_workspace:/opt/cloudbeaver/workspace
+volumes:
+  cloudbeaver_workspace:
