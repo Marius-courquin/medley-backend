@@ -15,11 +15,11 @@ import * as process from "process";
         TypeOrmModule.forRoot(
         {
             type: 'postgres',
-            host: process.env.DB_HOST,
-            port: parseInt(process.env.DB_PORT) || 5431,
-            username: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME,
+            host: process.env.AUTH_DB_HOST,
+            port: parseInt(process.env.AUTH_DB_PORT) || 5431,
+            username: process.env.AUTH_DB_USER,
+            password: process.env.AUTH_DB_PASSWORD,
+            database: process.env.AUTH_DB_NAME,
             entities: [
                 __dirname + '/domain/entities/*.entity{.ts,.js}',
             ],

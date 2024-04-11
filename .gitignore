@@ -25,3 +25,7 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+deployments/.env.apps
+deployments/.env.db
+deployments/.env.watchtower

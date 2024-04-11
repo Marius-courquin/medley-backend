@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  medley-core:
+    container_name: medley-core
+    image: mariuscourquin62/medley-core:latest
+    restart: always
+    environment:
+      - CORE_DB_HOST=${CORE_DB_HOST}
+      - CORE_DB_PORT=${CORE_DB_PORT}
+      - CORE_DB_USER=${CORE_DB_USER}
+      - CORE_DB_PASSWORD=${CORE_DB_PASSWORD}
+      - CORE_DB_NAME=${CORE_DB_NAME}
+      - JWT_KEY=${JWT_KEY}
+    ports:
+      - "8080:8080"
+    networks:
+      - medley_core-network
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  medley-auth:
+    container_name: medley-auth
+    image: mariuscourquin62/medley-auth:latest
+    restart: always
+    environment:
+      - AUTH_DB_HOST=${AUTH_DB_HOST}
+      - AUTH_DB_PORT=${AUTH_DB_PORT}
+      - AUTH_DB_USER=${AUTH_DB_USER}
+      - AUTH_DB_PASSWORD=${AUTH_DB_PASSWORD}
+      - AUTH_DB_NAME=${AUTH_DB_NAME}
+      - JWT_KEY=${JWT_KEY}
+    ports:
+      - "8081:8081"
+    networks:
+      - medley_auth-network
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+networks:
+  medley_core-network:
+    external: true
+  medley_auth-network:
+    external: true
