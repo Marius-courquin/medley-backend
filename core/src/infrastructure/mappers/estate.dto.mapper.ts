@@ -37,7 +37,9 @@ export class EstateDtoMapper {
             estateDto.class,
             estateDto.heaterType,
             estateDto.waterHeaterType,
-            third);
+            third,
+            estateDto.id
+        );
     }
 
 }

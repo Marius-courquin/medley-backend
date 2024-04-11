@@ -21,6 +21,7 @@ export class ThirdDtoMapper {
             thirdDto.firstName,
             thirdDto.dob,
             thirdDto.iban,
+            thirdDto.id
         );
     }
     

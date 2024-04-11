@@ -23,8 +23,12 @@ export class ThirdService {
         return ThirdDtoMapper.fromModel(third);
     }
 
-    async updateThird(id: string, third: ThirdDto): Promise<void> {
-        await this.repository.updateById(id, ThirdDtoMapper.toModel(third));
+    async updateThird(id: string, thirdDto: ThirdDto): Promise<ThirdDto> {
+
+        thirdDto.id = id;
+        const third : Third = ThirdDtoMapper.toModel(thirdDto);
+
+        return ThirdDtoMapper.fromModel( await this.repository.updateThird(third));
     }
 
 }

@@ -4,7 +4,7 @@ import {EstateRepository} from "@/domain/repositories/estate.repository";
 import { EstateDto } from '@/infrastructure/dtos/estate.dto';
 import { ThirdRepository } from '@/domain/repositories/third.repository';
 import { EstateDtoMapper } from '@/infrastructure/mappers/estate.dto.mapper'
-import { Estate } from '../entities/estate.entity';
+import { Estate } from '@domain/entities/estate.entity';
 
 
 @Injectable()
@@ -26,9 +26,7 @@ export class EstateService {
     }
 
     async findByOwner(ownerId: string): Promise<EstateDto[]> {
-        if (!ownerId) {
-            throw new NotFoundException( 'ownerId is required');
-        }
+
         const estates : Estate[] = await this.repository.findByOwner(ownerId);;
         return estates.map(estate => EstateDtoMapper.fromModel(estate));
     }
@@ -43,17 +41,18 @@ export class EstateService {
 
     }
 
-    async updateEstate(estateId: string, estateDto: EstateDto): Promise<void> {
+    async updateEstate(estateId: string, estateDto: EstateDto): Promise<EstateDto> {
 
         const third:Third = await this.thirdRepository.findById(estateDto.ownerId);
         
         if (!third) {
             throw new NotFoundException( 'third does not exist');
         }
+        estateDto.id = estateId;
+
         const estate : Estate = EstateDtoMapper.toModel(estateDto, third);
 
-        await this.repository.updateById(estateId, EstateDtoMapper.toModel(estateDto, third));
+        return EstateDtoMapper.fromModel( await this.repository.updateEstate(estate));
     }
-
 
 }

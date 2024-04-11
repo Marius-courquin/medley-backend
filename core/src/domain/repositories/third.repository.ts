@@ -15,10 +15,8 @@ export class ThirdRepository extends Repository<Third>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateById(id: string, third: Third): Promise<void> {
-        await this.update({id: id}, third);
+    async updateThird(third: Third): Promise<Third | undefined> {
+        return this.save(third);
     }  
 
-
-    
 }

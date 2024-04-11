@@ -1,6 +1,6 @@
-import { IsDateString, IsOptional, IsString, IsUUID } from "class-validator";
+import { IsDateString, IsEnum, IsOptional, IsString, IsUUID } from "class-validator";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import { ThirdType } from "@domain/entities/types/third.type";
 @Entity()
 export class Third {
     @PrimaryGeneratedColumn("uuid")
@@ -9,7 +9,7 @@ export class Third {
     id?: string;
 
     @Column({nullable: false})
-    @IsString({ message: 'type must be a valid string' })
+    @IsEnum(ThirdType, { message: 'type must be a valid type' })
     type: string;
 
     @Column({nullable: false, name : "last_name"})
@@ -24,7 +24,7 @@ export class Third {
     @IsDateString()
     dob: Date;
 
-    @Column({nullable: false})
+    @Column({nullable: true})
     @IsString({ message: 'iban must be a valid string' })
     iban: string;
 

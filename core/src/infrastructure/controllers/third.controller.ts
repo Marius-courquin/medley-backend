@@ -10,19 +10,19 @@ export class ThirdController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    create(@Body() thirdDto: ThirdDto) {
+    createThird(@Body() thirdDto: ThirdDto) {
         return this.service.createThird(thirdDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get(":id")
-    find(@Param('id', ParseUUIDPipe) id: string) {
+    getThird(@Param('id', ParseUUIDPipe) id: string) {
         return this.service.getThird(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
-    update(@Param('id', ParseUUIDPipe) id: string, @Body() thirdDto: ThirdDto) {
+    updateThird(@Param('id', ParseUUIDPipe) id: string, @Body() thirdDto: ThirdDto) {
         return this.service.updateThird(id, thirdDto);
     }
 

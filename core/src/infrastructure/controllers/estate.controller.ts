@@ -29,11 +29,8 @@ export class EstateController {
 
     @HttpCode(HttpStatus.OK)
     @Get()
-    getEstateByOwner(@Query('ownerId') id: string) {
+    getEstateByOwner(@Query('ownerId', ParseUUIDPipe) id: string) {
         return this.service.findByOwner(id);
     }   
-
-
-
 
 }
