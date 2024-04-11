@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  postgres-auth:
+    container_name: medley-db-auth
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB_AUTH}
+      - POSTGRES_USER=${POSTGRES_USER_AUTH}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_AUTH}
+    ports:
+      - "5431:5432"
+    networks:
+      - auth-network
+
+  postgres-core:
+    container_name: medley-db-core
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB_CORE}
+      - POSTGRES_USER=${POSTGRES_USER_CORE}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD_CORE}
+    ports:
+      - "5432:5432"
+    networks:
+      - core-network
+
+networks:
+  auth-network:
+    driver: bridge
+  core-network:
+    driver: bridge

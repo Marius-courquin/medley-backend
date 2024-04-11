@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    restart: always
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    environment:
+      - WATCHTOWER_NOTIFICATIONS=shoutrrr
+      - WATCHTOWER_NOTIFICATION_URL=shoutrrr://discord://${WEBHOOK_ID}/${WEBHOOK_TOKEN}
+    command: --interval 30 --label-enable
