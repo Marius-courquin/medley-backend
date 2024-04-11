@@ -13,5 +13,15 @@ export class ThirdDtoMapper {
             third.iban
         );
     }
+
+    static toModel(thirdDto: ThirdDto): Third {
+        return new Third(
+            thirdDto.type,
+            thirdDto.lastName,
+            thirdDto.firstName,
+            thirdDto.dob,
+            thirdDto.iban,
+        );
+    }
     
 }

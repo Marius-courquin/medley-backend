@@ -40,7 +40,4 @@ export class Third {
         this.iban = iban;
     }
 
-    static of(type: string, lastName: string, firstName: string, dob: Date, iban: string): Third {
-        return new Third(type, lastName, firstName, dob, iban);
-    }
 }

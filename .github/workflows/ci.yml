@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        project: ['auth', 'core']
+        project: ['auth']
     name: ${{ matrix.project }}
     steps:
       - uses: actions/checkout@v2

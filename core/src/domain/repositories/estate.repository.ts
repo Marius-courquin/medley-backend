@@ -22,10 +22,6 @@ export class EstateRepository extends Repository<Estate>{
         return this.findOne({where: {id: id}});
     }
 
-    async deleteById(id: string): Promise<void> {
-        await this.delete({id: id});
-    }
-
     async updateById(id: string, estate: Estate): Promise<void> {
         await this.update({id: id}, estate);
     }

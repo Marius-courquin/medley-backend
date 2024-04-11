@@ -2,22 +2,6 @@ import {EstateDto} from "@infrastructure/dtos/estate.dto"
 import {Estate} from "@domain/entities/estate.entity"
 import { Third } from "@/domain/entities/third.entity";
 export class EstateDtoMapper {
-    static toModel (estateDto: EstateDto, third: Third): Estate {
-        return new Estate(estateDto.streetNumber, 
-            estateDto.streetName,
-            estateDto.zipCode,
-            estateDto.city,
-            estateDto.floor,
-            estateDto.flatNumber,
-            estateDto.description,
-            estateDto.livingSpace,
-            estateDto.roomCount,
-            estateDto.type,
-            estateDto.class,
-            estateDto.heaterType,
-            estateDto.waterHeaterType,
-            third);
-    }
 
     static fromModel (estate: Estate): EstateDto {
         return new EstateDto(
@@ -37,6 +21,23 @@ export class EstateDtoMapper {
             estate.waterHeaterType,
             estate.owner.id
         );
+    }
+
+    static toModel (estateDto: EstateDto, third: Third): Estate {
+        return new Estate(estateDto.streetNumber, 
+            estateDto.streetName,
+            estateDto.zipCode,
+            estateDto.city,
+            estateDto.floor,
+            estateDto.flatNumber,
+            estateDto.description,
+            estateDto.livingSpace,
+            estateDto.roomCount,
+            estateDto.type,
+            estateDto.class,
+            estateDto.heaterType,
+            estateDto.waterHeaterType,
+            third);
     }
 
 }

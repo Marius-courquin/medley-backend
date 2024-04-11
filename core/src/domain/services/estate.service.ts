@@ -15,6 +15,7 @@ export class EstateService {
     ) {}
 
     async createEstate(estateDto: EstateDto): Promise<EstateDto> {
+
         const third:Third = await this.thirdRepository.findById(estateDto.ownerId);
         if (!third) {
             throw new NotFoundException( 'third does not exist');
@@ -25,18 +26,33 @@ export class EstateService {
     }
 
     async findByOwner(ownerId: string): Promise<EstateDto[]> {
+        if (!ownerId) {
+            throw new NotFoundException( 'ownerId is required');
+        }
         const estates : Estate[] = await this.repository.findByOwner(ownerId);;
         return estates.map(estate => EstateDtoMapper.fromModel(estate));
     }
 
     async getEstate(estateId: string): Promise<EstateDto> {
+        
         const estate: Estate = await this.repository.findById(estateId);
-        console.log(estate);
-        return EstateDtoMapper.fromModel( await this.repository.findById(estateId));
+        if (!estate) {
+            throw new NotFoundException( 'estate does not exist'); 
+        }
+        return EstateDtoMapper.fromModel( estate);
+
     }
 
-    async deleteEstate(id: string): Promise<void> {
-        await this.repository.deleteById(id);
+    async updateEstate(estateId: string, estateDto: EstateDto): Promise<void> {
+
+        const third:Third = await this.thirdRepository.findById(estateDto.ownerId);
+        
+        if (!third) {
+            throw new NotFoundException( 'third does not exist');
+        }
+        const estate : Estate = EstateDtoMapper.toModel(estateDto, third);
+
+        await this.repository.updateById(estateId, EstateDtoMapper.toModel(estateDto, third));
     }
 
 

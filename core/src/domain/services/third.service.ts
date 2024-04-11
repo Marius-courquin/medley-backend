@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import {Third} from "@domain/entities/third.entity";
 import {ThirdRepository} from "@domain/repositories/third.repository";
 import { ThirdDtoMapper } from '@/infrastructure/mappers/third.dto.mapper';
@@ -11,16 +11,20 @@ export class ThirdService {
         private readonly repository: ThirdRepository,
     ) {}
 
-    async create(estate: ThirdDto): Promise<ThirdDto> {
+    async createThird(estate: ThirdDto): Promise<ThirdDto> {
         return ThirdDtoMapper.fromModel(await this.repository.save(estate));
     }
 
-    async find(id: string): Promise<ThirdDto> {
-        return ThirdDtoMapper.fromModel(await this.repository.findById(id));
+    async getThird(id: string): Promise<ThirdDto> {
+        const third : Third = await this.repository.findById(id);
+        if (!third) {
+            throw new NotFoundException( 'third does not exist');
+        }
+        return ThirdDtoMapper.fromModel(third);
     }
 
-    async delete(id: string): Promise<void> {
-        await this.repository.deleteById(id);
+    async updateThird(id: string, third: ThirdDto): Promise<void> {
+        await this.repository.updateById(id, ThirdDtoMapper.toModel(third));
     }
 
 }
