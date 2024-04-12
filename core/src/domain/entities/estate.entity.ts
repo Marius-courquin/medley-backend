@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
 import { Third } from '@domain/entities/third.entity';
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { ClassType, EstateType, HeaterType, WaterHeaterType } from '@domain/entities/enum/estate.enum.entity';
 
 @Entity()
 export class Estate {
@@ -46,21 +47,21 @@ export class Estate {
     @IsNumber({}, { message: 'roomCount must be a valid number' })
     roomCount: number;
 
-    @Column({nullable: false, name : "type"})
-    @IsString({ message: 'type must be a valid string' })
-    type: string;
+    @Column({nullable: false, type: 'enum', enum: EstateType})
+    @IsEnum(EstateType, { message: 'type must be a valid type' })
+    type: EstateType;
 
-    @Column({nullable: false, name : "class"})
-    @IsString({ message: 'class must be a valid string' })
-    class: string;
+    @Column({nullable: false, type: 'enum', enum : ClassType})
+    @IsEnum(ClassType, { message: 'class must be a valid string' })
+    class: ClassType;
 
-    @Column({nullable: false, name : "heater_type"})
-    @IsString({ message: 'heaterType must be a valid string' })
-    heaterType: string;
+    @Column({nullable: false, type: 'enum', enum : HeaterType})
+    @IsEnum(HeaterType, { message: 'heaterType must be a valid string' })
+    heaterType: HeaterType;
 
-    @Column({nullable: false, name : "water_heater_type"})
-    @IsString({ message: 'waterHeaterType must be a valid string' })
-    waterHeaterType: string;
+    @Column({nullable: false, type: 'enum', enum : WaterHeaterType})
+    @IsEnum(WaterHeaterType, { message: 'waterHeaterType must be a valid string' })
+    waterHeaterType: WaterHeaterType;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" , name : "created_at"})
     createdAt: Date;
@@ -69,7 +70,7 @@ export class Estate {
     @IsOptional()
     owner?: Third;
 
-    constructor( streetNumber: string, streetName: string, zipCode: number, city: string, floor: number, flatNumber: number, description: string, livingSpace: number, roomCount: number, type: string, classType: string, heaterType: string, waterHeaterType: string, owner?: Third, id?: string) {
+    constructor( streetNumber: string, streetName: string, zipCode: number, city: string, floor: number, flatNumber: number, description: string, livingSpace: number, roomCount: number, type: EstateType, classType: ClassType, heaterType: HeaterType, waterHeaterType: WaterHeaterType, owner?: Third, id?: string) {
         this.id = id ?? undefined;
         this.streetNumber = streetNumber;
         this.streetName = streetName;

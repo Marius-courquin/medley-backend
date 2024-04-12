@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+import { ClassTypeDto, EstateTypeDto, HeaterTypeDto, WaterHeaterTypeDto } from "@infrastructure/dtos/enum/estate.enum.dto";
 export class EstateDto {
 
     @IsOptional()
@@ -43,27 +44,27 @@ export class EstateDto {
     @ApiProperty()
     roomCount: number;
 
-    @IsString({ message: 'type must be a valid string' })
+    @IsEnum(EstateTypeDto, { message: 'type must be a valid type' })
     @ApiProperty()
-    type: string;
+    type: EstateTypeDto;
 
-    @IsString({ message: 'class must be a valid string' })
+    @IsEnum(ClassTypeDto, { message: 'class must be a valid string' })
     @ApiProperty()
-    class: string;
+    class: ClassTypeDto;
 
-    @IsString({ message: 'heaterType must be a valid string' })
+    @IsEnum(HeaterTypeDto, { message: 'heaterType must be a valid string' })
     @ApiProperty()
-    heaterType: string;
+    heaterType: HeaterTypeDto;
 
-    @IsString({ message: 'waterHeaterType must be a valid string' })
+    @IsEnum(WaterHeaterTypeDto, { message: 'waterHeaterType must be a valid string' })
     @ApiProperty()
-    waterHeaterType: string;
+    waterHeaterType: WaterHeaterTypeDto;
 
     @IsString({ message: 'ownerId must be a valid string' })
     @ApiProperty()
     ownerId: string;
 
-    constructor (id: string, streetNumber: string, streetName: string, zipCode: number, city: string, floor: number, flatNumber: number, description: string, livingSpace: number, roomCount: number, type: string, classType: string, heaterType: string, waterHeaterType: string, ownerId: string) {
+    constructor (id: string, streetNumber: string, streetName: string, zipCode: number, city: string, floor: number, flatNumber: number, description: string, livingSpace: number, roomCount: number, type: EstateTypeDto, classType: ClassTypeDto, heaterType: HeaterTypeDto, waterHeaterType: WaterHeaterTypeDto, ownerId: string) {
         this.id = id ?? undefined;
         this.streetNumber = streetNumber;
         this.streetName = streetName;

@@ -1,5 +1,5 @@
 import {Injectable} from "@nestjs/common";
-import {Estate} from "../entities/estate.entity";
+import {Estate} from "@domain/entities/estate.entity";
 import {DataSource, Repository} from "typeorm";
 
 
@@ -22,7 +22,7 @@ export class EstateRepository extends Repository<Estate>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateEstate(estate: Estate): Promise<Estate | undefined> {
+    async updateElement(estate: Estate): Promise<Estate | undefined> {
         return this.save(estate);
     }
 

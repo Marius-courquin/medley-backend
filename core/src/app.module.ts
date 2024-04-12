@@ -28,5 +28,3 @@ import * as process from "process";
   ]
 })
 export class AppModule {}
-
-console.log('process env val', process.env.DB_HOST, process.env.DB_PORT, process.env.DB_USER, process.env.DB_PASSWORD, process.env.DB_NAME)

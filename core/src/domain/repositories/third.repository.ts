@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import {Third} from "../entities/third.entity";
+import {Third} from "@domain/entities/third.entity";
 import {DataSource, Repository} from "typeorm";
 
 
@@ -15,7 +15,7 @@ export class ThirdRepository extends Repository<Third>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateThird(third: Third): Promise<Third | undefined> {
+    async updateElement(third: Third): Promise<Third | undefined> {
         return this.save(third);
     }  
 

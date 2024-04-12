@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDateString, IsEnum, IsOptional, IsString, IsUUID } from "class-validator";
-import { ThirdType } from "@infrastructure/dtos/types/third.type";
+import { ThirdTypeDto } from "@infrastructure/dtos/enum/third.enum.dto";
 
 
 export class ThirdDto {
@@ -9,9 +9,9 @@ export class ThirdDto {
     @IsUUID(4, { message: 'id must be a valid uuid' })
     id?: string;
 
-    @IsEnum(ThirdType, { message: 'type must be a valid type' })
+    @IsEnum(ThirdTypeDto, { message: 'type must be a valid type' })
     @ApiProperty()
-    type: string;
+    type: ThirdTypeDto;
 
     @IsString({ message: 'lastName must be a valid string' })
     @ApiProperty()
@@ -30,7 +30,7 @@ export class ThirdDto {
     @ApiProperty()
     iban: string;
 
-    constructor (id: string, type: string, lastName: string, firstName: string, dob: Date, iban: string) {
+    constructor (id: string, type: ThirdTypeDto, lastName: string, firstName: string, dob: Date, iban: string) {
         this.id = id ?? undefined;
         this.type = type;
         this.lastName = lastName;
