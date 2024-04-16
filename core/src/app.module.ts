@@ -4,12 +4,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThirdModule } from './modules/third.module';
 import { ConfigModule } from '@nestjs/config';
 import * as process from "process";
+import { RoomModule } from './modules/room.module';
 
 
 @Module({
   imports: [
     EstateModule,
     ThirdModule,
+    RoomModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
