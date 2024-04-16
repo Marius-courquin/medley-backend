@@ -10,7 +10,7 @@ export class RoomDto {
 
     @ApiProperty()
     @IsNumber({}, { message: 'roomNumber must be a valid number' })
-    ordre: number;
+    order: number;
 
     @ApiProperty()
     @IsEnum(RoomTypeDto, { message: 'type must be a valid type' })
@@ -44,9 +44,9 @@ export class RoomDto {
     @ApiProperty()
     estateId: string;
 
-    constructor (ordre: number, type: RoomTypeDto, description: string, livingSpace: number, wallsCount: number, doorsCount: number, windowsCount: number, assignment: string, estateId: string, id?: string) {
+    constructor (order: number, type: RoomTypeDto, description: string, livingSpace: number, wallsCount: number, doorsCount: number, windowsCount: number, assignment: string, estateId: string, id?: string) {
         this.id = id ?? undefined;
-        this.ordre = ordre;
+        this.order = order;
         this.type = type;
         this.description = description;
         this.livingSpace = livingSpace;

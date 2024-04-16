@@ -10,9 +10,9 @@ export class Room {
     @IsUUID(4, { message: 'id must be a valid uuid' })
     id?: string;
 
-    @Column({nullable: false, name : "ordre"})
-    @IsNumber({}, { message: 'roomNumber must be a valid number' })
-    ordre: number;
+    @Column({nullable: false, name : "order"})
+    @IsNumber({}, { message: 'order must be a valid number' })
+    order: number;
 
     @Column({nullable: false, type: 'enum', enum: RoomType})
     @IsEnum(RoomType, { message: 'type must be a valid type' })
@@ -48,7 +48,7 @@ export class Room {
 
     constructor (ordre: number, type: RoomType, description: string, livingSpace: number, wallsCount: number, doorsCount: number, windowsCount: number, assignment: string, estate?: Estate, id?: string) {
         this.id = id ?? undefined;
-        this.ordre = ordre;
+        this.order = ordre;
         this.type = type;
         this.description = description;
         this.livingSpace = livingSpace;
