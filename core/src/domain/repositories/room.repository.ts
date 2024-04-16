@@ -9,8 +9,14 @@ export class RoomRepository extends Repository<Room>{
     }
 
     async findById(id: string): Promise<Room | undefined> {
-
         return this.findOne({ where: { id: id } });
+    }
+
+    async findByEstate(estateId: string): Promise<Room[]> {
+        return this.createQueryBuilder("room")
+            .leftJoinAndSelect("room.estate", "estate")
+            .where("estate.id = :estateId", { estateId })
+            .getMany();
     }
 
     async updateElement(room: Room): Promise<Room | undefined> {

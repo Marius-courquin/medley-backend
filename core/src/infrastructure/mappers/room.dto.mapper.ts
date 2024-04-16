@@ -42,6 +42,4 @@ export class RoomDtoMapper{
     private static roomTypeFromModel(type: RoomType): RoomTypeDto {
         return RoomTypeDto[type];
     }
-
-    
 }
