@@ -3,12 +3,20 @@ import {AuthService} from '@domain/services/auth.service';
 import {UserLoginDto} from "../dtos/userLogin.dto";
 import {UserSignupDto} from "@infrastructure/dtos/userSignup.dto";
 import {UserRevocationDto} from "@infrastructure/dtos/userRevocation.dto";
+import process from "process";
+import {ConfigService} from "@nestjs/config";
 
 @Controller('auth')
 export class AuthController {
     constructor(
         private service: AuthService,
-    ) {}
+        private configService: ConfigService
+    ) {
+        console.log("AUTH_DB_HOST: ", this.configService.get<string>('AUTH_DB_HOST'))
+        console.log("AUTH_DB_PORT: ", this.configService.get<string>('AUTH_DB_PORT'))
+        console.log("AUTH_DB_USER: ", this.configService.get<string>('AUTH_DB_USER'))
+        console.log("AUTH_DB_PASSWORD: ", this.configService.get<string>('AUTH_DB_PASSWORD'))
+    }
 
     @HttpCode(HttpStatus.OK)
     @Post('login')
