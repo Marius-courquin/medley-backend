@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, Query} from '@nestjs/common';
+import {Body, Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, Query} from '@nestjs/common';
 import {EstateService} from '@domain/services/estate.service';
 import {EstateDto} from "@infrastructure/dtos/estate.dto";
 

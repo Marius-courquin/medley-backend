@@ -5,7 +5,6 @@ import { ClassType, EstateType, HeaterType, WaterHeaterType } from '@domain/enti
 
 @Entity()
 export class Estate {
-
     @PrimaryGeneratedColumn("uuid")
     @IsOptional()
     @IsUUID(4, { message: 'id must be a valid uuid' })

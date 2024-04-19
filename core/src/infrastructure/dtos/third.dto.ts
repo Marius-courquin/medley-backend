@@ -4,9 +4,9 @@ import { ThirdTypeDto } from "@infrastructure/dtos/enum/third.enum.dto";
 
 
 export class ThirdDto {
-
     @IsOptional()
     @IsUUID(4, { message: 'id must be a valid uuid' })
+    @ApiProperty()
     id?: string;
 
     @IsEnum(ThirdTypeDto, { message: 'type must be a valid type' })

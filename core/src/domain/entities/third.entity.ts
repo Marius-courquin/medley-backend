@@ -10,7 +10,6 @@ export class Third {
     @IsUUID(4, { message: 'id must be a valid uuid' })
     id?: string;
 
-
     @Column({nullable: false, type: 'enum', enum: ThirdType})
     @IsEnum(ThirdType, { message: 'type must be a valid type' })
     type: ThirdType;

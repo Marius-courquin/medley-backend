@@ -16,7 +16,8 @@ import { EstateModule } from "./estate.module";
         RoomRepository
     ],
     exports: [
-        RoomService
+        RoomService,
+        RoomRepository
     ],
     controllers: [RoomController]
 })
