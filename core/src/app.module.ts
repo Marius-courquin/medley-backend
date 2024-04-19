@@ -5,6 +5,13 @@ import { ThirdModule } from './modules/third.module';
 import { ConfigModule } from '@nestjs/config';
 import * as process from "process";
 import { RoomModule } from './modules/room.module';
+import { ElementModule } from "@modules/element.module"
+import { FurnishingModule } from "@modules/furnishing.module"
+import { StairModule } from "@modules/stair.module"
+import { CeilingModule } from "@modules/ceiling.module"
+import { GroundModule } from "@modules/ground.module"
+import { WallModule } from "@modules/wall.module"
+
 
 
 @Module({
@@ -12,6 +19,12 @@ import { RoomModule } from './modules/room.module';
     EstateModule,
     ThirdModule,
     RoomModule,
+    ElementModule,
+    FurnishingModule,
+    StairModule,
+    CeilingModule,
+    GroundModule,
+    WallModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

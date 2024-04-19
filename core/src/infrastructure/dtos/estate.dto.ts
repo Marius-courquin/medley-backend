@@ -2,7 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 import { ClassTypeDto, EstateTypeDto, HeaterTypeDto, WaterHeaterTypeDto } from "@infrastructure/dtos/enum/estate.enum.dto";
 export class EstateDto {
-
     @IsOptional()
     @IsUUID(4, { message: 'id must be a valid uuid' })
     @ApiProperty()
@@ -60,7 +59,7 @@ export class EstateDto {
     @ApiProperty()
     waterHeaterType: WaterHeaterTypeDto;
 
-    @IsString({ message: 'ownerId must be a valid string' })
+    @IsUUID(4, { message: 'ownerId must be a valid uuid' })
     @ApiProperty()
     ownerId: string;
 

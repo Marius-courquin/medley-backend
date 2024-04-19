@@ -30,6 +30,7 @@ export class ThirdDtoMapper {
     private static enumToModel (type: string): ThirdType {
         return ThirdType[type];
     }
+    
     private static enumToDto (type: ThirdType): ThirdTypeDto {
         return ThirdTypeDto[type];
     }

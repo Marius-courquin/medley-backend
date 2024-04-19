@@ -4,7 +4,6 @@ import { Third } from "@domain/entities/third.entity";
 import { ClassType, EstateType, HeaterType, WaterHeaterType } from "@domain/entities/enum/estate.enum.entity";
 import { ClassTypeDto, EstateTypeDto, HeaterTypeDto, WaterHeaterTypeDto } from "@infrastructure/dtos/enum/estate.enum.dto";
 export class EstateDtoMapper {
-
     static fromModel (estate: Estate): EstateDto {
         return new EstateDto(
             estate.id,
@@ -47,6 +46,7 @@ export class EstateDtoMapper {
     private static estateTypeToModel (type: EstateTypeDto): EstateType {
         return EstateType[type];
     }
+
     private static estateTypeFromModel (type: EstateType): EstateTypeDto {
         return EstateTypeDto[type];
     }
