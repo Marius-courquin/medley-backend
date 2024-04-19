@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'auth/**'
-      - '.github/workflows/deploy-auth.yml'
+      - 'core/**'
+      - '.github/workflows/deploy-core.yml'
 
 jobs:
   build-and-push:
@@ -26,7 +26,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: ./auth
-          file: ./auth/Dockerfile
+          context: ./core
+          file: ./core/Dockerfile
           push: true
           tags: mariuscourquin62/medley-core:latest
