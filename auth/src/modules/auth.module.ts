@@ -5,11 +5,9 @@ import {UserModule} from "./user.module";
 import {JwtModule} from "@nestjs/jwt";
 import {jwtConstants} from "@infrastructure/constants/auth.constants";
 import {Hashing} from "@utils/hashing";
-import {ConfigModule} from "@nestjs/config";
 
 @Module({
     imports: [
-        ConfigModule,
         UserModule,
         JwtModule.register({
             global: true,
