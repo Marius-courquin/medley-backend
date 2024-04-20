@@ -1,15 +1,21 @@
 import { Module } from '@nestjs/common';
-import { EstateModule } from './modules/estate.module';
+import { EstateModule } from '@modules/estate.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ThirdModule } from './modules/third.module';
+import { ThirdModule } from '@modules/third.module';
 import { ConfigModule } from '@nestjs/config';
 import * as process from "process";
+import {JwtModule} from "@nestjs/jwt";
+import {AgentModule} from "@modules/agent.module";
+import {APP_GUARD, APP_INTERCEPTOR} from "@nestjs/core";
+import {AuthGuard} from "@infrastructure/guards/auth.guard";
+import {AgentInterceptor} from "@infrastructure/interceptors/agent.interceptor";
 
 
 @Module({
   imports: [
     EstateModule,
     ThirdModule,
+    AgentModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -25,6 +31,28 @@ import * as process from "process";
       ],
       synchronize: true
     }),
+    {
+      ...JwtModule.registerAsync({
+        imports: [ConfigModule],
+        useFactory: async () => ({
+          secret: process.env.JWT_KEY,
+        }),
+        global: true
+      })
+    }
+  ],
+  exports: [
+      JwtModule
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AgentInterceptor
+    }
   ]
 })
 export class AppModule {}
