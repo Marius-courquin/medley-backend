@@ -19,11 +19,11 @@ export class StairRepository extends Repository<Stair>{
         return this.save(stair);
     }
     
-    async findByElement(elementId: string): Promise<Stair[]> {
+    async findByElement(elementId: string): Promise<Stair> {
         return this.createQueryBuilder("stair")
             .innerJoinAndSelect("stair.element", "element")
             .where("element.id = :elementId", { elementId })
-            .getMany();
+            .getOne();
     }
 
 }

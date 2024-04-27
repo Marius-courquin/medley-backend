@@ -1,5 +1,5 @@
 import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { FurnishingType } from "@domain/entities/enum/furnishing.enum.entity";
 import { Element } from '@domain/entities/element.entity';
 
@@ -22,7 +22,8 @@ export class Furnishing {
     @IsString({ message: ' must be a valid string' })
     description: string;
 
-    @ManyToOne(() => Element, element => element.id, {nullable: true, eager: true})
+    @OneToOne(() => Element, element => element.id, {nullable: true, eager: true})
+    @JoinColumn()
     @IsOptional()
     element?: Element;
 

@@ -19,11 +19,11 @@ export class CeilingRepository extends Repository<Ceiling>{
         return this.save(ceiling);
     }
 
-    async findByElement(elementId: string): Promise<Ceiling[]> {
+    async findByElement(elementId: string): Promise<Ceiling> {
         return this.createQueryBuilder("ceiling")
             .innerJoinAndSelect("ceiling.element", "element")
             .where("element.id = :elementId", { elementId })
-            .getMany();
+            .getOne();
     }
 
 }

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Furnishing } from "@domain/entities/furninshing.entity";
+import { Furnishing } from "@domain/entities/furnishing.entity";
 import { DataSource, Repository } from "typeorm";
 
 
@@ -19,11 +19,11 @@ export class FurnishingRepository extends Repository<Furnishing>{
         return this.save(furnishing);
     }
 
-    async findByElement(elementId: string): Promise<Furnishing[]> {
+    async findByElement(elementId: string): Promise<Furnishing> {
         return this.createQueryBuilder("furnishing")
             .innerJoinAndSelect("furnishing.element", "element")
             .where("element.id = :elementId", { elementId })
-            .getMany();
+            .getOne();
     }
 
 }

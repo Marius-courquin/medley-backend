@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Wall } from "@domain/entities/wall.entity";
 import { ElementModule } from "@modules/element.module"
@@ -9,14 +9,15 @@ import { WallRepository } from '@domain/repositories/wall.repository';
 @Module({
     imports: [
         TypeOrmModule.forFeature([Wall]),
-        ElementModule
+        forwardRef(() => ElementModule)
     ],
     providers: [
         WallService,
         WallRepository
     ],
     exports: [
-        WallService
+        WallService,
+        WallRepository
     ],
     controllers: [WallController]
 })

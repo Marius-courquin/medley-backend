@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ElementModule } from "@modules/element.module"
 import { CeilingController } from '@infrastructure/controllers/ceiling.controller';
@@ -9,14 +9,15 @@ import { Ceiling } from '@domain/entities/ceiling.entity';
 @Module({
     imports: [
         TypeOrmModule.forFeature([Ceiling]),
-        ElementModule
+        forwardRef(() => ElementModule)
     ],
     providers: [
         CeilingService,
         CeilingRepository
     ],
     exports: [
-        CeilingService
+        CeilingService,
+        CeilingRepository
     ],
     controllers: [CeilingController]
 })

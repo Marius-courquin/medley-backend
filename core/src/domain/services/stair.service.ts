@@ -19,6 +19,9 @@ export class StairService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
+        if(element.type !== 'STAIR') {
+            throw new NotFoundException('element is not a stair');
+        }
 
         const Stair : Stair = StairDtoMapper.toModel(stairDto, element);
         return StairDtoMapper.fromModel(await this.repository.save(Stair));
@@ -44,13 +47,13 @@ export class StairService {
         return StairDtoMapper.fromModel( await this.repository.updateStair(Stair));
     }
 
-    async findStairByElement(elementId: string): Promise<StairDto[]> {
-        let stairs : Stair[] = await this.repository.findByElement(elementId);
-        if (stairs.length === 0) {
-            throw new NotFoundException('no Stairs found for this element');
+    async findStairByElement(elementId: string): Promise<StairDto> {
+        const stair : Stair = await this.repository.findByElement(elementId);
+        if (!stair) {
+            throw new NotFoundException('no stair found for this element');
         }
 
-        return stairs.map(stair => StairDtoMapper.fromModel(stair));
+        return StairDtoMapper.fromModel(stair);
     }
 
 }

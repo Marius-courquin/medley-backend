@@ -19,11 +19,11 @@ export class WallRepository extends Repository<Wall>{
         return this.save(wall);
     }
     
-    async findByElement(elementId: string): Promise<Wall[]> {
+    async findByElement(elementId: string): Promise<Wall> {
         return this.createQueryBuilder("wall")
             .innerJoinAndSelect("wall.element", "element")
             .where("element.id = :elementId", { elementId })
-            .getMany();
+            .getOne();
     }
 
 }
