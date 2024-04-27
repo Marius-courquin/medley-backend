@@ -19,6 +19,9 @@ export class WallService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
+        if(element.type !== 'WALL') {
+            throw new NotFoundException('element is not a wall');
+        }
 
         const wall : Wall = WallDtoMapper.toModel(wallDto, element);
         return WallDtoMapper.fromModel(await this.repository.save(wall));
@@ -44,12 +47,13 @@ export class WallService {
         return WallDtoMapper.fromModel( await this.repository.updateWall(wall));
     }
 
-    async findWallByElement(elementId: string): Promise<WallDto[]> {
-        const walls : Wall[] = await this.repository.findByElement(elementId);
-        if (walls.length === 0) {
-            throw new NotFoundException('no walls found for this element');
+    async findWallByElement(elementId: string): Promise<WallDto> {
+        const wall : Wall = await this.repository.findByElement(elementId);
+        if (!wall) {
+            throw new NotFoundException('no wall found for this element');
         }
-        return walls.map(wall => WallDtoMapper.fromModel(wall));
+
+        return WallDtoMapper.fromModel(wall);
     }
 
 }

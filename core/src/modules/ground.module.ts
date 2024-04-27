@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ElementModule } from "@modules/element.module"
 import { GroundController } from '@infrastructure/controllers/ground.controller';
@@ -9,14 +9,15 @@ import { Ground } from '@domain/entities/ground.entity';
 @Module({
     imports: [
         TypeOrmModule.forFeature([Ground]),
-        ElementModule
+        forwardRef(() => ElementModule)
     ],
     providers: [
         GroundService,
         GroundRepository
     ],
     exports: [
-        GroundService
+        GroundService,
+        GroundRepository
     ],
     controllers: [GroundController]
 })

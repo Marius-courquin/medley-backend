@@ -33,4 +33,10 @@ export class ElementController {
         return this.service.findElementByRoom(id);
     }   
 
+    @HttpCode(HttpStatus.OK)
+    @Get(":id/related")
+    getRelatedEntity(@Param('id', ParseUUIDPipe) id: string) {
+    return this.service.getRelatedEntity(id);
+}
+
 }

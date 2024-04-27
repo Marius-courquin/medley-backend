@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
 import { IsEnum, IsNumber, IsOptional, IsUUID } from 'class-validator';
 import { WallType } from '@domain/entities/enum/wall.enum.entity';
 import { Element } from '@domain/entities/element.entity';
@@ -29,7 +29,8 @@ export class Wall {
     @IsNumber({}, { message: 'wallSocketsCount must be a valid number' })
     wallSocketsCount: number;
 
-    @ManyToOne(() => Element, element => element.id, {nullable: true, eager: true})
+    @OneToOne(() => Element, element => element.id, {nullable: true, eager: true})
+    @JoinColumn()
     @IsOptional()
     element?: Element;
 

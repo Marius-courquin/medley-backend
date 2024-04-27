@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Furnishing } from "@domain/entities/furninshing.entity";
-import { FurnishingRepository } from "@domain/repositories/furninshing.repository";
+import { Furnishing } from "@domain/entities/furnishing.entity";
+import { FurnishingRepository } from "@domain/repositories/furnishing.repository";
 import { FurnishingDtoMapper  } from '@infrastructure/mappers/furnishing.dto.mapper';
 import { Element } from '@domain/entities/element.entity';
 import { ElementRepository } from '@domain/repositories/element.repository';
@@ -19,7 +19,9 @@ export class FurnishingService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
-
+        if(element.type !== 'FURNISHING') {
+            throw new NotFoundException('element is not a furnishing');
+        }
         const furnishing : Furnishing = FurnishingDtoMapper.toModel(furnishingDto, element);
         return FurnishingDtoMapper.fromModel(await this.repository.save(furnishing));
     }
@@ -44,13 +46,13 @@ export class FurnishingService {
         return FurnishingDtoMapper.fromModel( await this.repository.updateFurnishing(furnishing));
     }
 
-    async findFurnishingByElement(elementId: string): Promise<FurnishingDto[]> {
-        let furnishings : Furnishing[] = await this.repository.findByElement(elementId);
-        if (furnishings.length === 0) {
-            throw new NotFoundException('no Stairs found for this element');
+    async findFurnishingByElement(elementId: string): Promise<FurnishingDto> {
+        const furnishing : Furnishing = await this.repository.findByElement(elementId);
+        if (!furnishing) {
+            throw new NotFoundException('no furnishing found for this element');
         }
 
-        return furnishings.map(furnishing => FurnishingDtoMapper.fromModel(furnishing));
+        return FurnishingDtoMapper.fromModel(furnishing);
     }
 
 }

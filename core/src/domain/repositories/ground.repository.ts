@@ -19,11 +19,11 @@ export class GroundRepository extends Repository<Ground>{
         return this.save(ground);
     }
 
-    async findByElement(elementId: string): Promise<Ground[]> {
+    async findByElement(elementId: string): Promise<Ground> {
         return this.createQueryBuilder("ground")
             .innerJoinAndSelect("ground.element", "element")
             .where("element.id = :elementId", { elementId })
-            .getMany();
+            .getOne();
     }
 
 }

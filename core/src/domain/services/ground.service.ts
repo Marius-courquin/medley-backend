@@ -19,15 +19,17 @@ export class GroundService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
-
-        const Stair : Ground = GroundDtoMapper.toModel(groundDto, element);
-        return GroundDtoMapper.fromModel(await this.repository.save(Stair));
+        if(element.type !== 'GROUND') {
+            throw new NotFoundException('element is not a ground');
+        }
+        const ground : Ground = GroundDtoMapper.toModel(groundDto, element);
+        return GroundDtoMapper.fromModel(await this.repository.save(ground));
     }
 
     async getGround(id: string): Promise<GroundDto> {
         const ground : Ground = await this.repository.findById(id);
         if (!ground) {
-            throw new NotFoundException( 'Stair does not exist');
+            throw new NotFoundException( 'Ground does not exist');
         }
 
         return GroundDtoMapper.fromModel(ground);
@@ -44,13 +46,12 @@ export class GroundService {
         return GroundDtoMapper.fromModel( await this.repository.updateGround(Stair));
     }
 
-    async findGroundByElement(elementId: string): Promise<GroundDto[]> {
-        let grounds : Ground[] = await this.repository.findByElement(elementId);
-        if (grounds.length === 0) {
-            throw new NotFoundException('no Stairs found for this element');
+    async findGroundByElement(elementId: string): Promise<GroundDto> {
+        const ground : Ground = await this.repository.findByElement(elementId);
+        if (!ground) {
+            throw new NotFoundException('no ground found for this element');
         }
-
-        return grounds.map(ground => GroundDtoMapper.fromModel(ground));
+        return GroundDtoMapper.fromModel(ground);
     }
 
 }

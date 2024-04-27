@@ -19,6 +19,9 @@ export class CeilingService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
+        if(element.type !== 'CEILING') {
+            throw new NotFoundException('element is not a ceiling');
+        }
 
         const Stair : Ceiling = CeilingDtoMapper.toModel(ceilingDto, element);
         return CeilingDtoMapper.fromModel(await this.repository.save(Stair));
@@ -44,12 +47,12 @@ export class CeilingService {
         return CeilingDtoMapper.fromModel( await this.repository.updateGround(Stair));
     }
 
-    async findCeilingByElement(elementId: string): Promise<CeilingDto[]> {
-        let ceilings : Ceiling[] = await this.repository.findByElement(elementId);
-        if (ceilings.length === 0) {
+    async findCeilingByElement(elementId: string): Promise<CeilingDto> {
+        const ceiling : Ceiling = await this.repository.findByElement(elementId);
+        if (!ceiling) {
             throw new NotFoundException('no Stairs found for this element');
         }
 
-        return ceilings.map(ceiling => CeilingDtoMapper.fromModel(ceiling));
+        return CeilingDtoMapper.fromModel(ceiling);
     }
 }
