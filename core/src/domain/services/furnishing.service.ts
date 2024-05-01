@@ -5,7 +5,7 @@ import { FurnishingDtoMapper  } from '@infrastructure/mappers/furnishing.dto.map
 import { Element } from '@domain/entities/element.entity';
 import { ElementRepository } from '@domain/repositories/element.repository';
 import { FurnishingDto } from '@infrastructure/dtos/furninshing.dto';
-
+import { ElementType } from '@domain/entities/enum/element.enum.entity';
 
 @Injectable()
 export class FurnishingService {
@@ -19,7 +19,7 @@ export class FurnishingService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
-        if(element.type !== 'FURNISHING') {
+        if(element.type !== ElementType.FURNISHING) {
             throw new NotFoundException('element is not a furnishing');
         }
         const furnishing : Furnishing = FurnishingDtoMapper.toModel(furnishingDto, element);

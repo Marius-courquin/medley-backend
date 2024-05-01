@@ -5,7 +5,7 @@ import { GroundDtoMapper } from '@infrastructure/mappers/ground.dto.mapper';
 import { Element } from '@domain/entities/element.entity';
 import { ElementRepository } from '@domain/repositories/element.repository';
 import { GroundDto } from '@infrastructure/dtos/ground.dto';
-
+import { ElementType } from '@domain/entities/enum/element.enum.entity';
 
 @Injectable()
 export class GroundService {
@@ -19,7 +19,7 @@ export class GroundService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
-        if(element.type !== 'GROUND') {
+        if(element.type !== ElementType.GROUND) {
             throw new NotFoundException('element is not a ground');
         }
         const ground : Ground = GroundDtoMapper.toModel(groundDto, element);

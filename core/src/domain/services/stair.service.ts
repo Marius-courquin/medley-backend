@@ -5,7 +5,7 @@ import { StairDtoMapper } from '@infrastructure/mappers/stair.dto.mapper';
 import { StairDto } from '@infrastructure/dtos/Stair.dto';
 import { Element } from '@domain/entities/element.entity';
 import { ElementRepository } from '@domain/repositories/element.repository';
-
+import { ElementType } from '@domain/entities/enum/element.enum.entity';
 
 @Injectable()
 export class StairService {
@@ -19,7 +19,7 @@ export class StairService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
-        if(element.type !== 'STAIR') {
+        if(element.type !== ElementType.STAIR) {
             throw new NotFoundException('element is not a stair');
         }
 
