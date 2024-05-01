@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, Query } from "@nestjs/common";
 import { RoomDto } from "../dtos/room.dto";
 import { RoomService } from "@/domain/services/room.service";
 
@@ -28,7 +28,7 @@ export class RoomController {
 
     @HttpCode(HttpStatus.OK)
     @Get()
-    getRoomByEstate(@Param("estateId", ParseUUIDPipe) estateId:string) {
+    getRoomByEstate(@Query("estateId", ParseUUIDPipe) estateId:string) {
         return this.service.findByEstate(estateId);
     }
 }
