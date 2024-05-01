@@ -5,6 +5,7 @@ import { SubElementRepository } from "@domain/repositories/subElement.repository
 import { WindowDtoMapper } from '@infrastructure/mappers/window.dto.mapper';
 import { WindowDto } from '@infrastructure/dtos/window.dto';
 import { WindowRepository } from '@domain/repositories/window.repository';
+import { SubElementType } from '@domain/entities/enum/subElement.enum.entity';
 
 @Injectable()
 export class WindowService {
@@ -17,6 +18,9 @@ export class WindowService {
         const subElement : SubElement = await this.subElementRepository.findById(windowDto.subElementId);
         if (!subElement) {
             throw new NotFoundException('subElement does not exist');
+        }
+        if (subElement.type !== SubElementType.WINDOW ) {
+            throw new NotFoundException('subElement is not a window');
         }
 
         const window : Window = WindowDtoMapper.toModel(windowDto, subElement);
@@ -35,7 +39,7 @@ export class WindowService {
     async updateWindow(id: string, windowDto: WindowDto): Promise<WindowDto> {
         const subElement : SubElement = await this.subElementRepository.findById(windowDto.subElementId);
         if (!subElement) {
-            throw new NotFoundException('Wall does not exist');
+            throw new NotFoundException('Window does not exist');
         }
 
         windowDto.id = id;

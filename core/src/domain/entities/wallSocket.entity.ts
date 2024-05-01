@@ -13,7 +13,7 @@ export class WallSocket {
     @IsEnum(WallSocketType, { message: 'type must be a valid type' })
     type: WallSocketType;
 
-    @OneToOne(() => Element, element => element.id, {nullable: true, eager: true})
+    @OneToOne(() => SubElement, subElement => subElement.id, {nullable: true, eager: true})
     @JoinColumn()
     @IsOptional()
     subElement?: SubElement;

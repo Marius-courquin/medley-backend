@@ -5,7 +5,7 @@ import { SubElementRepository } from "@domain/repositories/subElement.repository
 import { GenericSubElementDtoMapper } from '@infrastructure/mappers/genericSubElement.dto.mapper';
 import { GenericSubElementDto } from '@infrastructure/dtos/genericSubElement.dto';
 import { GenericSubElementRepository } from '@domain/repositories/genericSubElement.repository';
-
+import { SubElementType } from '@domain/entities/enum/subElement.enum.entity';
 @Injectable()
 export class GenericSubElementService {
     constructor(
@@ -17,6 +17,9 @@ export class GenericSubElementService {
         const subElement : SubElement = await this.subElementRepository.findById(GenericSubElementDto.subElementId);
         if (!subElement) {
             throw new NotFoundException('subElement does not exist');
+        }
+        if (subElement.type !== SubElementType.GENERIC_SUB_ELEMENT ) {
+            throw new NotFoundException('subElement is not a generic sub element');
         }
         const genericSubElement : GenericSubElement = GenericSubElementDtoMapper.toModel(GenericSubElementDto, subElement);
         return GenericSubElementDtoMapper.fromModel(await this.repository.save(genericSubElement));

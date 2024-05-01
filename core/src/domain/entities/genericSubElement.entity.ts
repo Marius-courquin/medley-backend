@@ -13,7 +13,7 @@ export class GenericSubElement {
     @IsEnum(GenericSubElementType, { message: 'type must be a valid type' })
     type: GenericSubElementType;
 
-    @OneToOne(() => Element, element => element.id, {nullable: true, eager: true})
+    @OneToOne(() => SubElement, SubElement => SubElement.id, {nullable: true, eager: true})
     @JoinColumn()
     @IsOptional()
     subElement?: SubElement;

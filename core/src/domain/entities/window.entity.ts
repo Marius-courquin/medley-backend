@@ -1,7 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
 import { IsBoolean, IsEnum, IsOptional, IsUUID } from 'class-validator';
 import { WindowOrientation } from '@domain/entities/enum/window.enum.entity';
-import { SubElement } from '@/domain/entities/subElement.entity';
+import { SubElement } from '@domain/entities/subElement.entity';
+
 @Entity()
 export class Window {
     @PrimaryGeneratedColumn("uuid")
@@ -13,7 +14,7 @@ export class Window {
     @IsEnum(WindowOrientation, { message: 'orientation must be a valid type' })
     orientation: WindowOrientation;
 
-    @OneToOne(() => Element, element => element.id, {nullable: true, eager: true})
+    @OneToOne(() => SubElement, SubElement => SubElement.id, {nullable: true, eager: true})
     @JoinColumn()
     @IsOptional()
     subElement?: SubElement;

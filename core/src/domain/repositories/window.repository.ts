@@ -21,7 +21,7 @@ export class WindowRepository extends Repository<Window>{
     
     async findBySubElement(subElementId: string): Promise<Window> {
         return this.createQueryBuilder("window")
-            .innerJoinAndSelect("window.sub_element", "sub_element")
+            .innerJoinAndSelect("window.subElement", "sub_element")
             .where("sub_element.id = :subElementId", { subElementId })
             .getOne();
     }

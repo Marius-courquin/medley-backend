@@ -21,7 +21,7 @@ export class WallSocketRepository extends Repository<WallSocket>{
     
     async findBySubElement(subElementId: string): Promise<WallSocket> {
         return this.createQueryBuilder("wall_socket")
-            .innerJoinAndSelect("wall_socket.sub_element", "sub_element")
+            .innerJoinAndSelect("wall_socket.subElement", "sub_element")
             .where("sub_element.id = :subElementId", { subElementId })
             .getOne();
     }

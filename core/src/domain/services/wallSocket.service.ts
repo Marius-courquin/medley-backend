@@ -5,6 +5,7 @@ import { SubElementRepository } from "@domain/repositories/subElement.repository
 import { WallSocketDtoMapper } from '@infrastructure/mappers/wallSocket.dto.mapper';
 import { WallSocketDto } from '@infrastructure/dtos/wallSocket.dto';
 import { WallSocketRepository } from '@domain/repositories/wallSocket.repository';
+import { SubElementType } from '@domain/entities/enum/subElement.enum.entity';
 
 @Injectable()
 export class WallSocketService {
@@ -17,6 +18,9 @@ export class WallSocketService {
         const subElement : SubElement = await this.subElementRepository.findById(wallSocketDto.subElementId);
         if (!subElement) {
             throw new NotFoundException('subElement does not exist');
+        }
+        if (subElement.type !== SubElementType.WALL_SOCKET ) {
+            throw new NotFoundException('subElement is not a wall socket');
         }
 
         const wallSocket : WallSocket = WallSocketDtoMapper.toModel(wallSocketDto, subElement);
@@ -35,7 +39,7 @@ export class WallSocketService {
     async updateWallSocket(id: string, wallSocketDto: WallSocketDto): Promise<WallSocketDto> {
         const subElement : SubElement = await this.subElementRepository.findById(wallSocketDto.subElementId);
         if (!subElement) {
-            throw new NotFoundException('Wall does not exist');
+            throw new NotFoundException('WallSocket does not exist');
         }
 
         wallSocketDto.id = id;

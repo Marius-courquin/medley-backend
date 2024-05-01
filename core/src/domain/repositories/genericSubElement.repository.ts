@@ -21,7 +21,7 @@ export class GenericSubElementRepository extends Repository<GenericSubElement>{
     
     async findBySubElement(subElementId: string): Promise<GenericSubElement> {
         return this.createQueryBuilder("generic_sub_element")
-            .innerJoinAndSelect("generic_sub_element.sub_element", "sub_element")
+            .innerJoinAndSelect("generic_sub_element.subElement", "sub_element")
             .where("sub_element.id = :subElementId", { subElementId })
             .getOne();
     }

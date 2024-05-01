@@ -37,7 +37,8 @@ export class SubElementService {
 
     async getSubElement(id: string): Promise<SubElementDto> {
         const subElement : SubElement = await this.repository.findById(id);
-        if (!SubElement) {
+        console.log(subElement);
+        if (!subElement) {
             throw new NotFoundException( 'SubElement does not exist');
         }
 
