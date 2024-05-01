@@ -3,7 +3,7 @@ import { WallSocketService } from '@domain/services/wallSocket.service';
 import { WallSocketDto } from '@infrastructure/dtos/wallSocket.dto';
 
 @Controller('wall_socket')
-export class wallSocketController {
+export class WallSocketController {
     constructor(
         private service: WallSocketService,
     ) {}

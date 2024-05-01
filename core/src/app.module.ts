@@ -11,7 +11,10 @@ import { StairModule } from "@modules/stair.module"
 import { CeilingModule } from "@modules/ceiling.module"
 import { GroundModule } from "@modules/ground.module"
 import { WallModule } from "@modules/wall.module"
-
+import { WindowModule } from "@modules/window.module"
+import { SubElementModule } from "@modules/subElement.module"
+import { GenericSubElementModule } from "@modules/genericSubElement.module"
+import { WallSocketModule } from "@modules/wallSocket.module"
 
 
 @Module({
@@ -25,6 +28,10 @@ import { WallModule } from "@modules/wall.module"
     CeilingModule,
     GroundModule,
     WallModule,
+    SubElementModule,
+    WindowModule,
+    GenericSubElementModule,
+    WallSocketModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
