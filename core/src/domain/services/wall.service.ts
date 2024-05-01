@@ -5,7 +5,7 @@ import { WallDto } from '@infrastructure/dtos/wall.dto';
 import { Element } from '@domain/entities/element.entity';
 import { WallRepository } from '@domain/repositories/wall.repository';
 import { Wall } from '@domain/entities/wall.entity';
-
+import { ElementType } from '@domain/entities/enum/element.enum.entity';
 
 @Injectable()
 export class WallService {
@@ -19,7 +19,7 @@ export class WallService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
-        if(element.type !== 'WALL') {
+        if(element.type !== ElementType.WALL) {
             throw new NotFoundException('element is not a wall');
         }
 

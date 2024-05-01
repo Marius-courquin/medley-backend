@@ -3,5 +3,5 @@ export enum ElementType {
     STAIR = 'STAIR',
     GROUND = 'GROUND',
     CEILING = 'CEILING',
-    FURNINSHING = 'FURNISHING',
+    FURNISHING = 'FURNISHING',
 }
