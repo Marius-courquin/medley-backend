@@ -8,9 +8,12 @@ export class RoomRepository extends Repository<Room>{
         super(Room, dataSource.createEntityManager());
     }
 
-    async findById(id: string): Promise<Room | undefined> {
-        return this.findOne({ where: { id: id } });
-    }
+    async findById(id: string): Promise<Room> {
+        return this.findOne({
+          where: { id },
+          relations: ['estate'],
+        });
+      }
 
     async findByEstate(estateId: string): Promise<Room[]> {
         return this.createQueryBuilder("room")
