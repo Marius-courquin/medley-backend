@@ -80,7 +80,6 @@ export class ElementService {
 
     async getRelatedEntity(id: string): Promise<WallDto | CeilingDto  | GroundDto | StairDto | FurnishingDto> {
         const element : Element = await this.repository.findById(id);
-        console.log("j'ai trouvé un elt",element);
         if (!element) {
             throw new NotFoundException('Element does not exist');
         }

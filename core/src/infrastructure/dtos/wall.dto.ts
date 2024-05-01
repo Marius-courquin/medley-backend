@@ -9,6 +9,7 @@ export class WallDto {
     id?: string;
 
     @IsNumber({}, { message: 'order must be a valid number' })
+    @ApiProperty()
     order: number;
 
     @IsEnum(WallTypeDto, { message: 'type must be a valid type' })
@@ -16,12 +17,15 @@ export class WallDto {
     type: WallTypeDto;
 
     @IsNumber({}, { message: 'windowsCount must be a valid number' })
+    @ApiProperty()
     windowsCount: number;
 
     @IsNumber({}, { message: 'radiatorsCount must be a valid number' })
+    @ApiProperty()
     radiatorsCount: number;
 
     @IsNumber({}, { message: 'wallSocketsCount must be a valid number' })
+    @ApiProperty()
     wallSocketsCount: number;
 
     @IsUUID(4, { message: 'elementId must be a valid uuid' })

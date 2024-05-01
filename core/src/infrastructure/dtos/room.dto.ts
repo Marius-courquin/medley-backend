@@ -8,32 +8,33 @@ export class RoomDto {
     @ApiProperty()
     id?: string;
 
-    @ApiProperty()
     @IsNumber({}, { message: 'roomNumber must be a valid number' })
+    @ApiProperty()
     order: number;
 
-    @ApiProperty()
     @IsEnum(RoomTypeDto, { message: 'type must be a valid type' })
+    @ApiProperty()
     type: RoomTypeDto;
 
-    @ApiProperty()
     @IsString({ message: 'description must be a valid string' })
+    @ApiProperty()
     description: string;
 
-    @ApiProperty()
     @IsNumber({}, { message: 'livingSpace must be a valid number' })
+    @ApiProperty()
     livingSpace: number;
 
-    @ApiProperty()
     @IsNumber({}, { message: 'wallsCount must be a valid number' })
+    @ApiProperty()
     wallsCount: number;
 
-    @ApiProperty()
     @IsNumber({}, { message: 'doorsCount must be a valid number' })
+    @ApiProperty()
     doorsCount: number;
 
-    @ApiProperty()
     @IsNumber({}, { message: 'windowsCount must be a valid number' })
+    @ApiProperty()
+
     windowsCount: number;
 
     @IsString({ message: 'assignment must be a valid string' })
