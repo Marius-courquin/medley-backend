@@ -1,6 +1,6 @@
 import { SubElementType } from "@domain/entities/enum/subElement.enum.entity";
 import { SubElement } from "@domain/entities/subElement.entity";
-import { SubElementDto } from "@infrastructure/dtos/subElements.dto";
+import { SubElementDto } from "@/infrastructure/dtos/subElement.dto";
 import { SubElementTypeDto } from "@infrastructure/dtos/enum/subElement.enum.dto";
 import { Element } from "@domain/entities/element.entity";
 

@@ -7,7 +7,7 @@ import { WindowDto } from '@infrastructure/dtos/window.dto';
 import { WindowRepository } from '@domain/repositories/window.repository';
 
 @Injectable()
-export class WallSocketService {
+export class WindowService {
     constructor(
         private readonly repository: WindowRepository,
         private readonly subElementRepository: SubElementRepository,

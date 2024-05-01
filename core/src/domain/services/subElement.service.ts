@@ -3,14 +3,26 @@ import { SubElement } from "@domain/entities/subElement.entity";
 import { Element } from "@domain/entities/element.entity";
 import { SubElementRepository } from "@domain/repositories/subElement.repository";
 import { SubElementDtoMapper } from '@infrastructure/mappers/subElement.dto.mapper';
-import { SubElementDto } from '@infrastructure/dtos/subElements.dto';
+import { SubElementDto } from '@/infrastructure/dtos/subElement.dto';
 import { ElementRepository } from '@domain/repositories/element.repository';
+import { WallSocketRepository } from '@domain/repositories/wallSocket.repository';
+import { WallSocketDto } from '@/infrastructure/dtos/wallSocket.dto';
+import { WallSocketDtoMapper } from '@infrastructure/mappers/wallSocket.dto.mapper';
+import { GenericSubElementRepository } from '@domain/repositories/genericSubElement.repository';
+import { GenericSubElementDto } from '@/infrastructure/dtos/genericSubElement.dto';
+import { GenericSubElementDtoMapper } from '@infrastructure/mappers/genericSubElement.dto.mapper';
+import { WindowRepository } from '@domain/repositories/window.repository';
+import { WindowDto } from '@/infrastructure/dtos/window.dto';
+import { WindowDtoMapper } from '@infrastructure/mappers/window.dto.mapper';
 
 @Injectable()
 export class SubElementService {
     constructor(
         private readonly repository: SubElementRepository,
         private readonly elementRepository: ElementRepository,
+        private readonly wallSocketRepository: WallSocketRepository,
+        private readonly genericSubElementRepository: GenericSubElementRepository,
+        private readonly windowRepository: WindowRepository
     ) {}
 
     async createSubElement(subElementDto: SubElementDto): Promise<SubElementDto> {
@@ -52,46 +64,21 @@ export class SubElementService {
         return subElement.map(SubElementDtoMapper.fromModel);
     }
 
-    // async getRelatedEntity(id: string): Promise<WallDto | CeilingDto  | GroundDto | StairDto | FurnishingDto> {
-    //     const element : Element = await this.repository.findById(id);
-    //     console.log("j'ai trouvé un elt",element);
-    //     if (!element) {
-    //         throw new NotFoundException('Element does not exist');
-    //     }
-    //     switch (element.type) {
-    //         case 'WALL':
-    //             const wall : Wall = await this.wallRepository.findByElement(id);
-    //             if (!wall) {
-    //                 throw new NotFoundException('no wall found for this element');
-    //             }
-    //             return WallDtoMapper.fromModel(wall);
-    //         case 'CEILING':
-    //             const ceiling : Ceiling = await this.ceilingRepository.findByElement(id);
-    //             if (!ceiling) {
-    //                 throw new NotFoundException('no ceiling found for this element');
-    //             }
-    //             return CeilingDtoMapper.fromModel(ceiling);
-    //         case 'GROUND':
-    //             const ground : Ground = await this.groundRepository.findByElement(id);
-    //             if (!ground) {
-    //                 throw new NotFoundException('no ground found for this element');
-    //             }
-    //             return GroundDtoMapper.fromModel(ground);
-    //         case 'STAIR':
-    //             const stairs : Stair = await this.stairRepository.findByElement(id);
-    //             if (!stairs) {
-    //                 throw new NotFoundException('no stair found for this element');
-    //             }
-    //             return StairDtoMapper.fromModel(stairs);
-    //         case 'FURNISHING':
-    //             const furnishing : Furnishing = await this.furnishingRepository.findByElement(id);
-    //             if (!furnishing) {
-    //                 throw new NotFoundException('no furnishing found for this element');
-    //             }
-    //             return FurnishingDtoMapper.fromModel(furnishing);
-    //         default:
-    //             throw new NotFoundException('Element type not found');
-    //     }
-    // }
+    async getRelatedEntity(id: string): Promise< WallSocketDto | GenericSubElementDto  | WindowDto > {
+        const subElement : SubElement = await this.repository.findById(id);
+        if (!subElement) {
+            throw new NotFoundException('SubElement does not exist');
+        }
+        switch (subElement.type) {
+            case 'WALL_SOCKET':
+                return WallSocketDtoMapper.fromModel(await this.wallSocketRepository.findBySubElement(id));
+            case 'GENERIC_SUB_ELEMENT':
+                return GenericSubElementDtoMapper.fromModel(await this.genericSubElementRepository.findBySubElement(id));
+            case 'WINDOW':
+                return WindowDtoMapper.fromModel(await this.windowRepository.findBySubElement(id));
+            default:
+                throw new NotFoundException('SubElement type not found');
+        }
+    }
 
 }

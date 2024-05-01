@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { GenericSubElement } from "@domain/entities/genericSubElement.entity";
 import { SubElement } from "@domain/entities/subElement.entity";
 import { SubElementRepository } from "@domain/repositories/subElement.repository";
-import { GenericElementDtoMapper } from '@infrastructure/mappers/genericSubElement.dto.mapper';
+import { GenericSubElementDtoMapper } from '@infrastructure/mappers/genericSubElement.dto.mapper';
 import { GenericSubElementDto } from '@infrastructure/dtos/genericSubElement.dto';
 import { GenericSubElementRepository } from '@domain/repositories/genericSubElement.repository';
 
@@ -18,8 +18,8 @@ export class GenericSubElementService {
         if (!subElement) {
             throw new NotFoundException('subElement does not exist');
         }
-        const genericSubElement : GenericSubElement = GenericElementDtoMapper.toModel(GenericSubElementDto, subElement);
-        return GenericElementDtoMapper.fromModel(await this.repository.save(genericSubElement));
+        const genericSubElement : GenericSubElement = GenericSubElementDtoMapper.toModel(GenericSubElementDto, subElement);
+        return GenericSubElementDtoMapper.fromModel(await this.repository.save(genericSubElement));
     }
 
     async getGenericSubElement(id: string): Promise<GenericSubElementDto> {
@@ -28,7 +28,7 @@ export class GenericSubElementService {
             throw new NotFoundException( 'GenericSubElement does not exist');
         }
 
-        return GenericElementDtoMapper.fromModel(genericSubElement);
+        return GenericSubElementDtoMapper.fromModel(genericSubElement);
     }
 
     async updateGenericSubElement(id: string, genericSubElementDto: GenericSubElementDto): Promise<GenericSubElementDto> {
@@ -38,8 +38,8 @@ export class GenericSubElementService {
         }
 
         genericSubElementDto.id = id;
-        const genericSubElement : GenericSubElement = GenericElementDtoMapper.toModel(genericSubElementDto, subElement);
-        return GenericElementDtoMapper.fromModel( await this.repository.updateGenericSubElement(genericSubElement));
+        const genericSubElement : GenericSubElement = GenericSubElementDtoMapper.toModel(genericSubElementDto, subElement);
+        return GenericSubElementDtoMapper.fromModel( await this.repository.updateGenericSubElement(genericSubElement));
     }
 
     async findGenericSubElementBySubElement(subElementId: string): Promise<GenericSubElementDto> {
@@ -48,7 +48,7 @@ export class GenericSubElementService {
             throw new NotFoundException('no genericSubElement found for this subElement');
         }
 
-        return GenericElementDtoMapper.fromModel(genericSubElement);
+        return GenericSubElementDtoMapper.fromModel(genericSubElement);
     }
     
 }

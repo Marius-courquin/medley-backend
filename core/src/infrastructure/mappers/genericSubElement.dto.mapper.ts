@@ -4,7 +4,7 @@ import { GenericSubElementDto } from "@infrastructure/dtos/genericSubElement.dto
 import { GenericSubElementTypeDto } from "@infrastructure/dtos/enum/genericSubElement.enum.dto";
 import { SubElement } from "@domain/entities/subElement.entity";
 
-export class GenericElementDtoMapper {
+export class GenericSubElementDtoMapper {
     static fromModel(genericSubElement : GenericSubElement): GenericSubElementDto {
         return new GenericSubElementDto(
             this.enumToDto(genericSubElement.type),
