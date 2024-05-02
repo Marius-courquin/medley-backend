@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
 import { Estate } from '@domain/entities/estate.entity';
 import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
-import { RoomType } from './enum/room.enum.entity';
+import { RoomType } from '@domain/entities/enum/room.enum.entity';
 
 @Entity()
 export class Room {
@@ -46,9 +46,9 @@ export class Room {
     @IsOptional()
     estate?: Estate;
 
-    constructor (ordre: number, type: RoomType, description: string, livingSpace: number, wallsCount: number, doorsCount: number, windowsCount: number, assignment: string, estate?: Estate, id?: string) {
+    constructor (order: number, type: RoomType, description: string, livingSpace: number, wallsCount: number, doorsCount: number, windowsCount: number, assignment: string, estate?: Estate, id?: string) {
         this.id = id ?? undefined;
-        this.order = ordre;
+        this.order = order;
         this.type = type;
         this.description = description;
         this.livingSpace = livingSpace;

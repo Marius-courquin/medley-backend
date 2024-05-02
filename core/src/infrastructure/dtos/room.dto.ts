@@ -1,5 +1,5 @@
 import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
-import { RoomTypeDto } from "./enum/room.enum.dto";
+import { RoomTypeDto } from "@infrastructure/dtos/enum/room.enum.dto";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class RoomDto {

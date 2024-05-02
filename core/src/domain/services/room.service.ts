@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { EstateRepository } from "../repositories/estate.repository";
-import { RoomDto } from "@/infrastructure/dtos/room.dto";
-import { Room } from "../entities/room.entity";
-import { RoomRepository } from "../repositories/room.repository";
+import { EstateRepository } from "@domain/repositories/estate.repository";
+import { RoomDto } from "@infrastructure/dtos/room.dto";
+import { Room } from "@domain/entities/room.entity";
+import { RoomRepository } from "@domain/repositories/room.repository";
 import { RoomDtoMapper } from "@/infrastructure/mappers/room.dto.mapper";
 
 @Injectable()

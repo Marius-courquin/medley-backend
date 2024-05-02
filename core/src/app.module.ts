@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { EstateModule } from './modules/estate.module';
+import { EstateModule } from '@modules/estate.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ThirdModule } from './modules/third.module';
+import { ThirdModule } from '@modules/third.module';
 import { ConfigModule } from '@nestjs/config';
 import * as process from "process";
-import { RoomModule } from './modules/room.module';
+import { RoomModule } from '@modules/room.module';
 
 
 @Module({
