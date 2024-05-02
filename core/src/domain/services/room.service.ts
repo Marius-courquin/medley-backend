@@ -21,7 +21,7 @@ export class RoomService {
         return RoomDtoMapper.fromModel(await this.roomRepository.save(room));
     }
 
-    async getElement(id: string): Promise<RoomDto> {
+    async get(id: string): Promise<RoomDto> {
         const room: Room = await this.roomRepository.findById(id);
         if (!room) {
             throw new NotFoundException( 'room does not exist'); 
@@ -37,7 +37,7 @@ export class RoomService {
         return rooms.map(room => RoomDtoMapper.fromModel(room));
     }
 
-    async updateElement(room: any): Promise<RoomDto> {
+    async update(room: any): Promise<RoomDto> {
         const estate = await this.estateRepository.findById(room.estateId);
         if (!estate) {
             throw new NotFoundException( 'estate does not exist');
