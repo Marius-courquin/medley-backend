@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  postgres-auth:
+  db-auth:
     container_name: medley-db-auth
     image: postgres:latest
     environment:
@@ -13,7 +13,7 @@ services:
     networks:
       - auth-network
 
-  postgres-core:
+  db-core:
     container_name: medley-db-core
     image: postgres:latest
     environment:
