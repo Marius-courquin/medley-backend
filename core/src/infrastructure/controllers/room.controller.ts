@@ -16,14 +16,14 @@ export class RoomController {
 
     @HttpCode(HttpStatus.OK)
     @Get(":id")
-    getElement(@Param("id", ParseUUIDPipe) id:string) {
+    get(@Param("id", ParseUUIDPipe) id:string) {
         return this.service.getElement(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
-    updateElement(@Param("id", ParseUUIDPipe) id:string, @Body() roomDto: RoomDto) {
-        return this.service.updateElement(roomDto);
+    update(@Param("id", ParseUUIDPipe) id:string, @Body() roomDto: RoomDto) {
+        return this.service.update(roomDto);
     }
 
     @HttpCode(HttpStatus.OK)
