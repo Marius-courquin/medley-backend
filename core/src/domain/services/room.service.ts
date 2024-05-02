@@ -12,7 +12,7 @@ export class RoomService {
         private readonly estateRepository: EstateRepository
     ) {}
 
-    async createRoom(roomDto: RoomDto): Promise<RoomDto> {
+    async create(roomDto: RoomDto): Promise<RoomDto> {
         const estate = await this.estateRepository.findById(roomDto.estateId);
         if (!estate) {
             throw new NotFoundException( 'estate does not exist');
@@ -21,7 +21,7 @@ export class RoomService {
         return RoomDtoMapper.fromModel(await this.roomRepository.save(room));
     }
 
-    async getRoom(id: string): Promise<RoomDto> {
+    async getElement(id: string): Promise<RoomDto> {
         const room: Room = await this.roomRepository.findById(id);
         if (!room) {
             throw new NotFoundException( 'room does not exist'); 
@@ -29,8 +29,8 @@ export class RoomService {
         return RoomDtoMapper.fromModel(room);
     }
 
-    async findByEstate(estateId: string): Promise<RoomDto[]> {
-        const rooms: Room[] = await this.roomRepository.findByEstate(estateId);
+    async getAllForEstate(estateId: string): Promise<RoomDto[]> {
+        const rooms: Room[] = await this.roomRepository.findAllByEstate(estateId);
         if (rooms.length <= 0) {
             throw new NotFoundException( 'no rooms found for this estate');
         }

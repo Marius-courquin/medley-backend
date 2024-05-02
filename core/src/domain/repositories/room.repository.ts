@@ -15,7 +15,7 @@ export class RoomRepository extends Repository<Room>{
         });
       }
 
-    async findByEstate(estateId: string): Promise<Room[]> {
+    async findAllByEstate(estateId: string): Promise<Room[]> {
         return this.createQueryBuilder("room")
             .leftJoinAndSelect("room.estate", "estate")
             .where("estate.id = :estateId", { estateId })

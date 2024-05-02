@@ -10,25 +10,25 @@ export class RoomController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    createRoom(@Body() roomDto: RoomDto) {
-        return this.service.createRoom(roomDto);
+    create(@Body() roomDto: RoomDto) {
+        return this.service.create(roomDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get(":id")
-    getRoom(@Param("id", ParseUUIDPipe) id:string) {
-        return this.service.getRoom(id);
+    getElement(@Param("id", ParseUUIDPipe) id:string) {
+        return this.service.getElement(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
-    updateRoom(@Param("id", ParseUUIDPipe) id:string, @Body() roomDto: RoomDto) {
+    updateElement(@Param("id", ParseUUIDPipe) id:string, @Body() roomDto: RoomDto) {
         return this.service.updateElement(roomDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get()
-    getRoomByEstate(@Query("estateId", ParseUUIDPipe) estateId:string) {
-        return this.service.findByEstate(estateId);
+    getAllForEstate(@Query("estateId", ParseUUIDPipe) estateId:string) {
+        return this.service.getAllForEstate(estateId);
     }
 }
