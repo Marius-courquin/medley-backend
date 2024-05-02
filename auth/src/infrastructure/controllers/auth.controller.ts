@@ -7,7 +7,7 @@ import {UserRevocationDto} from "@infrastructure/dtos/userRevocation.dto";
 @Controller('auth')
 export class AuthController {
     constructor(
-        private service: AuthService,
+        private service: AuthService
     ) {}
 
     @HttpCode(HttpStatus.OK)
