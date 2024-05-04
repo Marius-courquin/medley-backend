@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, Query} from '@nestjs/common';
+import {Body, Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, Query} from '@nestjs/common';
 import {EstateService} from '@domain/services/estate.service';
 import {EstateDto} from "@infrastructure/dtos/estate.dto";
 
@@ -16,6 +16,18 @@ export class EstateController {
     }
 
     @HttpCode(HttpStatus.OK)
+    @Get()
+    searchEstate(@Query('streetName') streetName: string) {
+        return this.service.searchEstate(streetName);
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Get("owner/:ownerId")
+    getEstateByOwner(@Param('ownerId', ParseUUIDPipe) id: string) {
+        return this.service.findByOwner(id);
+    }
+
+    @HttpCode(HttpStatus.OK)
     @Get(":id")
     getEstate(@Param('id', ParseUUIDPipe) id: string ) {
         return this.service.getEstate(id);
@@ -25,18 +37,6 @@ export class EstateController {
     @Put(":id")
     updateEstate(@Param('id', ParseUUIDPipe) id: string, @Body() estateDto: EstateDto) {
         return this.service.updateEstate(id, estateDto);
-    }
-
-    @HttpCode(HttpStatus.OK)
-    @Get()
-    getEstateByOwner(@Query('ownerId', ParseUUIDPipe) id: string) {
-        return this.service.findByOwner(id);
-    }
-
-    @HttpCode(HttpStatus.OK)
-    @Get()
-    searchEstate(@Query('name') name: string) {
-        return this.service.searchEstate(name);
     }
 
 }

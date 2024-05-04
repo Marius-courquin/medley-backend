@@ -28,8 +28,9 @@ export class EstateRepository extends Repository<Estate>{
 
     async findByString(query: string): Promise<Estate[]> {
         return this.createQueryBuilder("estate")
-                    .where("estate.streetName LIKE :query", { query: `%${query}%` })
-                    .getMany();
+        .leftJoinAndSelect("estate.owner", "owner")
+        .where("estate.streetName LIKE :query", { query: `%${query}%` })
+        .getMany();
     }
 
 }
