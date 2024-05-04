@@ -21,7 +21,7 @@ export class FurnishingRepository extends Repository<Furnishing>{
 
     async findByElement(elementId: string): Promise<Furnishing> {
         return this.createQueryBuilder("furnishing")
-            .innerJoinAndSelect("furnishing.element", "element")
+            .leftJoinAndSelect("furnishing.element", "element")
             .where("element.id = :elementId", { elementId })
             .getOne();
     }

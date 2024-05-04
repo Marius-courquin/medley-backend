@@ -21,7 +21,7 @@ export class StairRepository extends Repository<Stair>{
     
     async findByElement(elementId: string): Promise<Stair> {
         return this.createQueryBuilder("stair")
-            .innerJoinAndSelect("stair.element", "element")
+            .leftJoinAndSelect("stair.element", "element")
             .where("element.id = :elementId", { elementId })
             .getOne();
     }

@@ -21,7 +21,7 @@ export class CeilingRepository extends Repository<Ceiling>{
 
     async findByElement(elementId: string): Promise<Ceiling> {
         return this.createQueryBuilder("ceiling")
-            .innerJoinAndSelect("ceiling.element", "element")
+            .leftJoinAndSelect("ceiling.element", "element")
             .where("element.id = :elementId", { elementId })
             .getOne();
     }
