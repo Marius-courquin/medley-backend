@@ -21,7 +21,7 @@ export class GroundRepository extends Repository<Ground>{
 
     async findByElement(elementId: string): Promise<Ground> {
         return this.createQueryBuilder("ground")
-            .innerJoinAndSelect("ground.element", "element")
+            .leftJoinAndSelect("ground.element", "element")
             .where("element.id = :elementId", { elementId })
             .getOne();
     }

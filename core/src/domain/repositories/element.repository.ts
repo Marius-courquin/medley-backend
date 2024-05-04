@@ -21,7 +21,7 @@ export class ElementRepository extends Repository<Element>{
     
     async findByRoom(roomId: string): Promise<Element[]> {
         return this.createQueryBuilder("element")
-            .innerJoinAndSelect("element.room", "room")
+            .leftJoinAndSelect("element.room", "room")
             .where("room.id = :roomId", { roomId })
             .getMany();
     }

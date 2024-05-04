@@ -21,7 +21,7 @@ export class WallRepository extends Repository<Wall>{
     
     async findByElement(elementId: string): Promise<Wall> {
         return this.createQueryBuilder("wall")
-            .innerJoinAndSelect("wall.element", "element")
+            .leftJoinAndSelect("wall.element", "element")
             .where("element.id = :elementId", { elementId })
             .getOne();
     }
