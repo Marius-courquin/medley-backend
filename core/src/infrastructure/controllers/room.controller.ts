@@ -17,7 +17,7 @@ export class RoomController {
     @HttpCode(HttpStatus.OK)
     @Get(":id")
     get(@Param("id", ParseUUIDPipe) id:string) {
-        return this.service.getElement(id);
+        return this.service.get(id);
     }
 
     @HttpCode(HttpStatus.OK)
