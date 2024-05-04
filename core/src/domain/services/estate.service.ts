@@ -55,9 +55,6 @@ export class EstateService {
 
     async searchEstate(query: string): Promise<EstateDto[]> {
         const estates : Estate[] = await this.repository.findByString(query);
-        if (estates.length === 0) {
-            throw new NotFoundException( 'no estates found for this query');
-        }
         return estates.map(estate => EstateDtoMapper.fromModel(estate));
     }
 
