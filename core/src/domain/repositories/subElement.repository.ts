@@ -21,7 +21,7 @@ export class SubElementRepository extends Repository<SubElement>{
     
     async findByElement(elementId: string): Promise<SubElement[]> {
         return this.createQueryBuilder("sub_element")
-            .innerJoinAndSelect("sub_element.element", "element")
+            .leftJoinAndSelect("sub_element.element", "element")
             .where("element.id = :elementId", { elementId })
             .getMany();
     }
