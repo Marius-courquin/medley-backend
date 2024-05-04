@@ -4,17 +4,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThirdModule } from '@modules/third.module';
 import { ConfigModule } from '@nestjs/config';
 import * as process from "process";
+import { RoomModule } from '@modules/room.module';
 import {JwtModule} from "@nestjs/jwt";
 import {AgentModule} from "@modules/agent.module";
 import {APP_GUARD, APP_INTERCEPTOR} from "@nestjs/core";
 import {AuthGuard} from "@infrastructure/guards/auth.guard";
 import {AgentInterceptor} from "@infrastructure/interceptors/agent.interceptor";
 
-
 @Module({
   imports: [
     EstateModule,
     ThirdModule,
+    RoomModule,
     AgentModule,
     ConfigModule.forRoot({
       isGlobal: true,
