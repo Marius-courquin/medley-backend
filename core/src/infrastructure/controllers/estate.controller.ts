@@ -17,8 +17,8 @@ export class EstateController {
 
     @HttpCode(HttpStatus.OK)
     @Get()
-    searchEstate(@Query('query') query: string) {
-        return this.service.searchEstate(query);
+    searchEstates(@Query('query') query: string) {
+        return this.service.search(query);
     }
 
     @HttpCode(HttpStatus.OK)

@@ -53,7 +53,7 @@ export class EstateService {
         return EstateDtoMapper.fromModel( await this.repository.updateElement(estate));
     }
 
-    async searchEstate(query: string): Promise<EstateDto[]> {
+    async search(query: string): Promise<EstateDto[]> {
         const estates : Estate[] = await this.repository.findByString(query);
         return estates.map(estate => EstateDtoMapper.fromModel(estate));
     }
