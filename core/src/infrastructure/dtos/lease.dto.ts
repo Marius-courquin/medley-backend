@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+import { IsDateString, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class LeaseDto {
 
@@ -12,11 +12,11 @@ export class LeaseDto {
     @ApiProperty()
     keyCount: number;
 
-    @IsDate({ message: 'startDate must be a valid date' })
+    @IsDateString()
     @ApiProperty({ type: String, format: 'date-time' })
     startDate: Date;
 
-    @IsDate({ message: 'endDate must be a valid date' })
+    @IsDateString()
     @ApiProperty({ type: String, format: 'date-time' })
     endDate: Date;
 

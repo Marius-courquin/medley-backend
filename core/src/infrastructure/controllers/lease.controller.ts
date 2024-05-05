@@ -26,6 +26,7 @@ export class LeaseController {
   @HttpCode(HttpStatus.OK)
   @Get(':id')
   getLease(@Param('id', ParseUUIDPipe) id: string) {
+    console.log('id', id);
     return this.service.getLease(id);
   }
 

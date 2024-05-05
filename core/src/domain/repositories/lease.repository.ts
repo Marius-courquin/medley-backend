@@ -13,21 +13,29 @@ export class LeaseRepository extends Repository<Lease>{
     }
 
     async findByAgent(agentId: string): Promise<Lease[]> {
-        return this.createQueryBuilder("lease")
-                    .leftJoinAndSelect("lease.agent", "agent")
-                    .where("agent.id = :agentId", { agentId })
-                    .getMany();
-    }
+    return this.createQueryBuilder("lease")
+        .leftJoinAndSelect("lease.agent", "agent")
+        .leftJoinAndSelect("lease.estate", "estate")
+        .leftJoinAndSelect("lease.tenant", "tenant")
+        .where("agent.id = :agentId", { agentId })
+        .getMany();
+}
+
 
     async findByTenant(tenantId: string): Promise<Lease[]> {
         return this.createQueryBuilder("lease")
                     .leftJoinAndSelect("lease.tenant", "tenant")
+                    .leftJoinAndSelect("lease.agent", "agent")
+                    .leftJoinAndSelect("lease.estate", "estate")
                     .where("tenant.id = :tenantId", { tenantId })
                     .getMany();
     }
 
     async findById(id: string): Promise<Lease | undefined> {
-        return this.findOne({where: {id}});
+      console.log(id);
+      const result = await this.findOne({ where: { id: id } });
+      console.log(result);
+      return result;
     }
 
     async updateLease(lease: Lease): Promise<Lease> {

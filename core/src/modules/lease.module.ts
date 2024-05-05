@@ -6,21 +6,26 @@ import { LeaseRepository } from '@domain/repositories/lease.repository';
 import { ThirdModule } from './third.module';
 import { LeaseController } from '@/infrastructure/controllers/lease.controller';
 import { EstateModule } from './estate.module'; // Import EstateModule if Lease operations depend on Estate
-import { AgentModule } from './agent.module'; // Assuming you have a similar setup for Agents
+import { AgentModule } from './agent.module';
+import {EstateRepository} from "@domain/repositories/estate.repository"; // Assuming you have a similar setup for Agents
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([Lease]),
         ThirdModule,
-        EstateModule,
         AgentModule
+
+
+
     ],
     providers: [
         LeaseService,
-        LeaseRepository
+        LeaseRepository,
+        EstateRepository // Add EstateRepository to the providers array if Lease operations depend on Estate
     ],
     exports: [
-        LeaseService
+        LeaseService,
+        LeaseRepository
     ],
     controllers: [LeaseController]
 })

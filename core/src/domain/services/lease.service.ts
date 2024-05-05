@@ -20,11 +20,16 @@ export class LeaseService {
         const tenant = await this.thirdRepository.findById(leaseDto.tenantId);
         const estate = await this.estateRepository.findById(leaseDto.estateId);
         const lease = LeaseDtoMapper.toModel(leaseDto, estate, agent, tenant);
+        console.log(lease);
+
         return LeaseDtoMapper.fromModel(await this.leaseRepository.save(lease));
+
+
     }
 
     async findByAgent(agentId: string): Promise<LeaseDto[]> {
         const leases: Lease[] = await this.leaseRepository.findByAgent(agentId);
+        console.log(leases);
         if (leases.length === 0) {
             throw new NotFoundException('No leases found for this agent');
         }
@@ -40,7 +45,8 @@ export class LeaseService {
     }
 
     async getLease(leaseId: string): Promise<LeaseDto> {
-        const lease: Lease = await this.leaseRepository.findById(leaseId);
+        const lease:Lease = await this.leaseRepository.findById(leaseId);
+        console.log(lease);
         if (!lease) {
             throw new NotFoundException('Lease does not exist');
         }
@@ -56,6 +62,7 @@ export class LeaseService {
         const tenant = await this.thirdRepository.findById(leaseDto.tenantId);
         const estate = await this.estateRepository.findById(leaseDto.estateId);
         const lease: Lease = LeaseDtoMapper.toModel(leaseDto, estate, agent, tenant);
+        console.log(lease);
         return LeaseDtoMapper.fromModel(await this.leaseRepository.updateLease(lease));
     }
 
