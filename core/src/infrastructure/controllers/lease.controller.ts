@@ -20,30 +20,30 @@ export class LeaseController {
   @HttpCode(HttpStatus.CREATED)
   @Post()
   createLease(@Body() leaseDto: LeaseDto) {
-    return this.service.createLease(leaseDto);
+    return this.service.create(leaseDto);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get(':id')
-  getLease(@Param('id', ParseUUIDPipe) id: string) {
+  get(@Param('id', ParseUUIDPipe) id: string) {
     return this.service.get(id);
   }
 
   @HttpCode(HttpStatus.OK)
   @Put(':id')
-  updateLease(@Param('id', ParseUUIDPipe) id: string, @Body() leaseDto: LeaseDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() leaseDto: LeaseDto) {
     return this.service.update(id, leaseDto);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('by-agent/:agentId')
-  getLeasesByAgent(@Param('agentId', ParseUUIDPipe) agentId: string) {
+  getByAgent(@Param('agentId', ParseUUIDPipe) agentId: string) {
     return this.service.getByAgent(agentId);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('by-tenant/:tenantId')
-  getLeasesByTenant(@Param('tenantId', ParseUUIDPipe) tenantId: string) {
+  getByTenant(@Param('tenantId', ParseUUIDPipe) tenantId: string) {
     return this.service.getByTenant(tenantId);
   }
 

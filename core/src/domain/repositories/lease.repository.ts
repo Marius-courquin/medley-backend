@@ -11,7 +11,7 @@ export class LeaseRepository extends Repository<Lease>{
         super(Lease, dataSource.createEntityManager());
     }
 
-    async getByAgent(agentId: string): Promise<Lease[]> {
+    async findByAgent(agentId: string): Promise<Lease[]> {
     return this.createQueryBuilder("lease")
         .leftJoinAndSelect("lease.agent", "agent")
         .leftJoinAndSelect("lease.estate", "estate")
@@ -21,7 +21,7 @@ export class LeaseRepository extends Repository<Lease>{
 }
 
 
-    async getByTenant(tenantId: string): Promise<Lease[]> {
+    async findByTenant(tenantId: string): Promise<Lease[]> {
         return this.createQueryBuilder("lease")
                     .leftJoinAndSelect("lease.tenant", "tenant")
                     .leftJoinAndSelect("lease.agent", "agent")
@@ -30,11 +30,11 @@ export class LeaseRepository extends Repository<Lease>{
                     .getMany();
     }
 
-    async getById(id: string): Promise<Lease | undefined> {
+    async findById(id: string): Promise<Lease | undefined> {
         return await this.findOne({where: {id: id}});
     }
 
-    async updateLease(lease: Lease): Promise<Lease> {
+    async updateElement(lease: Lease): Promise<Lease> {
         return this.save(lease);
     }
 

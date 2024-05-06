@@ -15,7 +15,7 @@ export class LeaseService {
         private readonly estateRepository: EstateRepository
     ) {}
 
-    async createLease(leaseDto: LeaseDto): Promise<LeaseDto> {
+    async create(leaseDto: LeaseDto): Promise<LeaseDto> {
         const agent = await this.agentRepository.findById(leaseDto.agentId);
         const tenant = await this.thirdRepository.findById(leaseDto.tenantId);
         const estate = await this.estateRepository.findById(leaseDto.estateId);
@@ -28,7 +28,7 @@ export class LeaseService {
     }
 
     async getByAgent(agentId: string): Promise<LeaseDto[]> {
-        const leases: Lease[] = await this.leaseRepository.getByAgent(agentId);
+        const leases: Lease[] = await this.leaseRepository.findByAgent(agentId);
         if (leases.length === 0) {
             throw new NotFoundException('No leases found for this agent');
         }
@@ -36,7 +36,7 @@ export class LeaseService {
     }
 
     async getByTenant(tenantId: string): Promise<LeaseDto[]> {
-        const leases: Lease[] = await this.leaseRepository.getByTenant(tenantId);
+        const leases: Lease[] = await this.leaseRepository.findByTenant(tenantId);
         if (leases.length === 0) {
             throw new NotFoundException('No leases found for this tenant');
         }
@@ -44,7 +44,7 @@ export class LeaseService {
     }
 
     async get(leaseId: string): Promise<LeaseDto> {
-        const lease:Lease = await this.leaseRepository.getById(leaseId);
+        const lease:Lease = await this.leaseRepository.findById(leaseId);
         if (!lease) {
             throw new NotFoundException('Lease does not exist');
         }
@@ -57,7 +57,7 @@ export class LeaseService {
         const tenant = await this.thirdRepository.findById(leaseDto.tenantId);
         const estate = await this.estateRepository.findById(leaseDto.estateId);
         const lease: Lease = LeaseDtoMapper.toModel(leaseDto, estate, agent, tenant);
-        return LeaseDtoMapper.fromModel(await this.leaseRepository.updateLease(lease));
+        return LeaseDtoMapper.fromModel(await this.leaseRepository.updateElement(lease));
     }
 
 }
