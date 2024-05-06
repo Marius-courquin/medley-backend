@@ -19,7 +19,6 @@ export class LeaseInspectionStepController {
         required: true
     })
     @ApiCreatedResponse({ 
-        description: 'The lease inspection step has been successfully created' ,
         type: LeaseInspectionStepWithLinkDto
     })
     @ApiNotFoundResponse({
@@ -43,67 +42,6 @@ export class LeaseInspectionStepController {
         name: 'id',
         type: 'string',
         description: 'The id of the lease inspection step',
-        format: 'uuid',
-        example: '123e4567-e89b-12d3-a456-426614174000',
-        required: true,
-    })
-    @ApiOkResponse({
-        description: 'The lease inspection step has been successfully found',
-        type: LeaseInspectionStepWithLinkDto
-    })
-    @ApiNotFoundResponse({
-        description: 'The lease inspection step does not exist',
-        schema: {
-            example: {
-                message: 'The lease inspection step does not exist',
-                statusCode: 404
-            }
-        }
-    })
-    @HttpCode(HttpStatus.OK)
-    @Get(':id')
-    get(@Param('id', ParseUUIDPipe) id: string) {
-        return this.service.get(id);
-    }
-
-    @ApiParam({
-        name: 'id',
-        type: 'string',
-        description: 'The id of the lease inspection step',
-        format: 'uuid',
-        example: '123e4567-e89b-12d3-a456-426614174000',
-        required: true,
-    })
-    @ApiBody({
-        type: LeaseInspectionStepWithFileDto,
-        description: 'The lease inspection step to update',
-        required: true
-    })
-    @ApiOkResponse({
-        description: 'The lease inspection step has been successfully updated',
-        type: LeaseInspectionStepWithLinkDto
-    })
-    @ApiNotFoundResponse({
-        description: 'The lease inspection step does not exist',
-        schema: {
-            example: {
-                message: 'The lease inspection step does not exist',
-                statusCode: 404
-            }
-        }
-    })
-    @HttpCode(HttpStatus.OK)
-    @Put(':id')
-    @UseInterceptors(new ParseIntFieldsInterceptor(['state', 'description', 'rating']))
-    @FormDataRequest()
-    update(@Param('id', ParseUUIDPipe) id: string, @Body() leaseInspectionStepDto : LeaseInspectionStepWithFileDto) {
-        return this.service.update(id, leaseInspectionStepDto);
-    }
-
-    @ApiParam({
-        name: 'leaseId',
-        type: 'string',
-        description: 'The id of the lease inspection',
         format: 'uuid',
         example: '123e4567-e89b-12d3-a456-426614174000',
         required: true,
