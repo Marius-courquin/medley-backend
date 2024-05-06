@@ -15,7 +15,7 @@ export class GroundRepository extends Repository<Ground>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateGround(ground: Ground): Promise<Ground | undefined> {
+    async updateElement(ground: Ground): Promise<Ground | undefined> {
         return this.save(ground);
     }
 

@@ -18,7 +18,8 @@ import { EstateRepository } from "@domain/repositories/estate.repository";
         EstateRepository
     ],
     exports: [
-        RoomService
+        RoomService,
+        RoomRepository,
     ],
     controllers: [RoomController]
 })

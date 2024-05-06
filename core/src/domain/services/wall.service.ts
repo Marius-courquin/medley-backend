@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { ElementRepository } from "@domain/repositories/element.repository";
 import { WallDtoMapper } from '@infrastructure/mappers/wall.dto.mapper';
 import { WallDto } from '@infrastructure/dtos/wall.dto';
@@ -14,20 +14,20 @@ export class WallService {
         private readonly elementRepository: ElementRepository
     ) {}
 
-    async createWall(wallDto: WallDto): Promise<WallDto> {
+    async create(wallDto: WallDto): Promise<WallDto> {
         const element : Element = await this.elementRepository.findById(wallDto.elementId);
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
         if(element.type !== ElementType.WALL) {
-            throw new NotFoundException('element is not a wall');
+            throw new BadRequestException('element is not a wall');
         }
 
         const wall : Wall = WallDtoMapper.toModel(wallDto, element);
         return WallDtoMapper.fromModel(await this.repository.save(wall));
     }
 
-    async getWall(id: string): Promise<WallDto> {
+    async get(id: string): Promise<WallDto> {
         const wall : Wall = await this.repository.findById(id);
         if (!wall) {
             throw new NotFoundException( 'wall does not exist');
@@ -36,7 +36,7 @@ export class WallService {
         return WallDtoMapper.fromModel(wall);
     }
 
-    async updateWall(id: string, wallDto: WallDto): Promise<WallDto> {
+    async update(id: string, wallDto: WallDto): Promise<WallDto> {
         const element : Element = await this.elementRepository.findById(wallDto.elementId);
         if (!element) {
             throw new NotFoundException('element does not exist');
@@ -44,10 +44,10 @@ export class WallService {
 
         wallDto.id = id;
         const wall : Wall = WallDtoMapper.toModel(wallDto, element);
-        return WallDtoMapper.fromModel( await this.repository.updateWall(wall));
+        return WallDtoMapper.fromModel( await this.repository.updateElement(wall));
     }
 
-    async findWallByElement(elementId: string): Promise<WallDto> {
+    async getWallByElement(elementId: string): Promise<WallDto> {
         const wall : Wall = await this.repository.findByElement(elementId);
         if (!wall) {
             throw new NotFoundException('no wall found for this element');

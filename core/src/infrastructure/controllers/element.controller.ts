@@ -11,26 +11,26 @@ export class ElementController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    createElement(@Body() elementDto: ElementDto) {
-        return this.service.createElement(elementDto);
+    create(@Body() elementDto: ElementDto) {
+        return this.service.create(elementDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get(":id")
-    getElement(@Param('id', ParseUUIDPipe) id: string ) {
-        return this.service.getElement(id);
+    get(@Param('id', ParseUUIDPipe) id: string ) {
+        return this.service.get(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
-    updateElement(@Param('id', ParseUUIDPipe) id: string, @Body() elementDto: ElementDto) {
-        return this.service.updateElement(id, elementDto);
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() elementDto: ElementDto) {
+        return this.service.update(id, elementDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get()
     getElementByRoom(@Query('roomId', ParseUUIDPipe) id: string) {
-        return this.service.findElementByRoom(id);
+        return this.service.getElementByRoom(id);
     }   
 
     @HttpCode(HttpStatus.OK)
