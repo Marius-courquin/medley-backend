@@ -30,14 +30,13 @@ export class EstateRepository extends Repository<Estate>{
         return this.createQueryBuilder("estate")
         .leftJoinAndSelect("estate.owner", "owner")
         .where(new Brackets(qb => {
-            qb.where("estate.streetNumber LIKE :query", { query: `%${query}%` })
-              .orWhere("estate.streetName LIKE :query", { query: `%${query}%` })
-              .orWhere("estate.city LIKE :query", { query: `%${query}%` })
-              .orWhere("estate.description LIKE :query", { query: `%${query}%` })
-              .orWhere("estate.type::text LIKE :query", { query: `%${query}%` })
-              .orWhere("CAST(estate.type AS TEXT) LIKE :query", { query: `%${query}%` })
-              .orWhere("owner.firstName LIKE :query", { query: `%${query}%` })
-              .orWhere("owner.lastName LIKE :query", { query: `%${query}%` }) 
+            qb.where("estate.streetNumber ILIKE :query", { query: `%${query}%` })
+              .orWhere("estate.streetName ILIKE :query", { query: `%${query}%` })
+              .orWhere("estate.city ILIKE :query", { query: `%${query}%` })
+              .orWhere("estate.description ILIKE :query", { query: `%${query}%` })
+              .orWhere("CAST(estate.type AS TEXT) ILIKE :query", { query: `%${query}%` })
+              .orWhere("owner.firstName ILIKE :query", { query: `%${query}%` })
+              .orWhere("owner.lastName ILIKE :query", { query: `%${query}%` }) 
   
         })).getMany();
     }
