@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Stair } from "@domain/entities/Stair.entity";
+import { Stair } from "@domain/entities/stair.entity";
 import { StairRepository } from "@domain/repositories/stair.repository";
 import { StairDtoMapper } from '@infrastructure/mappers/stair.dto.mapper';
-import { StairDto } from '@infrastructure/dtos/Stair.dto';
+import { StairDto } from '@infrastructure/dtos/stair.dto';
 import { Element } from '@domain/entities/element.entity';
 import { ElementRepository } from '@domain/repositories/element.repository';
 import { ElementType } from '@domain/entities/enum/element.enum.entity';
