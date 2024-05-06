@@ -8,7 +8,7 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
-  Query,
+
 } from '@nestjs/common';
 import { LeaseService } from '@domain/services/lease.service';
 import { LeaseDto } from '@infrastructure/dtos/lease.dto';
@@ -26,27 +26,25 @@ export class LeaseController {
   @HttpCode(HttpStatus.OK)
   @Get(':id')
   getLease(@Param('id', ParseUUIDPipe) id: string) {
-    console.log('id', id);
-    return this.service.getLease(id);
+    return this.service.get(id);
   }
 
   @HttpCode(HttpStatus.OK)
   @Put(':id')
   updateLease(@Param('id', ParseUUIDPipe) id: string, @Body() leaseDto: LeaseDto) {
-    return this.service.updateLease(id, leaseDto);
+    return this.service.update(id, leaseDto);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('by-agent/:agentId')
   getLeasesByAgent(@Param('agentId', ParseUUIDPipe) agentId: string) {
-    return this.service.findByAgent(agentId);
+    return this.service.getByAgent(agentId);
   }
 
   @HttpCode(HttpStatus.OK)
   @Get('by-tenant/:tenantId')
   getLeasesByTenant(@Param('tenantId', ParseUUIDPipe) tenantId: string) {
-    return this.service.findByTenant(tenantId);
+    return this.service.getByTenant(tenantId);
   }
 
-  // You can add more endpoints as needed for your application's functionality
 }

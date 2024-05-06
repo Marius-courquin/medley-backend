@@ -5,9 +5,8 @@ import { Lease } from '@domain/entities/lease.entity';
 import { LeaseRepository } from '@domain/repositories/lease.repository';
 import { ThirdModule } from './third.module';
 import { LeaseController } from '@/infrastructure/controllers/lease.controller';
-import { EstateModule } from './estate.module'; // Import EstateModule if Lease operations depend on Estate
-import { AgentModule } from './agent.module';
-import {EstateRepository} from "@domain/repositories/estate.repository"; // Assuming you have a similar setup for Agents
+import { AgentModule } from '@/modules/agent.module';
+import {EstateRepository} from "@domain/repositories/estate.repository";
 
 @Module({
     imports: [
@@ -21,7 +20,7 @@ import {EstateRepository} from "@domain/repositories/estate.repository"; // Assu
     providers: [
         LeaseService,
         LeaseRepository,
-        EstateRepository // Add EstateRepository to the providers array if Lease operations depend on Estate
+        EstateRepository
     ],
     exports: [
         LeaseService,

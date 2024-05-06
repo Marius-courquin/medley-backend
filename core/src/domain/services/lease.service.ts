@@ -27,36 +27,31 @@ export class LeaseService {
 
     }
 
-    async findByAgent(agentId: string): Promise<LeaseDto[]> {
-        const leases: Lease[] = await this.leaseRepository.findByAgent(agentId);
-        console.log(leases);
+    async getByAgent(agentId: string): Promise<LeaseDto[]> {
+        const leases: Lease[] = await this.leaseRepository.getByAgent(agentId);
         if (leases.length === 0) {
             throw new NotFoundException('No leases found for this agent');
         }
         return leases.map(lease => LeaseDtoMapper.fromModel(lease));
     }
 
-    async findByTenant(tenantId: string): Promise<LeaseDto[]> {
-        const leases: Lease[] = await this.leaseRepository.findByTenant(tenantId);
+    async getByTenant(tenantId: string): Promise<LeaseDto[]> {
+        const leases: Lease[] = await this.leaseRepository.getByTenant(tenantId);
         if (leases.length === 0) {
             throw new NotFoundException('No leases found for this tenant');
         }
         return leases.map(lease => LeaseDtoMapper.fromModel(lease));
     }
 
-    async getLease(leaseId: string): Promise<LeaseDto> {
-        const lease:Lease = await this.leaseRepository.findById(leaseId);
-        console.log(lease);
+    async get(leaseId: string): Promise<LeaseDto> {
+        const lease:Lease = await this.leaseRepository.getById(leaseId);
         if (!lease) {
             throw new NotFoundException('Lease does not exist');
         }
         return LeaseDtoMapper.fromModel(lease);
     }
 
-    async updateLease(leaseId: string, leaseDto: LeaseDto): Promise<LeaseDto> {
-        // You would need to verify the agent and the tenant as well before updating a lease
-        // And map the DTO to a lease entity before saving
-        // This is a simplified placeholder logic
+    async update(leaseId: string, leaseDto: LeaseDto): Promise<LeaseDto> {
         leaseDto.id = leaseId;
         const agent = await this.agentRepository.findById(leaseDto.agentId);
         const tenant = await this.thirdRepository.findById(leaseDto.tenantId);
@@ -66,5 +61,4 @@ export class LeaseService {
         return LeaseDtoMapper.fromModel(await this.leaseRepository.updateLease(lease));
     }
 
-    // Additional methods for lease-specific logic can be added here
 }
