@@ -3,7 +3,7 @@ import { ThirdService } from "@domain/services/third.service";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {Third} from "@domain/entities/third.entity";
 import {ThirdRepository} from "@domain/repositories/third.repository";
-import { ThirdController } from '@/infrastructure/controllers/third.controller';
+import { ThirdController } from '@infrastructure/controllers/third.controller';
 
 @Module({
     imports: [

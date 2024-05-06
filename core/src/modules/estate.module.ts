@@ -3,7 +3,7 @@ import { EstateService } from "@domain/services/estate.service";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {Estate} from "@domain/entities/estate.entity";
 import {EstateRepository} from "@domain/repositories/estate.repository";
-import { ThirdModule } from './third.module';
+import { ThirdModule } from '@modules/third.module';
 import { EstateController } from '@/infrastructure/controllers/estate.controller';
 
 @Module({
@@ -16,7 +16,8 @@ import { EstateController } from '@/infrastructure/controllers/estate.controller
         EstateRepository
     ],
     exports: [
-        EstateService
+        EstateService,
+        EstateRepository
     ],
     controllers: [EstateController]
 })

@@ -4,6 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThirdModule } from '@modules/third.module';
 import { ConfigModule } from '@nestjs/config';
 import * as process from "process";
+import { ElementModule } from "@modules/element.module"
+import { FurnishingModule } from "@modules/furnishing.module"
+import { StairModule } from "@modules/stair.module"
+import { CeilingModule } from "@modules/ceiling.module"
+import { GroundModule } from "@modules/ground.module"
+import { WallModule } from "@modules/wall.module"
 import { RoomModule } from '@modules/room.module';
 import {JwtModule} from "@nestjs/jwt";
 import {AgentModule} from "@modules/agent.module";
@@ -17,6 +23,12 @@ import {LeaseModule} from "@modules/lease.module";
     EstateModule,
     ThirdModule,
     RoomModule,
+    ElementModule,
+    FurnishingModule,
+    StairModule,
+    CeilingModule,
+    GroundModule,
+    WallModule,
     AgentModule,
     LeaseModule,
     ConfigModule.forRoot({
