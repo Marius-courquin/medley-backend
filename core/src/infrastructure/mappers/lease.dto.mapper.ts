@@ -7,7 +7,6 @@ import { Agent } from "@domain/entities/agent.entity";
 export class LeaseDtoMapper {
 
     static fromModel(lease: Lease): LeaseDto {
-        console.log(lease);
         return new LeaseDto(
             lease.id,
             lease.keyCount,

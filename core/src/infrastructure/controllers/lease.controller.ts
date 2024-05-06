@@ -19,7 +19,7 @@ export class LeaseController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post()
-  createLease(@Body() leaseDto: LeaseDto) {
+  create(@Body() leaseDto: LeaseDto) {
     return this.service.create(leaseDto);
   }
 
