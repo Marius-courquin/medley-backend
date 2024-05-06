@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Stair } from "@domain/entities/Stair.entity";
 import { StairRepository } from "@domain/repositories/stair.repository";
 import { StairDtoMapper } from '@infrastructure/mappers/stair.dto.mapper';
@@ -14,20 +14,20 @@ export class StairService {
         private readonly elementRepository: ElementRepository
     ) {}
 
-    async createStair(stairDto: StairDto): Promise<StairDto> {
+    async create(stairDto: StairDto): Promise<StairDto> {
         const element : Element = await this.elementRepository.findById(stairDto.elementId);
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
         if(element.type !== ElementType.STAIR) {
-            throw new NotFoundException('element is not a stair');
+            throw new BadRequestException('element is not a stair');
         }
-
+        
         const Stair : Stair = StairDtoMapper.toModel(stairDto, element);
         return StairDtoMapper.fromModel(await this.repository.save(Stair));
     }
 
-    async getStair(id: string): Promise<StairDto> {
+    async get(id: string): Promise<StairDto> {
         const Stair : Stair = await this.repository.findById(id);
         if (!Stair) {
             throw new NotFoundException( 'Stair does not exist');
@@ -36,7 +36,7 @@ export class StairService {
         return StairDtoMapper.fromModel(Stair);
     }
 
-    async updateStair(id: string, stairDto: StairDto): Promise<StairDto> {
+    async update(id: string, stairDto: StairDto): Promise<StairDto> {
         const element : Element = await this.elementRepository.findById(stairDto.elementId);
         if (!element) {
             throw new NotFoundException('element does not exist');
@@ -44,10 +44,10 @@ export class StairService {
 
         stairDto.id = id;
         const Stair : Stair = StairDtoMapper.toModel(stairDto, element);
-        return StairDtoMapper.fromModel( await this.repository.updateStair(Stair));
+        return StairDtoMapper.fromModel( await this.repository.updateElement(Stair));
     }
 
-    async findStairByElement(elementId: string): Promise<StairDto> {
+    async getStairByElement(elementId: string): Promise<StairDto> {
         const stair : Stair = await this.repository.findByElement(elementId);
         if (!stair) {
             throw new NotFoundException('no stair found for this element');

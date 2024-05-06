@@ -11,26 +11,26 @@ export class WallController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    createWall(@Body() wallDto: WallDto) {
-        return this.service.createWall(wallDto);
+    create(@Body() wallDto: WallDto) {
+        return this.service.create(wallDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get(":id")
-    getWall(@Param('id', ParseUUIDPipe) id: string ) {
-        return this.service.getWall(id);
+    get(@Param('id', ParseUUIDPipe) id: string ) {
+        return this.service.get(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
-    updateWall(@Param('id', ParseUUIDPipe) id: string, @Body() wallDto: WallDto) {
-        return this.service.updateWall(id, wallDto);
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() wallDto: WallDto) {
+        return this.service.update(id, wallDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get()
     getWallByElement(@Query('elementId', ParseUUIDPipe) id: string) {
-        return this.service.findWallByElement(id);
+        return this.service.getWallByElement(id);
     }
 
 }

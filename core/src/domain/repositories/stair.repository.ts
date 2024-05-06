@@ -15,7 +15,7 @@ export class StairRepository extends Repository<Stair>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateStair(stair: Stair): Promise<Stair | undefined> {
+    async updateElement(stair: Stair): Promise<Stair | undefined> {
         return this.save(stair);
     }
     

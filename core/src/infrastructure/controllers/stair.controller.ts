@@ -11,26 +11,26 @@ export class StairController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    createStair(@Body() stairDto: StairDto) {
-        return this.service.createStair(stairDto);
+    create(@Body() stairDto: StairDto) {
+        return this.service.create(stairDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get(":id")
-    getStair(@Param('id', ParseUUIDPipe) id: string ) {
-        return this.service.getStair(id);
+    get(@Param('id', ParseUUIDPipe) id: string ) {
+        return this.service.get(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
-    updateStair(@Param('id', ParseUUIDPipe) id: string, @Body() stairDto: StairDto) {
-        return this.service.updateStair(id, stairDto);
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() stairDto: StairDto) {
+        return this.service.update(id, stairDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get()
     getStairByElement(@Query('elementId', ParseUUIDPipe) id: string) {
-        return this.service.findStairByElement(id);
+        return this.service.getStairByElement(id);
     }  
 
 }

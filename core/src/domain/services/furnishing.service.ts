@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Furnishing } from "@domain/entities/furnishing.entity";
 import { FurnishingRepository } from "@domain/repositories/furnishing.repository";
 import { FurnishingDtoMapper  } from '@infrastructure/mappers/furnishing.dto.mapper';
@@ -14,19 +14,19 @@ export class FurnishingService {
         private readonly elementRepository: ElementRepository
     ) {}
 
-    async createFurnishing(furnishingDto: FurnishingDto): Promise<FurnishingDto> {
+    async create(furnishingDto: FurnishingDto): Promise<FurnishingDto> {
         const element : Element = await this.elementRepository.findById(furnishingDto.elementId);
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
         if(element.type !== ElementType.FURNISHING) {
-            throw new NotFoundException('element is not a furnishing');
+            throw new BadRequestException('element is not a furnishing');
         }
         const furnishing : Furnishing = FurnishingDtoMapper.toModel(furnishingDto, element);
         return FurnishingDtoMapper.fromModel(await this.repository.save(furnishing));
     }
 
-    async getFurnishing(id: string): Promise<FurnishingDto> {
+    async get(id: string): Promise<FurnishingDto> {
         const furnishing : Furnishing = await this.repository.findById(id);
         if (!furnishing) {
             throw new NotFoundException( 'Stair does not exist');
@@ -35,7 +35,7 @@ export class FurnishingService {
         return FurnishingDtoMapper.fromModel(furnishing);
     }
 
-    async updateFurnishing(id: string, furnishingDto: FurnishingDto): Promise<FurnishingDto> {
+    async update(id: string, furnishingDto: FurnishingDto): Promise<FurnishingDto> {
         const element : Element = await this.elementRepository.findById(furnishingDto.elementId);
         if (!element) {
             throw new NotFoundException('element does not exist');
@@ -43,10 +43,10 @@ export class FurnishingService {
 
         furnishingDto.id = id;
         const furnishing : Furnishing = FurnishingDtoMapper.toModel(furnishingDto, element);
-        return FurnishingDtoMapper.fromModel( await this.repository.updateFurnishing(furnishing));
+        return FurnishingDtoMapper.fromModel( await this.repository.updateElement(furnishing));
     }
 
-    async findFurnishingByElement(elementId: string): Promise<FurnishingDto> {
+    async getFurnishingByElement(elementId: string): Promise<FurnishingDto> {
         const furnishing : Furnishing = await this.repository.findByElement(elementId);
         if (!furnishing) {
             throw new NotFoundException('no furnishing found for this element');

@@ -15,7 +15,7 @@ export class FurnishingRepository extends Repository<Furnishing>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateFurnishing(furnishing: Furnishing): Promise<Furnishing | undefined> {
+    async updateElement(furnishing: Furnishing): Promise<Furnishing | undefined> {
         return this.save(furnishing);
     }
 

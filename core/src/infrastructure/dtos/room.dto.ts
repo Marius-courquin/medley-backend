@@ -1,5 +1,5 @@
 import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
-import { RoomTypeDto } from "./enum/room.enum.dto";
+import { RoomTypeDto } from "@infrastructure/dtos/enum/room.enum.dto";
 import { ApiProperty } from "@nestjs/swagger";
 
 export class RoomDto {
@@ -34,7 +34,6 @@ export class RoomDto {
 
     @IsNumber({}, { message: 'windowsCount must be a valid number' })
     @ApiProperty()
-
     windowsCount: number;
 
     @IsString({ message: 'assignment must be a valid string' })

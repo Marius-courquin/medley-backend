@@ -11,26 +11,26 @@ export class FurnishingController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    createFurnishing(@Body() furnishingDto: FurnishingDto) {
-        return this.service.createFurnishing(furnishingDto);
+    create(@Body() furnishingDto: FurnishingDto) {
+        return this.service.create(furnishingDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get(":id")
-    getFurnishing(@Param('id', ParseUUIDPipe) id: string ) {
-        return this.service.getFurnishing(id);
+    get(@Param('id', ParseUUIDPipe) id: string ) {
+        return this.service.get(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
-    updateFurnishing(@Param('id', ParseUUIDPipe) id: string, @Body() furnishingDto: FurnishingDto) {
-        return this.service.updateFurnishing(id, furnishingDto);
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() furnishingDto: FurnishingDto) {
+        return this.service.update(id, furnishingDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get()
     getFurnishingByElement(@Query('elementId', ParseUUIDPipe) id: string) {
-        return this.service.findFurnishingByElement(id); 
+        return this.service.getFurnishingByElement(id); 
     }
 
 }

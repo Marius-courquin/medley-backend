@@ -15,7 +15,7 @@ export class CeilingRepository extends Repository<Ceiling>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateGround(ceiling: Ceiling): Promise<Ceiling | undefined> {
+    async updateElement(ceiling: Ceiling): Promise<Ceiling | undefined> {
         return this.save(ceiling);
     }
 

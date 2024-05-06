@@ -15,7 +15,7 @@ export class WallRepository extends Repository<Wall>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateWall(wall: Wall): Promise<Wall | undefined> {
+    async updateElement(wall: Wall): Promise<Wall | undefined> {
         return this.save(wall);
     }
     

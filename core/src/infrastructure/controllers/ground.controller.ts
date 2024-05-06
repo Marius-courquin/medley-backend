@@ -11,26 +11,26 @@ export class GroundController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    createGround(@Body() groundDto: GroundDto) {
-        return this.service.createGround(groundDto);
+    create(@Body() groundDto: GroundDto) {
+        return this.service.create(groundDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get(":id")
-    getGround(@Param('id', ParseUUIDPipe) id: string ) {
-        return this.service.getGround(id);
+    get(@Param('id', ParseUUIDPipe) id: string ) {
+        return this.service.get(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
-    updateGround(@Param('id', ParseUUIDPipe) id: string, @Body() groundDto: GroundDto) {
-        return this.service.updateGround(id, groundDto);
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() groundDto: GroundDto) {
+        return this.service.update(id, groundDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get()
     getGroundByElement(@Query('elementId', ParseUUIDPipe) id: string) {
-        return this.service.findGroundByElement(id);
+        return this.service.getGroundByElement(id);
     }
 
 }
