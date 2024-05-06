@@ -1,9 +1,9 @@
 
 import { Element } from "@domain/entities/element.entity";
-import { Ceiling } from "@domain/entities/Ceiling.entity";
-import { CeilingDto } from "@infrastructure/dtos/Ceiling.dto";
-import { CeilingType } from "@domain/entities/enum/Ceiling.enum.entity";
-import { CeilingTypeDto } from "@infrastructure/dtos/enum/Ceiling.enum.dto";
+import { Ceiling } from "@domain/entities/ceiling.entity";
+import { CeilingDto } from "@infrastructure/dtos/ceiling.dto";
+import { CeilingType } from "@domain/entities/enum/ceiling.enum.entity";
+import { CeilingTypeDto } from "@infrastructure/dtos/enum/ceiling.enum.dto";
 
 export class CeilingDtoMapper {
     static fromModel(Ceiling : Ceiling): CeilingDto {
