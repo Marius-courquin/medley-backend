@@ -16,6 +16,18 @@ export class EstateController {
     }
 
     @HttpCode(HttpStatus.OK)
+    @Get()
+    searchEstates(@Query('query') query: string) {
+        return this.service.search(query);
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Get("owner/:ownerId")
+    getEstateByOwner(@Param('ownerId', ParseUUIDPipe) id: string) {
+        return this.service.findByOwner(id);
+    }
+
+    @HttpCode(HttpStatus.OK)
     @Get(":id")
     getEstate(@Param('id', ParseUUIDPipe) id: string ) {
         return this.service.getEstate(id);
@@ -26,11 +38,5 @@ export class EstateController {
     updateEstate(@Param('id', ParseUUIDPipe) id: string, @Body() estateDto: EstateDto) {
         return this.service.updateEstate(id, estateDto);
     }
-
-    @HttpCode(HttpStatus.OK)
-    @Get()
-    getEstateByOwner(@Query('ownerId', ParseUUIDPipe) id: string) {
-        return this.service.findByOwner(id);
-    }   
 
 }

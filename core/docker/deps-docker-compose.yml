@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  db-auth:
+    container_name: medley-db-auth
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=medley-db-auth
+      - POSTGRES_USER=medley-auth
+      - POSTGRES_PASSWORD=medley-auth
+    ports:
+      - "5431:5432"
+    networks:
+        - medley-auth-network
+
+  db-core:
+    container_name: medley-db-core
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=medley-db-core
+      - POSTGRES_USER=medley-core
+      - POSTGRES_PASSWORD=medley-core
+    ports:
+      - "5432:5432"
+    networks:
+        - medley-core-network
+
+  medley-auth:
+    container_name: medley-auth
+    image: mariuscourquin62/medley-auth:latest
+    restart: always
+    environment:
+      - AUTH_DB_HOST=${AUTH_DB_HOST}
+      - AUTH_DB_PORT=${AUTH_DB_PORT}
+      - AUTH_DB_USER=${AUTH_DB_USER}
+      - AUTH_DB_PASSWORD=${AUTH_DB_PASSWORD}
+      - AUTH_DB_NAME=${AUTH_DB_NAME}
+      - JWT_KEY=${JWT_KEY}
+    ports:
+      - "8081:8081"
+    networks:
+      - medley-auth-network
+
+networks:
+    medley-auth-network:
+        driver: bridge
+    medley-core-network:
+        driver: bridge

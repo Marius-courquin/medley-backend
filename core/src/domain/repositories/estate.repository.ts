@@ -1,6 +1,6 @@
 import {Injectable} from "@nestjs/common";
 import {Estate} from "@domain/entities/estate.entity";
-import {DataSource, Repository} from "typeorm";
+import {Brackets, DataSource, Repository} from "typeorm";
 
 
 @Injectable()
@@ -24,6 +24,22 @@ export class EstateRepository extends Repository<Estate>{
 
     async updateElement(estate: Estate): Promise<Estate | undefined> {
         return this.save(estate);
+    }
+
+    async findByString(query: string): Promise<Estate[]> {
+        return this.createQueryBuilder("estate")
+        .leftJoinAndSelect("estate.owner", "owner")
+        .where(new Brackets(qb => {
+            qb.where("estate.streetNumber LIKE :query", { query: `%${query}%` })
+              .orWhere("estate.streetName LIKE :query", { query: `%${query}%` })
+              .orWhere("estate.city LIKE :query", { query: `%${query}%` })
+              .orWhere("estate.description LIKE :query", { query: `%${query}%` })
+              .orWhere("estate.type::text LIKE :query", { query: `%${query}%` })
+              .orWhere("CAST(estate.type AS TEXT) LIKE :query", { query: `%${query}%` })
+              .orWhere("owner.firstName LIKE :query", { query: `%${query}%` })
+              .orWhere("owner.lastName LIKE :query", { query: `%${query}%` }) 
+  
+        })).getMany();
     }
 
 }

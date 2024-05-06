@@ -1,8 +1,8 @@
-import { Room } from "@/domain/entities/room.entity";
-import { RoomDto } from "../dtos/room.dto";
-import { RoomType } from "@/domain/entities/enum/room.enum.entity";
-import { RoomTypeDto } from "../dtos/enum/room.enum.dto";
-import { Estate } from "@/domain/entities/estate.entity";
+import { Room } from "@domain/entities/room.entity";
+import { RoomDto } from "@infrastructure/dtos/room.dto";
+import { RoomType } from "@domain/entities/enum/room.enum.entity";
+import { RoomTypeDto } from "@infrastructure/dtos/enum/room.enum.dto";
+import { Estate } from "@domain/entities/estate.entity";
 
 export class RoomDtoMapper{
     static fromModel(room: Room): RoomDto {
