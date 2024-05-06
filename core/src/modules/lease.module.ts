@@ -13,9 +13,6 @@ import {EstateRepository} from "@domain/repositories/estate.repository";
         TypeOrmModule.forFeature([Lease]),
         ThirdModule,
         AgentModule
-
-
-
     ],
     providers: [
         LeaseService,
@@ -23,7 +20,6 @@ import {EstateRepository} from "@domain/repositories/estate.repository";
         EstateRepository
     ],
     exports: [
-        LeaseService,
         LeaseRepository
     ],
     controllers: [LeaseController]

@@ -21,6 +21,7 @@ import {APP_GUARD, APP_INTERCEPTOR} from "@nestjs/core";
 import {AuthGuard} from "@infrastructure/guards/auth.guard";
 import {AgentInterceptor} from "@infrastructure/interceptors/agent.interceptor";
 import {LeaseModule} from "@modules/lease.module";
+import {LeaseInspectionModule} from "@modules/leaseInspection.module";
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import {LeaseModule} from "@modules/lease.module";
     WallSocketModule,
     AgentModule,
     LeaseModule,
+    LeaseInspectionModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

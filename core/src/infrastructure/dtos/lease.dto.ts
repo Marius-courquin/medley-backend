@@ -24,21 +24,22 @@ export class LeaseDto {
     @ApiProperty()
     estateId: string;
 
+    @IsOptional()
     @IsUUID(4, { message: 'agentId must be a valid uuid' })
     @ApiProperty()
-    agentId: string;
+    agentId?: string;
 
     @IsUUID(4, { message: 'tenantId must be a valid uuid' })
     @ApiProperty()
     tenantId: string;
 
-    constructor(id: string, keyCount: number, startDate: Date, endDate: Date, estateId: string, agentId: string, tenantId: string) {
+    constructor(keyCount: number, startDate: Date, endDate: Date, estateId: string, tenantId: string, agentId?: string, id?: string) {
         this.id = id ?? undefined;
         this.keyCount = keyCount;
         this.startDate = startDate;
         this.endDate = endDate;
         this.estateId = estateId;
-        this.agentId = agentId;
+        this.agentId = agentId ?? undefined;
         this.tenantId = tenantId;
     }
 }

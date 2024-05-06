@@ -8,13 +8,13 @@ export class LeaseDtoMapper {
 
     static fromModel(lease: Lease): LeaseDto {
         return new LeaseDto(
-            lease.id,
             lease.keyCount,
             lease.startDate,
             lease.endDate,
             lease.estate.id,
             lease.agent.id,
-            lease.tenant.id
+            lease.tenant.id,
+            lease.id
         );
     }
 

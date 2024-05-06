@@ -2,8 +2,9 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } f
 import { IsDateString, IsEnum, IsOptional, IsUUID } from 'class-validator';
 import { LeaseInspectionType, LeaseInspectionState } from '@domain/entities/enum/leaseInspection.enum.entity';
 import { Lease } from '@domain/entities/lease.entity';
+import { Agent } from '@domain/entities/agent.entity';
 
-@Entity()
+@Entity("lease_inspection")
 export class LeaseInspection {
     @PrimaryGeneratedColumn("uuid")
     @IsOptional()
@@ -26,15 +27,20 @@ export class LeaseInspection {
     @IsOptional()
     lease?: Lease;
 
+    @ManyToOne(() => Agent, agent => agent.id, {nullable: true, eager: true})
+    @IsOptional()
+    agent?: Agent;
+
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" , name : "created_at"})
     createdAt: Date;
 
-    constructor(type: LeaseInspectionType, state: LeaseInspectionState, endDate: Date, lease?: Lease, id?: string) {
+    constructor (type: LeaseInspectionType, state: LeaseInspectionState, endDate: Date, lease: Lease, agent: Agent, id?: string) {
         this.id = id ?? undefined;
         this.type = type;
         this.state = state;
         this.endDate = endDate;
         this.lease = lease ?? undefined;
+        this.agent = agent ?? undefined;
     }
 
 }
