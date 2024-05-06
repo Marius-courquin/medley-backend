@@ -10,6 +10,10 @@ import { StairModule } from "@modules/stair.module"
 import { CeilingModule } from "@modules/ceiling.module"
 import { GroundModule } from "@modules/ground.module"
 import { WallModule } from "@modules/wall.module"
+import { WindowModule } from "@modules/window.module"
+import { SubElementModule } from "@modules/subElement.module"
+import { GenericSubElementModule } from "@modules/genericSubElement.module"
+import { WallSocketModule } from "@modules/wallSocket.module"
 import { RoomModule } from '@modules/room.module';
 import {JwtModule} from "@nestjs/jwt";
 import {AgentModule} from "@modules/agent.module";
@@ -29,6 +33,10 @@ import {LeaseModule} from "@modules/lease.module";
     CeilingModule,
     GroundModule,
     WallModule,
+    SubElementModule,
+    WindowModule,
+    GenericSubElementModule,
+    WallSocketModule,
     AgentModule,
     LeaseModule,
     ConfigModule.forRoot({
