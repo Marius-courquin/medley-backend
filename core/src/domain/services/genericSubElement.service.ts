@@ -13,7 +13,7 @@ export class GenericSubElementService {
         private readonly subElementRepository: SubElementRepository,
     ) {}
 
-    async createGenericSubElement(GenericSubElementDto: GenericSubElementDto): Promise<GenericSubElementDto> {
+    async create(GenericSubElementDto: GenericSubElementDto): Promise<GenericSubElementDto> {
         const subElement : SubElement = await this.subElementRepository.findById(GenericSubElementDto.subElementId);
         if (!subElement) {
             throw new NotFoundException('subElement does not exist');
@@ -25,7 +25,7 @@ export class GenericSubElementService {
         return GenericSubElementDtoMapper.fromModel(await this.repository.save(genericSubElement));
     }
 
-    async getGenericSubElement(id: string): Promise<GenericSubElementDto> {
+    async get(id: string): Promise<GenericSubElementDto> {
         const genericSubElement : GenericSubElement = await this.repository.findById(id);
         if (!genericSubElement) {
             throw new NotFoundException( 'GenericSubElement does not exist');
@@ -34,7 +34,7 @@ export class GenericSubElementService {
         return GenericSubElementDtoMapper.fromModel(genericSubElement);
     }
 
-    async updateGenericSubElement(id: string, genericSubElementDto: GenericSubElementDto): Promise<GenericSubElementDto> {
+    async update(id: string, genericSubElementDto: GenericSubElementDto): Promise<GenericSubElementDto> {
         const subElement : SubElement = await this.subElementRepository.findById(genericSubElementDto.subElementId);
         if (!subElement) {
             throw new NotFoundException('subElement does not exist');
@@ -42,10 +42,10 @@ export class GenericSubElementService {
 
         genericSubElementDto.id = id;
         const genericSubElement : GenericSubElement = GenericSubElementDtoMapper.toModel(genericSubElementDto, subElement);
-        return GenericSubElementDtoMapper.fromModel( await this.repository.updateGenericSubElement(genericSubElement));
+        return GenericSubElementDtoMapper.fromModel( await this.repository.updateElement(genericSubElement));
     }
 
-    async findGenericSubElementBySubElement(subElementId: string): Promise<GenericSubElementDto> {
+    async getBySubElement(subElementId: string): Promise<GenericSubElementDto> {
         const genericSubElement : GenericSubElement = await this.repository.findBySubElement(subElementId);
         if (!genericSubElement) {
             throw new NotFoundException('no genericSubElement found for this subElement');

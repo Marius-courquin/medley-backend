@@ -25,7 +25,7 @@ export class SubElementService {
         private readonly windowRepository: WindowRepository
     ) {}
 
-    async createSubElement(subElementDto: SubElementDto): Promise<SubElementDto> {
+    async create(subElementDto: SubElementDto): Promise<SubElementDto> {
         const element : Element = await this.elementRepository.findById(subElementDto.elementId);
         if (!element) {
             throw new NotFoundException('Element does not exist');
@@ -35,7 +35,7 @@ export class SubElementService {
         return SubElementDtoMapper.fromModel(await this.repository.save(subElement));
     }
 
-    async getSubElement(id: string): Promise<SubElementDto> {
+    async get(id: string): Promise<SubElementDto> {
         const subElement : SubElement = await this.repository.findById(id);
         console.log(subElement);
         if (!subElement) {
@@ -45,7 +45,7 @@ export class SubElementService {
         return SubElementDtoMapper.fromModel(subElement);
     }
 
-    async updateSubElement(id: string, subElementDto: SubElementDto): Promise<SubElementDto> {
+    async update(id: string, subElementDto: SubElementDto): Promise<SubElementDto> {
         const element : Element = await this.elementRepository.findById(subElementDto.elementId);
         if (!element) {
             throw new NotFoundException('Element does not exist');
@@ -53,10 +53,10 @@ export class SubElementService {
 
         subElementDto.id = id;
         const subElement : SubElement = SubElementDtoMapper.toModel(subElementDto, element);
-        return SubElementDtoMapper.fromModel( await this.repository.updateSubElement(subElement));
+        return SubElementDtoMapper.fromModel( await this.repository.updateElement(subElement));
     }
 
-    async findSubElementsByElement(elementId: string): Promise<SubElementDto[]> {
+    async getByElement(elementId: string): Promise<SubElementDto[]> {
         const subElement : SubElement[] = await this.repository.findByElement(elementId);
         if (subElement.length === 0) {
             throw new NotFoundException('no subElement found for this element');

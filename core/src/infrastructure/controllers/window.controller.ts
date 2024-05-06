@@ -10,25 +10,25 @@ export class WindowController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    createWindow(@Body() windowDto: WindowDto) {
-        return this.service.createWindow(windowDto);
+    create(@Body() windowDto: WindowDto) {
+        return this.service.create(windowDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get(":id")
-    getWindow(@Param('id', ParseUUIDPipe) id: string ) {
-        return this.service.getWindow(id);
+    get(@Param('id', ParseUUIDPipe) id: string ) {
+        return this.service.get(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
-    updateWindow(@Param('id', ParseUUIDPipe) id: string, @Body() windowDto: WindowDto) {
-        return this.service.updateWindow(id, windowDto);
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() windowDto: WindowDto) {
+        return this.service.update(id, windowDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get()
-    getWindowBySubElement(@Query('subElementId', ParseUUIDPipe) id: string) {
-        return this.service.findWindowBySubElement(id);
+    getBySubElement(@Query('subElementId', ParseUUIDPipe) id: string) {
+        return this.service.getBySubElement(id);
     }
 }

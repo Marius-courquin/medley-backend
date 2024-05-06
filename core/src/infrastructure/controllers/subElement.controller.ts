@@ -11,25 +11,25 @@ export class SubElementController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    createElement(@Body() subElementDto: SubElementDto) {
-        return this.service.createSubElement(subElementDto);
+    create(@Body() subElementDto: SubElementDto) {
+        return this.service.create(subElementDto);
     }
     @HttpCode(HttpStatus.OK)
     @Get(":id")
-    getElement(@Param('id', ParseUUIDPipe) id: string ) {
-        return this.service.getSubElement(id);
+    get(@Param('id', ParseUUIDPipe) id: string ) {
+        return this.service.get(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
     updateElement(@Param('id', ParseUUIDPipe) id: string, @Body() subElementDto: SubElementDto) {
-        return this.service.updateSubElement(id, subElementDto);
+        return this.service.update(id, subElementDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get()
-    getSubElementByElement(@Query('elementId', ParseUUIDPipe) id: string) {
-        return this.service.findSubElementsByElement(id);
+    getByElement(@Query('elementId', ParseUUIDPipe) id: string) {
+        return this.service.getByElement(id);
     } 
 
     @HttpCode(HttpStatus.OK)

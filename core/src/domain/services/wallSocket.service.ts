@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { WallSocket } from "@domain/entities/wallSocket.entity";
 import { SubElement } from "@domain/entities/subElement.entity";
 import { SubElementRepository } from "@domain/repositories/subElement.repository";
@@ -14,20 +14,20 @@ export class WallSocketService {
         private readonly subElementRepository: SubElementRepository,
     ) {}
 
-    async createWallSocket(wallSocketDto: WallSocketDto): Promise<WallSocketDto> {
+    async create(wallSocketDto: WallSocketDto): Promise<WallSocketDto> {
         const subElement : SubElement = await this.subElementRepository.findById(wallSocketDto.subElementId);
         if (!subElement) {
             throw new NotFoundException('subElement does not exist');
         }
         if (subElement.type !== SubElementType.WALL_SOCKET ) {
-            throw new NotFoundException('subElement is not a wall socket');
+            throw new BadRequestException('subElement is not a WallSocket');
         }
 
         const wallSocket : WallSocket = WallSocketDtoMapper.toModel(wallSocketDto, subElement);
         return WallSocketDtoMapper.fromModel(await this.repository.save(wallSocket));
     }
 
-    async getWallSocket(id: string): Promise<WallSocketDto> {
+    async get(id: string): Promise<WallSocketDto> {
         const wallSocket : WallSocket = await this.repository.findById(id);
         if (!wallSocket) {
             throw new NotFoundException( 'WallSocket does not exist');
@@ -36,7 +36,7 @@ export class WallSocketService {
         return WallSocketDtoMapper.fromModel(wallSocket);
     }
 
-    async updateWallSocket(id: string, wallSocketDto: WallSocketDto): Promise<WallSocketDto> {
+    async update(id: string, wallSocketDto: WallSocketDto): Promise<WallSocketDto> {
         const subElement : SubElement = await this.subElementRepository.findById(wallSocketDto.subElementId);
         if (!subElement) {
             throw new NotFoundException('WallSocket does not exist');
@@ -44,10 +44,10 @@ export class WallSocketService {
 
         wallSocketDto.id = id;
         const wallSocket : WallSocket = WallSocketDtoMapper.toModel(wallSocketDto, subElement);
-        return WallSocketDtoMapper.fromModel( await this.repository.updateWallSocket(wallSocket));
+        return WallSocketDtoMapper.fromModel( await this.repository.updateElement(wallSocket));
     }
 
-    async findWallSocketBySubElement(subElementId: string): Promise<WallSocketDto> {
+    async getBySubElement(subElementId: string): Promise<WallSocketDto> {
         const wallSocket : WallSocket = await this.repository.findBySubElement(subElementId);
         if (!wallSocket) {
             throw new NotFoundException('no wallSocket found for this subElement');

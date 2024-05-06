@@ -15,7 +15,7 @@ export class SubElementRepository extends Repository<SubElement>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateSubElement(element: SubElement): Promise<SubElement | undefined> {
+    async updateElement(element: SubElement): Promise<SubElement | undefined> {
         return this.save(element);
     }
     

@@ -15,7 +15,7 @@ export class WindowRepository extends Repository<Window>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateWindow(window: Window): Promise<Window | undefined> {
+    async updateElement(window: Window): Promise<Window | undefined> {
         return this.save(window);
     }
     

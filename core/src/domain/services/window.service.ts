@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Window } from "@domain/entities/window.entity";
 import { SubElement } from "@domain/entities/subElement.entity";
 import { SubElementRepository } from "@domain/repositories/subElement.repository";
@@ -14,20 +14,20 @@ export class WindowService {
         private readonly subElementRepository: SubElementRepository,
     ) {}
 
-    async createWindow(windowDto: WindowDto): Promise<WindowDto> {
+    async create(windowDto: WindowDto): Promise<WindowDto> {
         const subElement : SubElement = await this.subElementRepository.findById(windowDto.subElementId);
         if (!subElement) {
             throw new NotFoundException('subElement does not exist');
         }
         if (subElement.type !== SubElementType.WINDOW ) {
-            throw new NotFoundException('subElement is not a window');
+            throw new BadRequestException('subElement is not a Window');
         }
 
         const window : Window = WindowDtoMapper.toModel(windowDto, subElement);
         return WindowDtoMapper.fromModel(await this.repository.save(window));
     }
 
-    async getWindow(id: string): Promise<WindowDto> {
+    async get(id: string): Promise<WindowDto> {
         const window : Window = await this.repository.findById(id);
         if (!window) {
             throw new NotFoundException( 'Window does not exist');
@@ -36,7 +36,7 @@ export class WindowService {
         return WindowDtoMapper.fromModel(window);
     }
 
-    async updateWindow(id: string, windowDto: WindowDto): Promise<WindowDto> {
+    async update(id: string, windowDto: WindowDto): Promise<WindowDto> {
         const subElement : SubElement = await this.subElementRepository.findById(windowDto.subElementId);
         if (!subElement) {
             throw new NotFoundException('Window does not exist');
@@ -44,10 +44,10 @@ export class WindowService {
 
         windowDto.id = id;
         const window : Window = WindowDtoMapper.toModel(windowDto, subElement);
-        return WindowDtoMapper.fromModel( await this.repository.updateWindow(window));
+        return WindowDtoMapper.fromModel( await this.repository.updateElement(window));
     }
 
-    async findWindowBySubElement(subElementId: string): Promise<WindowDto> {
+    async getBySubElement(subElementId: string): Promise<WindowDto> {
         const window : Window = await this.repository.findBySubElement(subElementId);
         if (!window) {
             throw new NotFoundException('no window found for this subElement');

@@ -10,26 +10,26 @@ export class GenericSubElementController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    createGenericSubElement(@Body() genericSubElementDto: GenericSubElementDto) {
-        return this.service.createGenericSubElement(genericSubElementDto);
+    create(@Body() genericSubElementDto: GenericSubElementDto) {
+        return this.service.create(genericSubElementDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get(":id")
-    getGenericSubElement(@Param('id', ParseUUIDPipe) id: string ) {
-        return this.service.getGenericSubElement(id);
+    get(@Param('id', ParseUUIDPipe) id: string ) {
+        return this.service.get(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
-    updateGenericSubElement(@Param('id', ParseUUIDPipe) id: string, @Body() genericSubElementDto: GenericSubElementDto) {
-        return this.service.updateGenericSubElement(id, genericSubElementDto);
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() genericSubElementDto: GenericSubElementDto) {
+        return this.service.update(id, genericSubElementDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get()
-    getGenericSubElementBySubElement(@Query('subElementId', ParseUUIDPipe) id: string) {
-        return this.service.findGenericSubElementBySubElement(id);
+    getBySubElement(@Query('subElementId', ParseUUIDPipe) id: string) {
+        return this.service.getBySubElement(id);
     }  
 
 }

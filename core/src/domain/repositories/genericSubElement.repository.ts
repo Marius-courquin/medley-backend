@@ -15,7 +15,7 @@ export class GenericSubElementRepository extends Repository<GenericSubElement>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateGenericSubElement(genericSubElement: GenericSubElement): Promise<GenericSubElement | undefined> {
+    async updateElement(genericSubElement: GenericSubElement): Promise<GenericSubElement | undefined> {
         return this.save(genericSubElement);
     }
     

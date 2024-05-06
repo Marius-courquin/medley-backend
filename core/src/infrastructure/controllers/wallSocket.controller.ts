@@ -11,25 +11,25 @@ export class WallSocketController {
     @HttpCode(HttpStatus.CREATED)
     @Post()
     createWallSocket(@Body() wallSocketDto: WallSocketDto) {
-        return this.service.createWallSocket(wallSocketDto);
+        return this.service.create(wallSocketDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get(":id")
     getWallSocket(@Param('id', ParseUUIDPipe) id: string ) {
-        return this.service.getWallSocket(id);
+        return this.service.get(id);
     }
 
     @HttpCode(HttpStatus.OK)
     @Put(":id")
-    updateWallSocket(@Param('id', ParseUUIDPipe) id: string, @Body() wallSocketDto: WallSocketDto) {
-        return this.service.updateWallSocket(id, wallSocketDto);
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() wallSocketDto: WallSocketDto) {
+        return this.service.update(id, wallSocketDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @Get()
-    getWallSocketBySubElement(@Query('subElementId', ParseUUIDPipe) id: string) {
-        return this.service.findWallSocketBySubElement(id);
+    getBySubElement(@Query('subElementId', ParseUUIDPipe) id: string) {
+        return this.service.getBySubElement(id);
     }
 
 }

@@ -15,7 +15,7 @@ export class WallSocketRepository extends Repository<WallSocket>{
         return this.findOne({where: {id: id}});
     }
 
-    async updateWallSocket(wallSocket: WallSocket): Promise<WallSocket | undefined> {
+    async updateElement(wallSocket: WallSocket): Promise<WallSocket | undefined> {
         return this.save(wallSocket);
     }
     
