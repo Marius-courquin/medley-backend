@@ -28,7 +28,7 @@ export class Lease {
     estate: Estate;
 
     @ManyToOne(() => Agent, agent => agent.id, {nullable: false, eager: true})
-    agent: Agent; // Relation avec l'entité Agent
+    agent: Agent;
 
     @ManyToOne(() => Third, tenant => tenant.id, {nullable: false, eager: true})
     tenant: Third;

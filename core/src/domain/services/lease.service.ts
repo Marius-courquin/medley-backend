@@ -57,7 +57,6 @@ export class LeaseService {
         const tenant = await this.thirdRepository.findById(leaseDto.tenantId);
         const estate = await this.estateRepository.findById(leaseDto.estateId);
         const lease: Lease = LeaseDtoMapper.toModel(leaseDto, estate, agent, tenant);
-        console.log(lease);
         return LeaseDtoMapper.fromModel(await this.leaseRepository.updateLease(lease));
     }
 
