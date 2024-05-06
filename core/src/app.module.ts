@@ -10,6 +10,7 @@ import {AgentModule} from "@modules/agent.module";
 import {APP_GUARD, APP_INTERCEPTOR} from "@nestjs/core";
 import {AuthGuard} from "@infrastructure/guards/auth.guard";
 import {AgentInterceptor} from "@infrastructure/interceptors/agent.interceptor";
+import {LeaseModule} from "@modules/lease.module";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import {AgentInterceptor} from "@infrastructure/interceptors/agent.interceptor";
     ThirdModule,
     RoomModule,
     AgentModule,
+    LeaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
