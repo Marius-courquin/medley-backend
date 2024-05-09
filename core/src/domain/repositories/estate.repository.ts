@@ -14,6 +14,7 @@ export class EstateRepository extends Repository<Estate>{
     async findByOwner(ownerId: string): Promise<Estate[]> {
         return this.createQueryBuilder("estate")
                     .leftJoinAndSelect("estate.owner", "owner")
+                    .leftJoinAndSelect("estate.picture", "picture")
                     .where("owner.id = :ownerId", { ownerId })
                     .getMany();
     }
@@ -29,8 +30,10 @@ export class EstateRepository extends Repository<Estate>{
     async findByString(query: string): Promise<Estate[]> {
         return this.createQueryBuilder("estate")
         .leftJoinAndSelect("estate.owner", "owner")
+        .leftJoinAndSelect("estate.picture", "picture")
         .where(new Brackets(qb => {
-            qb.where("estate.streetNumber ILIKE :query", { query: `%${query}%` })
+            qb.where("estate.name ILIKE :query", { query: `%${query}%` })
+              .orWhere("estate.streetNumber ILIKE :query", { query: `%${query}%` })
               .orWhere("estate.streetName ILIKE :query", { query: `%${query}%` })
               .orWhere("estate.city ILIKE :query", { query: `%${query}%` })
               .orWhere("estate.description ILIKE :query", { query: `%${query}%` })

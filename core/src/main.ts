@@ -10,7 +10,16 @@ async function bootstrap() {
     .setTitle('medley-core API')
     .setDescription('The medley-core API description')
     .setVersion('1.0')
-    .addTag('core')
+    .setBasePath('api/v1')
+    .addServer('http://localhost:8080', 'Local server')
+    .addServer('https://medley-core.m-w-s.fr', 'Production server')
+    .addGlobalParameters({
+      name: 'Authorization',
+      in: 'header',
+      required: true,
+      description: 'Bearer token',
+    })
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
@@ -21,7 +30,6 @@ async function bootstrap() {
     defaultVersion: ['1'],
   });
   await app.listen(8080);
-  console.log(`Application is running on: ${await app.getUrl()}`);
-
+  console.log(`Application is running on: ${await app.getUrl() === 'http://[::1]:8080' ? 'http://localhost:8080' : await app.getUrl()}/api/v1`);
 }
 bootstrap();

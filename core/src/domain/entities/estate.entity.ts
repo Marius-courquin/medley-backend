@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
-import { Third } from '@domain/entities/third.entity';
-import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
-import { ClassType, EstateType, HeaterType, WaterHeaterType } from '@domain/entities/enum/estate.enum.entity';
+import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {Third} from '@domain/entities/third.entity';
+import {IsEnum, IsNumber, IsOptional, IsString, IsUUID} from 'class-validator';
+import {ClassType, EstateType, HeaterType, WaterHeaterType} from '@domain/entities/enum/estate.enum.entity';
+import {Picture} from "@domain/entities/picture.entity";
 
 @Entity()
 export class Estate {
@@ -9,6 +10,10 @@ export class Estate {
     @IsOptional()
     @IsUUID(4, { message: 'id must be a valid uuid' })
     id?: string;
+
+    @Column({nullable: false})
+    @IsString({ message: 'name must be a valid string' })
+    name: string;
 
     @Column({nullable: false, name : "street_number"})
     @IsString({ message: 'streetNumber must be a valid string' })
@@ -54,11 +59,11 @@ export class Estate {
     @IsEnum(ClassType, { message: 'class must be a valid string' })
     class: ClassType;
 
-    @Column({nullable: false, type: 'enum', enum : HeaterType})
+    @Column({nullable: false, type: 'enum', enum : HeaterType, name : "heater_type"})
     @IsEnum(HeaterType, { message: 'heaterType must be a valid string' })
     heaterType: HeaterType;
 
-    @Column({nullable: false, type: 'enum', enum : WaterHeaterType})
+    @Column({nullable: false, type: 'enum', enum : WaterHeaterType, name : "water_heater_type"})
     @IsEnum(WaterHeaterType, { message: 'waterHeaterType must be a valid string' })
     waterHeaterType: WaterHeaterType;
 
@@ -69,8 +74,14 @@ export class Estate {
     @IsOptional()
     owner?: Third;
 
-    constructor( streetNumber: string, streetName: string, zipCode: number, city: string, floor: number, flatNumber: number, description: string, livingSpace: number, roomCount: number, type: EstateType, classType: ClassType, heaterType: HeaterType, waterHeaterType: WaterHeaterType, owner?: Third, id?: string) {
+    @OneToOne(() => Picture, picture => picture.id, { onDelete: 'CASCADE', eager: true})
+    @JoinColumn()
+    @IsOptional()
+    picture: Picture;
+
+    constructor( name: string, streetNumber: string, streetName: string, zipCode: number, city: string, floor: number, flatNumber: number, description: string, livingSpace: number, roomCount: number, type: EstateType, classType: ClassType, heaterType: HeaterType, waterHeaterType: WaterHeaterType, owner?: Third, id?: string, picture?: Picture) {
         this.id = id ?? undefined;
+        this.name = name;
         this.streetNumber = streetNumber;
         this.streetName = streetName;
         this.zipCode = zipCode;
@@ -85,6 +96,11 @@ export class Estate {
         this.heaterType = heaterType;
         this.waterHeaterType = waterHeaterType;
         this.owner = owner ?? undefined;
+        this.picture = picture ?? undefined;
     }
-    
+
+    getPicture(): Picture {
+        return this.picture;
+    }
+
 }

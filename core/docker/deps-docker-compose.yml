@@ -41,8 +41,25 @@ services:
     networks:
       - medley-auth-network
 
+  minio:
+    container_name: medley-minio
+    image: minio/minio
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - medley-core-network
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+    command: server /data --console-address ":9001"
+
 networks:
     medley-auth-network:
         driver: bridge
     medley-core-network:
         driver: bridge
+volumes:
+  minio_data:

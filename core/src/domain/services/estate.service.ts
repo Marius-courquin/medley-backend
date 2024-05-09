@@ -1,61 +1,77 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {ForbiddenException, Injectable, NotFoundException} from '@nestjs/common';
 import { Third } from '@domain/entities/third.entity';
 import {EstateRepository} from "@domain/repositories/estate.repository";
-import { EstateDto } from '@infrastructure/dtos/estate.dto';
+import { EstateWithFileDto } from '@infrastructure/dtos/estateWithFile.dto';
 import { ThirdRepository } from '@domain/repositories/third.repository';
 import { EstateDtoMapper } from '@infrastructure/mappers/estate.dto.mapper'
 import { Estate } from '@domain/entities/estate.entity';
+import {Picture} from "@domain/entities/picture.entity";
+import {FileService} from "@domain/services/file.service";
+import {EstateWithLinkDto} from "@infrastructure/dtos/estateWithLink.dto";
 
 
 @Injectable()
 export class EstateService {
     constructor(
         private readonly repository: EstateRepository,
-        private readonly thirdRepository: ThirdRepository
+        private readonly thirdRepository: ThirdRepository,
+        private readonly fileService: FileService
     ) {}
 
-    async createEstate(estateDto: EstateDto): Promise<EstateDto> {
+    async createEstate(estateDto: EstateWithFileDto): Promise<EstateWithLinkDto> {
         const third:Third = await this.thirdRepository.findById(estateDto.ownerId);
         if (!third) {
-            throw new NotFoundException( 'third does not exist');
+            throw new NotFoundException( 'third related to ownerId does not exist');
         }
-
-        const estate = EstateDtoMapper.toModel(estateDto, third);
-        return EstateDtoMapper.fromModel(await this.repository.save(estate));
-
+        this.assertThirdIsOwner(third);
+        let picture: Picture = null;
+        if (estateDto.picture) {
+            picture = await this.fileService.savePicture(estateDto.picture, Estate);
+        }
+        const estate = EstateDtoMapper.toModel(estateDto, third, picture);
+        return EstateDtoMapper.fromModelWithLink(await this.repository.save(estate), await this.fileService.generateSignedUrlForPicture(picture, Estate));
     }
 
-    async findByOwner(ownerId: string): Promise<EstateDto[]> {
+    async getByOwner(ownerId: string): Promise<EstateWithLinkDto[]> {
         const estates : Estate[] = await this.repository.findByOwner(ownerId);
-        if (estates.length === 0) {
-            throw new NotFoundException( 'no estates found for this owner');
-        }
-        return estates.map(estate => EstateDtoMapper.fromModel(estate));
+        const estateWithLinkDtos = estates.map(async estate => EstateDtoMapper.fromModelWithLink(estate, await this.fileService.generateSignedUrlForPicture(estate.getPicture(), Estate)));
+        return Promise.all(estateWithLinkDtos);
     }
 
-    async getEstate(estateId: string): Promise<EstateDto> {
+    async getEstate(estateId: string): Promise<EstateWithLinkDto> {
         const estate: Estate = await this.repository.findById(estateId);
         if (!estate) {
             throw new NotFoundException( 'estate does not exist'); 
         }
-        return EstateDtoMapper.fromModel( estate);
-
+        return EstateDtoMapper.fromModelWithLink(estate, await this.fileService.generateSignedUrlForPicture(estate.getPicture(), Estate));
     }
 
-    async updateEstate(estateId: string, estateDto: EstateDto): Promise<EstateDto> {
+    async updateEstate(estateId: string, estateDto: EstateWithFileDto): Promise<EstateWithLinkDto> {
         const third:Third = await this.thirdRepository.findById(estateDto.ownerId);
         if (!third) {
-            throw new NotFoundException( 'third does not exist');
+            throw new NotFoundException( 'third related to ownerId does not exist');
         }
+        this.assertThirdIsOwner(third);
         
         estateDto.id = estateId;
-        const estate : Estate = EstateDtoMapper.toModel(estateDto, third);
-        return EstateDtoMapper.fromModel( await this.repository.updateElement(estate));
+        let picture: Picture = null;
+        if (estateDto.picture) {
+            picture = await this.fileService.savePicture(estateDto.picture, Estate);
+        }
+        const estate : Estate = EstateDtoMapper.toModel(estateDto, third, picture);
+        return EstateDtoMapper.fromModelWithLink( await this.repository.updateElement(estate), await this.fileService.generateSignedUrlForPicture(estate.getPicture(), Estate));
     }
 
-    async search(query: string): Promise<EstateDto[]> {
+    async search(query: string): Promise<EstateWithLinkDto[]> {
         const estates : Estate[] = await this.repository.findByString(query);
-        return estates.map(estate => EstateDtoMapper.fromModel(estate));
+        const estateWithLinkDtos = estates.map(async estate => EstateDtoMapper.fromModelWithLink(estate, await this.fileService.generateSignedUrlForPicture(estate.getPicture(), Estate)));
+        return Promise.all(estateWithLinkDtos);
+    }
+
+    private assertThirdIsOwner(third: Third) {
+        if (!third.isOwner()) {
+            throw new ForbiddenException('third is not an owner')
+        }
     }
 
 }
