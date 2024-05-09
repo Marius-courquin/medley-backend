@@ -42,4 +42,8 @@ export class Third {
         this.iban = iban;
     }
 
+    isOwner(): boolean {
+        return this.type === ThirdType.OWNER;
+    }
+
 }

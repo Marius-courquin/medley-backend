@@ -11,6 +11,9 @@ services:
       - CORE_DB_PASSWORD=${CORE_DB_PASSWORD}
       - CORE_DB_NAME=${CORE_DB_NAME}
       - JWT_KEY=${JWT_KEY}
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_USER=${MINIO_USER}
+      - MINIO_PASSWORD=${MINIO_PASSWORD}
     ports:
       - "8080:8080"
     networks:

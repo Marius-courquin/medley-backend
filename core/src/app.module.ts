@@ -22,6 +22,7 @@ import {AuthGuard} from "@infrastructure/guards/auth.guard";
 import {AgentInterceptor} from "@infrastructure/interceptors/agent.interceptor";
 import {LeaseModule} from "@modules/lease.module";
 import {LeaseInspectionModule} from "@modules/leaseInspection.module";
+import {FileModule} from "@modules/file.module";
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import {LeaseInspectionModule} from "@modules/leaseInspection.module";
     AgentModule,
     LeaseModule,
     LeaseInspectionModule,
+    FileModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

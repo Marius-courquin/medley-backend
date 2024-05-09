@@ -1,12 +1,15 @@
-import {EstateDto} from "@infrastructure/dtos/estate.dto"
+import {EstateWithFileDto} from "@infrastructure/dtos/estateWithFile.dto"
 import {Estate} from "@domain/entities/estate.entity"
 import { Third } from "@domain/entities/third.entity";
 import { ClassType, EstateType, HeaterType, WaterHeaterType } from "@domain/entities/enum/estate.enum.entity";
 import { ClassTypeDto, EstateTypeDto, HeaterTypeDto, WaterHeaterTypeDto } from "@infrastructure/dtos/enum/estate.enum.dto";
+import {Picture} from "@domain/entities/picture.entity";
+import {EstateWithLinkDto} from "@infrastructure/dtos/estateWithLink.dto";
 export class EstateDtoMapper {
-    static fromModel (estate: Estate): EstateDto {
-        return new EstateDto(
+    static fromModel (estate: Estate): EstateWithFileDto {
+        return new EstateWithFileDto(
             estate.id,
+            estate.name,
             estate.streetNumber,
             estate.streetName,
             estate.zipCode,
@@ -24,8 +27,32 @@ export class EstateDtoMapper {
         );
     }
 
-    static toModel (estateDto: EstateDto, third: Third): Estate {
-        return new Estate(estateDto.streetNumber, 
+    static fromModelWithLink (estate: Estate, picture?: string): EstateWithLinkDto {
+        return new EstateWithLinkDto(
+            estate.id,
+            estate.name,
+            estate.streetNumber,
+            estate.streetName,
+            estate.zipCode,
+            estate.city,
+            estate.floor,
+            estate.flatNumber,
+            estate.description,
+            estate.livingSpace,
+            estate.roomCount,
+            this.estateTypeFromModel(estate.type),
+            this.estateClassFromModel(estate.class),
+            this.heaterTypeFromModel(estate.heaterType),
+            this.waterHeaterTypeFromModel(estate.waterHeaterType),
+            estate.owner.id,
+            picture
+        );
+    }
+
+    static toModel (estateDto: EstateWithFileDto, third: Third, picture?: Picture): Estate {
+        return new Estate(
+            estateDto.name,
+            estateDto.streetNumber,
             estateDto.streetName,
             estateDto.zipCode,
             estateDto.city,
@@ -39,7 +66,8 @@ export class EstateDtoMapper {
             this.heaterTypeToModel(estateDto.heaterType),
             this.waterHeaterTypeToModel(estateDto.waterHeaterType),
             third,
-            estateDto.id
+            estateDto.id,
+            picture ? picture : undefined
         );
     }
 
