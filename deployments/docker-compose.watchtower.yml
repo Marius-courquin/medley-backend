@@ -8,6 +8,6 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
       - WATCHTOWER_NOTIFICATIONS=shoutrrr
-      - WATCHTOWER_NOTIFICATION_URL=shoutrrr://discord://${WEBHOOK_TOKEN}@${WEBHOOK_ID}
+      - WATCHTOWER_NOTIFICATION_URL=discord://${WEBHOOK_TOKEN}@${WEBHOOK_ID}
       - WATCHTOWER_CLEANUP=true
     command: --interval 30 --label-enable
