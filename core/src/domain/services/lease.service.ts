@@ -6,6 +6,7 @@ import { AgentRepository } from '@domain/repositories/agent.repository';
 import { ThirdRepository } from '@domain/repositories/third.repository';
 import { LeaseDtoMapper } from '@infrastructure/mappers/lease.dto.mapper';
 import { EstateRepository } from '@domain/repositories/estate.repository';
+import {Third} from "@domain/entities/third.entity";
 
 @Injectable()
 export class LeaseService {
@@ -20,7 +21,7 @@ export class LeaseService {
         const agent = await this.agentRepository.findById(leaseDto.agentId);
         const tenant = await this.thirdRepository.findById(leaseDto.tenantId);
         if (!tenant) {
-            throw new NotFoundException('Tenant does not exist');
+            throw new NotFoundException('tenant does not exist');
         }
         const estate = await this.estateRepository.findById(leaseDto.estateId);
         if (!estate) {
@@ -40,17 +41,18 @@ export class LeaseService {
     }
 
     async getByTenant(tenantId: string): Promise<LeaseDto[]> {
-        const leases: Lease[] = await this.leaseRepository.findByTenant(tenantId);
-        if (leases.length === 0) {
-            throw new NotFoundException('No leases found for this tenant');
+        const tenant: Third = await this.thirdRepository.findById(tenantId);
+        if (!tenant) {
+            throw new NotFoundException('tenant does not exist');
         }
+        const leases: Lease[] = await this.leaseRepository.findByTenant(tenantId);
         return leases.map(lease => LeaseDtoMapper.fromModel(lease));
     }
 
     async get(leaseId: string): Promise<LeaseDto> {
         const lease:Lease = await this.leaseRepository.findById(leaseId);
         if (!lease) {
-            throw new NotFoundException('Lease does not exist');
+            throw new NotFoundException('lease does not exist');
         }
         return LeaseDtoMapper.fromModel(lease);
     }
@@ -59,7 +61,13 @@ export class LeaseService {
         leaseDto.id = leaseId;
         const agent = await this.agentRepository.findById(leaseDto.agentId);
         const tenant = await this.thirdRepository.findById(leaseDto.tenantId);
+        if (!tenant) {
+            throw new NotFoundException('tenant does not exist');
+        }
         const estate = await this.estateRepository.findById(leaseDto.estateId);
+        if (!estate) {
+            throw new NotFoundException('Estate does not exist');
+        }
         const lease: Lease = LeaseDtoMapper.toModel(leaseDto, estate, agent, tenant);
         return LeaseDtoMapper.fromModel(await this.leaseRepository.updateElement(lease));
     }

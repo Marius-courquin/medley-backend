@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
 import { GenericSubElement } from "@domain/entities/genericSubElement.entity";
 import { SubElement } from "@domain/entities/subElement.entity";
 import { SubElementRepository } from "@domain/repositories/subElement.repository";
@@ -19,7 +19,7 @@ export class GenericSubElementService {
             throw new NotFoundException('subElement does not exist');
         }
         if (subElement.type !== SubElementType.GENERIC_SUB_ELEMENT ) {
-            throw new NotFoundException('subElement is not a generic sub element');
+            throw new BadRequestException('subElement is not a generic sub element');
         }
         const genericSubElement : GenericSubElement = GenericSubElementDtoMapper.toModel(GenericSubElementDto, subElement);
         return GenericSubElementDtoMapper.fromModel(await this.repository.save(genericSubElement));
@@ -28,7 +28,7 @@ export class GenericSubElementService {
     async get(id: string): Promise<GenericSubElementDto> {
         const genericSubElement : GenericSubElement = await this.repository.findById(id);
         if (!genericSubElement) {
-            throw new NotFoundException( 'GenericSubElement does not exist');
+            throw new NotFoundException( 'genericSubElement does not exist');
         }
 
         return GenericSubElementDtoMapper.fromModel(genericSubElement);
@@ -38,6 +38,9 @@ export class GenericSubElementService {
         const subElement : SubElement = await this.subElementRepository.findById(genericSubElementDto.subElementId);
         if (!subElement) {
             throw new NotFoundException('subElement does not exist');
+        }
+        if (subElement.type !== SubElementType.GENERIC_SUB_ELEMENT ) {
+            throw new BadRequestException('subElement is not a generic sub element');
         }
 
         genericSubElementDto.id = id;
