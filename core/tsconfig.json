@@ -23,6 +23,7 @@
       "@infrastructure/*": ["src/infrastructure/*"],
       "@modules/*": ["src/modules/*"],
       "@utils/*": ["src/utils/*"],
+      "@shared/*": ["src/shared/*"],
     }
   }
 }

@@ -3,6 +3,7 @@ import { IsDateString, IsEnum, IsOptional, IsUUID } from 'class-validator';
 import { LeaseInspectionType, LeaseInspectionState } from '@domain/entities/enum/leaseInspection.enum.entity';
 import { Lease } from '@domain/entities/lease.entity';
 import { Agent } from '@domain/entities/agent.entity';
+import { IsCustomDate } from '@shared/decorators/date.shared.decorator';
 
 @Entity("lease_inspection")
 export class LeaseInspection {
@@ -19,8 +20,12 @@ export class LeaseInspection {
     @IsEnum(LeaseInspectionState, { message: 'state must be a valid type' })
     state: LeaseInspectionState;
 
-    @Column({nullable: false, name : "end_date"})
-    @IsDateString()
+    @Column({nullable: false, name : "end_date", type : "date",
+    transformer: {
+        from: (value: string) => value,
+        to: (value: Date) => new Date(value).toISOString().slice(0, 10), 
+    }})
+    @IsCustomDate({ message: 'endDate must be a valid date in YYYY-MM-DD format' })
     endDate: Date;
 
     @ManyToOne(() => Lease, lease => lease.id, {nullable: true, eager: true})

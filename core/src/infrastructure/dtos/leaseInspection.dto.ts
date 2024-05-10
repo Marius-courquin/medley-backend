@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDateString, IsEnum, IsOptional, IsUUID } from "class-validator";
 import { LeaseInspectionStateDto, LeaseInspectionTypeDto } from "./enum/leaseInspection.enum.dto";
+import { IsCustomDate } from "@shared/decorators/date.shared.decorator";
 
 export class LeaseInspectionDto {
     @IsOptional()
@@ -16,9 +17,9 @@ export class LeaseInspectionDto {
     @ApiProperty()
     state: LeaseInspectionStateDto;
 
-    @IsDateString()
+    @IsCustomDate({ message: 'endDate must be a valid date in YYYY-MM-DD format' })
     @ApiProperty()
-    endDate: Date;
+    endDate: string;
 
     @IsUUID(4, { message: 'leaseId must be a valid uuid' })
     @ApiProperty()
@@ -29,7 +30,7 @@ export class LeaseInspectionDto {
     @ApiProperty()
     agentId?: string;
 
-    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, endDate: Date, leaseId: string, agentId?: string, id?: string) {
+    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, endDate: string, leaseId: string, agentId?: string, id?: string) {
         this.id = id ?? undefined;
         this.type = type;
         this.state = state;

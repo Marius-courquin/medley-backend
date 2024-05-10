@@ -10,7 +10,7 @@ export class LeaseInspectionDtoMapper {
         return new LeaseInspectionDto(
             this.leaseInspectionTypeFromModel(leaseInspection.type),
             this.leaseInspectionStateFromModel(leaseInspection.state),
-            leaseInspection.endDate,
+            leaseInspection.endDate.toISOString().slice(0, 10),
             leaseInspection.lease.id,
             leaseInspection.agent.id,
             leaseInspection.id
@@ -21,7 +21,7 @@ export class LeaseInspectionDtoMapper {
         return new LeaseInspection(
             this.leaseInspectionTypeToModel(leaseInspectionDto.type),
             this.leaseInspectionStateToModel(leaseInspectionDto.state),
-            leaseInspectionDto.endDate,
+            new Date(leaseInspectionDto.endDate),
             lease,
             agent,
             leaseInspectionDto.id
