@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  db-auth:
+    container_name: medley-db-auth
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=medley-db-auth
+      - POSTGRES_USER=medley-auth
+      - POSTGRES_PASSWORD=medley-auth
+    ports:
+      - "5431:5432"
+    networks:
+        - medley-auth-network
+
+networks:
+    medley-auth-network:
+        driver: bridge
