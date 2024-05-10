@@ -29,7 +29,7 @@ export class FurnishingService {
     async get(id: string): Promise<FurnishingDto> {
         const furnishing : Furnishing = await this.repository.findById(id);
         if (!furnishing) {
-            throw new NotFoundException( 'Stair does not exist');
+            throw new NotFoundException( 'furnishing does not exist');
         }
 
         return FurnishingDtoMapper.fromModel(furnishing);
@@ -40,7 +40,9 @@ export class FurnishingService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
-
+        if(element.type !== ElementType.FURNISHING) {
+            throw new BadRequestException('element is not a furnishing');
+        }
         furnishingDto.id = id;
         const furnishing : Furnishing = FurnishingDtoMapper.toModel(furnishingDto, element);
         return FurnishingDtoMapper.fromModel( await this.repository.updateElement(furnishing));

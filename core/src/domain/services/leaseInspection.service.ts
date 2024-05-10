@@ -19,7 +19,7 @@ export class LeaseInspectionService {
         const agent : Agent  = await this.agentRepository.findById(leaseInspectionDto.agentId);
         const lease = await this.leaseRepository.findById(leaseInspectionDto.leaseId);
         if (!lease) {
-            throw new NotFoundException('Lease does not exist');
+            throw new NotFoundException('lease does not exist');
         }
         const leaseInspection = LeaseInspectionDtoMapper.toModel(leaseInspectionDto, lease, agent);
 
@@ -27,17 +27,18 @@ export class LeaseInspectionService {
     }
 
     async getByLease(leaseId: string): Promise<LeaseInspectionDto[]> {
-        const leaseInspections: LeaseInspection[] = await this.repository.findByLease(leaseId);
-        if (leaseInspections.length === 0) {
-            throw new NotFoundException('No lease inspections found for this lease');
+        const lease = await this.leaseRepository.findById(leaseId);
+        if (!lease) {
+            throw new NotFoundException('lease does not exist');
         }
+        const leaseInspections: LeaseInspection[] = await this.repository.findByLease(leaseId);
         return leaseInspections.map(leaseInspection => LeaseInspectionDtoMapper.fromModel(leaseInspection));
     }
 
     async get(leaseId: string): Promise<LeaseInspectionDto> {
         const leaseInspection: LeaseInspection = await this.repository.findById(leaseId);
         if (!leaseInspection) {
-            throw new NotFoundException('Lease inspection does not exist');
+            throw new NotFoundException('lease inspection does not exist');
         }
         return LeaseInspectionDtoMapper.fromModel(leaseInspection);
     }
@@ -47,7 +48,7 @@ export class LeaseInspectionService {
         const agent = await this.agentRepository.findById(leaseInspectionDto.agentId);
         const lease = await this.leaseRepository.findById(leaseInspectionDto.leaseId);
         if (!lease) {
-            throw new NotFoundException('Lease does not exist');
+            throw new NotFoundException('lease does not exist');
         }
         const leaseInspection = LeaseInspectionDtoMapper.toModel(leaseInspectionDto, lease, agent);
         return LeaseInspectionDtoMapper.fromModel(await this.repository.updateElement(leaseInspection));

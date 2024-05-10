@@ -26,7 +26,7 @@ import {
 import {ParseIntFieldsInterceptor} from "@infrastructure/interceptors/floatParser.interceptor";
 import {EstateWithLinkDto} from "@infrastructure/dtos/estateWithLink.dto";
 
-@ApiTags('estate')
+@ApiTags('Estate')
 @ApiBearerAuth()
 @Controller('estate')
 export class EstateController {
@@ -37,6 +37,7 @@ export class EstateController {
     @ApiBody({
         type: EstateWithFileDto,
         description: 'The estate to create',
+        required: true
     })
     @ApiCreatedResponse({
         description: 'The estate has been successfully created.',
@@ -124,6 +125,7 @@ export class EstateController {
     @ApiBody({
         type: EstateWithFileDto,
         description: 'The estate to update',
+        required: true
     })
     @ApiParam({
         name: 'id',

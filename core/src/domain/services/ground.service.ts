@@ -29,7 +29,7 @@ export class GroundService {
     async get(id: string): Promise<GroundDto> {
         const ground : Ground = await this.repository.findById(id);
         if (!ground) {
-            throw new NotFoundException( 'Ground does not exist');
+            throw new NotFoundException( 'ground does not exist');
         }
 
         return GroundDtoMapper.fromModel(ground);
@@ -40,10 +40,13 @@ export class GroundService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
+        if(element.type !== ElementType.GROUND) {
+            throw new BadRequestException('element is not a ground');
+        }
 
         groundDto.id = id;
-        const Stair : Ground = GroundDtoMapper.toModel(groundDto, element);
-        return GroundDtoMapper.fromModel( await this.repository.updateElement(Stair));
+        const ground : Ground = GroundDtoMapper.toModel(groundDto, element);
+        return GroundDtoMapper.fromModel( await this.repository.updateElement(ground));
     }
 
     async getGroundByElement(elementId: string): Promise<GroundDto> {

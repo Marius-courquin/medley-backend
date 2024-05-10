@@ -28,7 +28,7 @@ export class SubElementService {
     async create(subElementDto: SubElementDto): Promise<SubElementDto> {
         const element : Element = await this.elementRepository.findById(subElementDto.elementId);
         if (!element) {
-            throw new NotFoundException('Element does not exist');
+            throw new NotFoundException('element does not exist');
         }
 
         const subElement : SubElement = SubElementDtoMapper.toModel(subElementDto, element);
@@ -38,7 +38,7 @@ export class SubElementService {
     async get(id: string): Promise<SubElementDto> {
         const subElement : SubElement = await this.repository.findById(id);
         if (!subElement) {
-            throw new NotFoundException( 'SubElement does not exist');
+            throw new NotFoundException( 'sub element does not exist');
         }
 
         return SubElementDtoMapper.fromModel(subElement);
@@ -47,7 +47,7 @@ export class SubElementService {
     async update(id: string, subElementDto: SubElementDto): Promise<SubElementDto> {
         const element : Element = await this.elementRepository.findById(subElementDto.elementId);
         if (!element) {
-            throw new NotFoundException('Element does not exist');
+            throw new NotFoundException('element does not exist');
         }
 
         subElementDto.id = id;
@@ -56,10 +56,11 @@ export class SubElementService {
     }
 
     async getByElement(elementId: string): Promise<SubElementDto[]> {
-        const subElement : SubElement[] = await this.repository.findByElement(elementId);
-        if (subElement.length === 0) {
-            throw new NotFoundException('no subElement found for this element');
+        const element : Element = await this.elementRepository.findById(elementId);
+        if (!element) {
+            throw new NotFoundException('element does not exist');
         }
+        const subElement : SubElement[] = await this.repository.findByElement(elementId);
 
         return subElement.map(SubElementDtoMapper.fromModel);
     }
@@ -67,7 +68,7 @@ export class SubElementService {
     async getRelatedEntity(id: string): Promise< WallSocketDto | GenericSubElementDto  | WindowDto > {
         const subElement : SubElement = await this.repository.findById(id);
         if (!subElement) {
-            throw new NotFoundException('SubElement does not exist');
+            throw new NotFoundException('sub element does not exist');
         }
         switch (subElement.type) {
             case 'WALL_SOCKET':

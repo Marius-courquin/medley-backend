@@ -41,6 +41,9 @@ export class WallService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
+        if(element.type !== ElementType.WALL) {
+            throw new BadRequestException('element is not a wall');
+        }
 
         wallDto.id = id;
         const wall : Wall = WallDtoMapper.toModel(wallDto, element);

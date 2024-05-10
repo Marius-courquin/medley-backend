@@ -42,7 +42,7 @@ export class ElementService {
     async create(elementDto: ElementDto): Promise<ElementDto> {
         const room : Room = await this.roomRepository.findById(elementDto.roomId);
         if (!room) {
-            throw new NotFoundException('Room does not exist');
+            throw new NotFoundException('room does not exist');
         }
 
         const element : Element = ElementDtoMapper.toModel(elementDto, room);
@@ -71,10 +71,6 @@ export class ElementService {
 
     async getElementByRoom(roomId: string): Promise<ElementDto[]> {
         const elements : Element[] = await this.repository.findByRoom(roomId);
-        if (elements.length === 0) {
-            throw new NotFoundException('no elements found for this room');
-        }
-
         return elements.map(element => ElementDtoMapper.fromModel(element));
     }
 
@@ -115,7 +111,7 @@ export class ElementService {
                 }
                 return FurnishingDtoMapper.fromModel(furnishing);
             default:
-                throw new NotFoundException('Element type not found');
+                throw new NotFoundException('element type not found');
         }
     }
 
