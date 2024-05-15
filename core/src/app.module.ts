@@ -24,6 +24,7 @@ import {LeaseModule} from "@modules/lease.module";
 import {LeaseInspectionModule} from "@modules/leaseInspection.module";
 import {FileModule} from "@modules/file.module";
 import { LeaseInspectionStepModule } from '@modules/leaseInspectionStep.module';
+import { LeaseInspectionStepPictureModule } from '@modules/leaseInspectionStepPicture.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { LeaseInspectionStepModule } from '@modules/leaseInspectionStep.module';
     LeaseModule,
     LeaseInspectionModule,
     LeaseInspectionStepModule,
+    LeaseInspectionStepPictureModule,
     FileModule,
     ConfigModule.forRoot({
       isGlobal: true,

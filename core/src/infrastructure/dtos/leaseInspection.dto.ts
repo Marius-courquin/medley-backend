@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsEnum, IsOptional, IsUUID } from "class-validator";
-import { LeaseInspectionStateDto, LeaseInspectionTypeDto } from "./enum/leaseInspection.enum.dto";
+import { IsEnum, IsOptional, IsUUID } from "class-validator";
+import { LeaseInspectionStateDto, LeaseInspectionTypeDto } from "@infrastructure/dtos/enum/leaseInspection.enum.dto";
 import { IsCustomDate } from "@shared/decorators/date.shared.decorator";
 
 export class LeaseInspectionDto {

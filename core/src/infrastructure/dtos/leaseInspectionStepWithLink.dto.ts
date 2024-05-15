@@ -1,8 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
-import {  LeaseInspectionStepStateDto } from "./enum/leaseInspectionStep.enum.dto";
+import { IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+import {  LeaseInspectionStepStateDto } from "@infrastructure/dtos/enum/leaseInspectionStep.enum.dto";
 
-export class LeaseInspectionStepDto {
+export class LeaseInspectionStepWithLinkDto {
     @IsOptional()
     @IsUUID(4, { message: 'id must be a valid uuid' })
     @ApiProperty({
@@ -48,12 +48,24 @@ export class LeaseInspectionStepDto {
     })
     leaseInspectionId: string;
 
-    constructor(state: LeaseInspectionStepStateDto, description: string, rating: number, leaseInspectionId: string, id?: string) {
-        this.id = id ?? undefined;
+    @IsArray({message: 'pictures must be an array'})
+    @IsString({each: true, message: 'pictures must be an array of strings'})
+    @ApiProperty({
+        required: true,
+        type: 'string',
+        isArray: true,
+        description: 'Contains the links to the pictures of the lease inspection step',
+        example: 'https://medley-minio.m-w-s.fr/pictures/estate/123e4567-e89b-12d3-a456-426614174000',
+    })
+    pictures?: string[];
+
+    constructor(state: LeaseInspectionStepStateDto, description: string, rating: number, leaseInspectionId: string, id: string, pictures?: string[]) {
+        this.id = id;
         this.state = state;
         this.description = description;
         this.rating = rating;
         this.leaseInspectionId = leaseInspectionId;
+        this.pictures = pictures ?? undefined
     }
 
 }
