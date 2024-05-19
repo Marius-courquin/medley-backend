@@ -1,10 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Ceiling } from "@domain/entities/ceiling.entity";
-import { CeilingRepository } from "@domain/repositories/ceiling.repository";
-import { CeilingDtoMapper } from '@infrastructure/mappers/ceiling.dto.mapper';
-import { Element } from '@domain/entities/element.entity';
-import { ElementRepository } from '@domain/repositories/element.repository';
-import { CeilingDto } from '@infrastructure/dtos/ceiling.dto';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
+import {Ceiling} from "@domain/entities/ceiling.entity";
+import {CeilingRepository} from "@domain/repositories/ceiling.repository";
+import {CeilingDtoMapper} from '@infrastructure/mappers/ceiling.dto.mapper';
+import {Element} from '@domain/entities/element.entity';
+import {ElementRepository} from '@domain/repositories/element.repository';
+import {CeilingDto} from '@infrastructure/dtos/ceiling.dto';
 
 
 @Injectable()
@@ -41,16 +41,19 @@ export class CeilingService {
         if (!element) {
             throw new NotFoundException('element does not exist');
         }
+        if(element.type !== 'CEILING') {
+            throw new BadRequestException('element is not a ceiling');
+        }
 
         ceilingDto.id = id;
-        const Stair : Ceiling = CeilingDtoMapper.toModel(ceilingDto, element);
-        return CeilingDtoMapper.fromModel( await this.repository.updateElement(Stair));
+        const ceiling : Ceiling = CeilingDtoMapper.toModel(ceilingDto, element);
+        return CeilingDtoMapper.fromModel( await this.repository.updateElement(ceiling));
     }
 
     async getCeilingByElement(elementId: string): Promise<CeilingDto> {
         const ceiling : Ceiling = await this.repository.findByElement(elementId);
         if (!ceiling) {
-            throw new NotFoundException('no Stairs found for this element');
+            throw new NotFoundException('no ceiling found for this element');
         }
 
         return CeilingDtoMapper.fromModel(ceiling);

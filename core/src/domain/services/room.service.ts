@@ -30,10 +30,11 @@ export class RoomService {
     }
 
     async getAllForEstate(estateId: string): Promise<RoomDto[]> {
-        const rooms: Room[] = await this.roomRepository.findAllByEstate(estateId);
-        if (rooms.length <= 0) {
-            throw new NotFoundException( 'no rooms found for this estate');
+        const estate = await this.estateRepository.findById(estateId);
+        if (!estate) {
+            throw new NotFoundException( 'estate does not exist');
         }
+        const rooms: Room[] = await this.roomRepository.findAllByEstate(estateId);
         return rooms.map(room => RoomDtoMapper.fromModel(room));
     }
 

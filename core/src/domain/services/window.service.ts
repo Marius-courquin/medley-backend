@@ -17,10 +17,10 @@ export class WindowService {
     async create(windowDto: WindowDto): Promise<WindowDto> {
         const subElement : SubElement = await this.subElementRepository.findById(windowDto.subElementId);
         if (!subElement) {
-            throw new NotFoundException('subElement does not exist');
+            throw new NotFoundException('sub element does not exist');
         }
         if (subElement.type !== SubElementType.WINDOW ) {
-            throw new BadRequestException('subElement is not a Window');
+            throw new BadRequestException('sub element is not a Window');
         }
 
         const window : Window = WindowDtoMapper.toModel(windowDto, subElement);
@@ -30,7 +30,7 @@ export class WindowService {
     async get(id: string): Promise<WindowDto> {
         const window : Window = await this.repository.findById(id);
         if (!window) {
-            throw new NotFoundException( 'Window does not exist');
+            throw new NotFoundException( 'window does not exist');
         }
 
         return WindowDtoMapper.fromModel(window);
@@ -39,9 +39,11 @@ export class WindowService {
     async update(id: string, windowDto: WindowDto): Promise<WindowDto> {
         const subElement : SubElement = await this.subElementRepository.findById(windowDto.subElementId);
         if (!subElement) {
-            throw new NotFoundException('Window does not exist');
+            throw new NotFoundException('sub element does not exist');
         }
-
+        if (subElement.type !== SubElementType.WINDOW ) {
+            throw new BadRequestException('sub element is not a Window');
+        }
         windowDto.id = id;
         const window : Window = WindowDtoMapper.toModel(windowDto, subElement);
         return WindowDtoMapper.fromModel( await this.repository.updateElement(window));

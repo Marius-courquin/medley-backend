@@ -17,10 +17,10 @@ export class WallSocketService {
     async create(wallSocketDto: WallSocketDto): Promise<WallSocketDto> {
         const subElement : SubElement = await this.subElementRepository.findById(wallSocketDto.subElementId);
         if (!subElement) {
-            throw new NotFoundException('subElement does not exist');
+            throw new NotFoundException('sub element does not exist');
         }
         if (subElement.type !== SubElementType.WALL_SOCKET ) {
-            throw new BadRequestException('subElement is not a WallSocket');
+            throw new BadRequestException('sub element is not a WallSocket');
         }
 
         const wallSocket : WallSocket = WallSocketDtoMapper.toModel(wallSocketDto, subElement);
@@ -30,7 +30,7 @@ export class WallSocketService {
     async get(id: string): Promise<WallSocketDto> {
         const wallSocket : WallSocket = await this.repository.findById(id);
         if (!wallSocket) {
-            throw new NotFoundException( 'WallSocket does not exist');
+            throw new NotFoundException( 'wall socket does not exist');
         }
 
         return WallSocketDtoMapper.fromModel(wallSocket);
@@ -39,9 +39,11 @@ export class WallSocketService {
     async update(id: string, wallSocketDto: WallSocketDto): Promise<WallSocketDto> {
         const subElement : SubElement = await this.subElementRepository.findById(wallSocketDto.subElementId);
         if (!subElement) {
-            throw new NotFoundException('WallSocket does not exist');
+            throw new NotFoundException('sub element does not exist');
         }
-
+        if (subElement.type !== SubElementType.WALL_SOCKET ) {
+            throw new BadRequestException('sub element is not a WallSocket');
+        }
         wallSocketDto.id = id;
         const wallSocket : WallSocket = WallSocketDtoMapper.toModel(wallSocketDto, subElement);
         return WallSocketDtoMapper.fromModel( await this.repository.updateElement(wallSocket));
@@ -50,7 +52,7 @@ export class WallSocketService {
     async getBySubElement(subElementId: string): Promise<WallSocketDto> {
         const wallSocket : WallSocket = await this.repository.findBySubElement(subElementId);
         if (!wallSocket) {
-            throw new NotFoundException('no wallSocket found for this subElement');
+            throw new NotFoundException('no wall socket found for this subElement');
         }
 
         return WallSocketDtoMapper.fromModel(wallSocket);
