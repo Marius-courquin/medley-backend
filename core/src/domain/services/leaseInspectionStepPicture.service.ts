@@ -30,7 +30,7 @@ export class LeaseInspectionStepPictureService {
         }
         return await this.repository.delete(leaseInspectionStepPictureId);
     }
-    
+
     async getPicturesUrl(leaseInspectionStepPictureId: string): Promise<PictureDto[]> {
         const leaseInspectionStepPictures: LeaseInspectionStepPicture[] = await this.repository.findByLeaseInspectionStep(leaseInspectionStepPictureId);
         if (leaseInspectionStepPictures.length === 0) {
