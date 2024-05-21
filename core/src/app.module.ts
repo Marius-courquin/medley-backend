@@ -25,6 +25,8 @@ import {LeaseInspectionModule} from "@modules/leaseInspection.module";
 import {FileModule} from "@modules/file.module";
 import { LeaseInspectionStepModule } from '@modules/leaseInspectionStep.module';
 import { LeaseInspectionStepPictureModule } from '@modules/leaseInspectionStepPicture.module';
+import { LeaseInspectionSubStepPictureModule } from '@modules/leaseInspectionSubStepPicture.module';
+import { LeaseInspectionSubStepModule } from '@modules/leaseInspectionSubStep.module';
 
 @Module({
   imports: [
@@ -46,6 +48,8 @@ import { LeaseInspectionStepPictureModule } from '@modules/leaseInspectionStepPi
     LeaseInspectionModule,
     LeaseInspectionStepModule,
     LeaseInspectionStepPictureModule,
+    LeaseInspectionSubStepModule,
+    LeaseInspectionSubStepPictureModule,
     FileModule,
     ConfigModule.forRoot({
       isGlobal: true,
