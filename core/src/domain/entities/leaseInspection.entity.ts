@@ -1,9 +1,9 @@
-import {Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
-import {IsEnum, IsOptional, IsUUID} from 'class-validator';
-import {LeaseInspectionState, LeaseInspectionType} from '@domain/entities/enum/leaseInspection.enum.entity';
-import {Lease} from '@domain/entities/lease.entity';
-import {Agent} from '@domain/entities/agent.entity';
-import {IsCustomDate} from '@shared/decorators/date.shared.decorator';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
+import { IsDateString, IsEnum, IsOptional, IsUUID } from 'class-validator';
+import { LeaseInspectionType, LeaseInspectionState } from '@domain/entities/enum/leaseInspection.enum.entity';
+import { Lease } from '@domain/entities/lease.entity';
+import { Agent } from '@domain/entities/agent.entity';
+import { IsCustomDate } from '@shared/decorators/date.shared.decorator';
 
 @Entity("lease_inspection")
 export class LeaseInspection {
@@ -36,14 +36,32 @@ export class LeaseInspection {
     @IsOptional()
     agent?: Agent;
 
+    @OneToOne( () => Signature, signature => signature.id, { onDelete: 'CASCADE', eager: true})
+    @IsOptional()
+    agentSignature: Signature;
+
+    @OneToOne( () => Signature, signature => signature.id, { onDelete: 'CASCADE', eager: true})
+    @IsOptional()
+    thirdSignature: Signature;
+
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" , name : "created_at"})
     createdAt: Date;
 
-    constructor (type: LeaseInspectionType, state: LeaseInspectionState, endDate: Date, lease: Lease, agent: Agent, id?: string) {
+    constructor (
+        type: LeaseInspectionType,
+        state: LeaseInspectionState,
+        endDate: Date, lease: Lease,
+        agent: Agent,
+        agentSignature: Signature,
+        thirdSignature: Signature,
+        id?: string)
+    {
         this.id = id ?? undefined;
         this.type = type;
         this.state = state;
         this.endDate = endDate;
+        this.agentSignature = agentSignature;
+        this.thirdSignature = thirdSignature;
         this.lease = lease ?? undefined;
         this.agent = agent ?? undefined;
     }
