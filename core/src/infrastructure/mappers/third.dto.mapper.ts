@@ -11,7 +11,7 @@ export class ThirdDtoMapper {
             this.enumToDto(third.type),
             third.lastName,
             third.firstName,
-            third.dob,
+            third.dob.toISOString().slice(0, 10),
             third.iban
         );
     }
@@ -21,7 +21,7 @@ export class ThirdDtoMapper {
             this.enumToModel(thirdDto.type),
             thirdDto.lastName,
             thirdDto.firstName,
-            thirdDto.dob,
+            new Date(thirdDto.dob),
             thirdDto.iban,
             thirdDto.id
         );

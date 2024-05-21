@@ -1,6 +1,7 @@
 import { IsDateString, IsEnum, IsOptional, IsString, IsUUID } from "class-validator";
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { ThirdType as ThirdType } from "@domain/entities/enum/third.enum.entity";
+import { IsCustomDate } from "@/shared/decorators/date.shared.decorator";
 
 
 @Entity()
@@ -22,8 +23,12 @@ export class Third {
     @IsString({ message: 'firstName must be a valid string' })
     firstName: string;
 
-    @Column({nullable: false})
-    @IsDateString()
+    @Column({nullable: false, type : "date",
+    transformer: {
+        from: (value: string) => value,
+        to: (value: Date) => new Date(value).toISOString().slice(0, 10), 
+    }})
+    @IsCustomDate({ message: 'dob must be a valid date in YYYY-MM-DD format' })
     dob: Date;
 
     @Column({nullable: true})

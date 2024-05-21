@@ -1,5 +1,6 @@
+import { IsCustomDate } from "@/shared/decorators/date.shared.decorator";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsNumber, IsOptional, IsUUID } from "class-validator";
+import { IsNumber, IsOptional, IsUUID } from "class-validator";
 
 export class LeaseDto {
 
@@ -23,25 +24,25 @@ export class LeaseDto {
     })
     keyCount: number;
 
-    @IsDateString()
+    @IsCustomDate({ message: 'startDate must be a valid date in YYYY-MM-DD format' })
     @ApiProperty({
         type: String,
         format: 'date-time',
         description: 'The start date of the lease',
-        example: '2021-01-01T00:00:00.000Z',
+        example: '2021-01-01',
         required: true,
     })
-    startDate: Date;
+    startDate: string;
 
-    @IsDateString()
+    @IsCustomDate({ message: 'endDate must be a valid date in YYYY-MM-DD format' })
     @ApiProperty({
         type: String,
         format: 'date-time',
         description: 'The end date of the lease',
-        example: '2021-12-31T23:59:59.999Z',
+        example: '2021-12-31',
         required: true,
     })
-    endDate: Date;
+    endDate: string;
 
     @IsUUID(4, { message: 'estateId must be a valid uuid' })
     @ApiProperty({
@@ -74,7 +75,7 @@ export class LeaseDto {
     })
     tenantId: string;
 
-    constructor(keyCount: number, startDate: Date, endDate: Date, estateId: string, tenantId: string, agentId?: string, id?: string) {
+    constructor(keyCount: number, startDate: string, endDate: string, estateId: string, tenantId: string, agentId?: string, id?: string) {
         this.id = id ?? undefined;
         this.keyCount = keyCount;
         this.startDate = startDate;

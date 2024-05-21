@@ -9,8 +9,8 @@ export class LeaseDtoMapper {
     static fromModel(lease: Lease): LeaseDto {
         return new LeaseDto(
             lease.keyCount,
-            lease.startDate,
-            lease.endDate,
+            lease.startDate.toISOString().slice(0, 10),
+            lease.endDate.toISOString().slice(0, 10),
             lease.estate.id,
             lease.agent.id,
             lease.tenant.id,
@@ -21,8 +21,8 @@ export class LeaseDtoMapper {
     static toModel(leaseDto: LeaseDto, estate: Estate, agent: Agent, tenant: Third): Lease {
         return new Lease(
             leaseDto.keyCount,
-            leaseDto.startDate,
-            leaseDto.endDate,
+            new Date(leaseDto.startDate),
+            new Date(leaseDto.endDate),
             estate,
             agent,
             tenant,

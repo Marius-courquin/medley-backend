@@ -3,6 +3,7 @@ import { Third } from '@domain/entities/third.entity';
 import { Estate } from '@domain/entities/estate.entity';
 import { IsNumber, IsOptional, IsUUID, IsDate } from 'class-validator';
 import {Agent} from "@domain/entities/agent.entity";
+import { IsCustomDate } from '@shared/decorators/date.shared.decorator';
 
 @Entity()
 export class Lease {
@@ -16,11 +17,19 @@ export class Lease {
     @IsNumber({}, { message: 'keyCount must be a valid number' })
     keyCount: number;
 
-    @Column({nullable: false, name : "start_date", type: 'date'})
-    @IsDate({ message: 'startDate must be a valid date' })
+    @Column({nullable: false, name : "start_date", type : "date",
+    transformer: {
+        from: (value: string) => value,
+        to: (value: Date) => new Date(value).toISOString().slice(0, 10), 
+    }})
+    @IsCustomDate({ message: 'dob must be a valid date in YYYY-MM-DD format' })
     startDate: Date;
 
-    @Column({nullable: false, name : "end_date", type: 'date'})
+    @Column({nullable: false, name : "end_date", type : "date",
+    transformer: {
+        from: (value: string) => value,
+        to: (value: Date) => new Date(value).toISOString().slice(0, 10), 
+    }})
     @IsDate({ message: 'endDate must be a valid date' })
     endDate: Date;
 
