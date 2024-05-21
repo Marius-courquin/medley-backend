@@ -1,26 +1,26 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, UseInterceptors } from '@nestjs/common';
-import { LeaseInspectionStepWithFileDto } from '@/infrastructure/dtos/leaseInspectionStepWithFile.dto';
-import { LeaseInspectionStepService } from '@domain/services/leaseInspectionStep.service';
+import { LeaseInspectionSubStepWithFileDto } from '@/infrastructure/dtos/leaseInspectionSubStepWithFile.dto';
 import { ApiBody, ApiCreatedResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ParseIntFieldsInterceptor } from '@infrastructure/interceptors/floatParser.interceptor';
 import { FormDataRequest } from 'nestjs-form-data';
-import { LeaseInspectionStepWithLinkDto } from '../dtos/leaseInspectionStepWithLink.dto';
+import { LeaseInspectionSubStepWithLinkDto } from "@infrastructure/dtos/leaseInspectionSubStepWithLink.dto";
+import { LeaseInspectionSubStepService } from '@domain/services/leaseInspectionSubStep.service';
 
 
-@ApiTags('lease_inspection/step')
-@Controller('lease_inspection/step')
-export class LeaseInspectionStepController {
+@ApiTags('lease_inspection/sub_step')
+@Controller('lease_inspection/sub_step')
+export class LeaseInspectionSubStepController {
 
-    constructor(private service: LeaseInspectionStepService) {}
+    constructor(private service: LeaseInspectionSubStepService) {}
 
     @ApiBody({ 
-        type: LeaseInspectionStepWithFileDto,
+        type: LeaseInspectionSubStepWithFileDto,
         description: 'The lease inspection step to create',
         required: true
     })
     @ApiCreatedResponse({ 
         description: 'The lease inspection step has been successfully created' ,
-        type: LeaseInspectionStepWithLinkDto
+        type: LeaseInspectionSubStepWithFileDto
     })
     @ApiNotFoundResponse({
         description: 'The lease inspection step does not exist',
@@ -35,27 +35,27 @@ export class LeaseInspectionStepController {
     @Post()
     @UseInterceptors(new ParseIntFieldsInterceptor(['rating']))
     @FormDataRequest()
-    create(@Body() leaseInspectionStepDto : LeaseInspectionStepWithFileDto) {
+    create(@Body() leaseInspectionStepDto : LeaseInspectionSubStepWithFileDto) {
         return this.service.create(leaseInspectionStepDto);
     }
 
     @ApiParam({
         name: 'id',
         type: 'string',
-        description: 'The id of the lease inspection step',
+        description: 'The id of the lease inspection sub step',
         format: 'uuid',
         example: '123e4567-e89b-12d3-a456-426614174000',
         required: true,
     })
     @ApiOkResponse({
-        description: 'The lease inspection step has been successfully found',
-        type: LeaseInspectionStepWithLinkDto
+        description: 'The lease inspection sub step has been successfully found',
+        type: LeaseInspectionSubStepWithFileDto
     })
     @ApiNotFoundResponse({
-        description: 'The lease inspection step does not exist',
+        description: 'The lease inspection sub step does not exist',
         schema: {
             example: {
-                message: 'The lease inspection step does not exist',
+                message: 'The lease inspection sub step does not exist',
                 statusCode: 404
             }
         }
@@ -65,52 +65,19 @@ export class LeaseInspectionStepController {
     get(@Param('id', ParseUUIDPipe) id: string) {
         return this.service.get(id);
     }
+    
 
     @ApiParam({
-        name: 'id',
+        name: 'leaseInspectionStepId',
         type: 'string',
-        description: 'The id of the lease inspection step',
-        format: 'uuid',
-        example: '123e4567-e89b-12d3-a456-426614174000',
-        required: true,
-    })
-    @ApiBody({
-        type: LeaseInspectionStepWithFileDto,
-        description: 'The lease inspection step to update',
-        required: true
-    })
-    @ApiOkResponse({
-        description: 'The lease inspection step has been successfully updated',
-        type: LeaseInspectionStepWithLinkDto
-    })
-    @ApiNotFoundResponse({
-        description: 'The lease inspection step does not exist',
-        schema: {
-            example: {
-                message: 'The lease inspection step does not exist',
-                statusCode: 404
-            }
-        }
-    })
-    @HttpCode(HttpStatus.OK)
-    @Put(':id')
-    @UseInterceptors(new ParseIntFieldsInterceptor(['state', 'description', 'rating']))
-    @FormDataRequest()
-    update(@Param('id', ParseUUIDPipe) id: string, @Body() leaseInspectionStepDto : LeaseInspectionStepWithFileDto) {
-        return this.service.update(id, leaseInspectionStepDto);
-    }
-
-    @ApiParam({
-        name: 'leaseInspectionId',
-        type: 'string',
-        description: 'The id of the lease inspection',
+        description: 'The id of the lease  step',
         format: 'uuid',
         example: '123e4567-e89b-12d3-a456-426614174000',
         required: true,
     })
     @ApiOkResponse({
         description: 'The lease inspection step has been successfully found',
-        type: LeaseInspectionStepWithLinkDto
+        type: LeaseInspectionSubStepWithLinkDto
     })
     @ApiNotFoundResponse({
         description: 'The lease inspection step does not exist',
@@ -122,9 +89,43 @@ export class LeaseInspectionStepController {
         }
     })
     @HttpCode(HttpStatus.OK)
-    @Get("lease_inspection/:leaseInspectionId")
-    getByLeaseInspetion(@Param('leaseInspectionId', ParseUUIDPipe) leaseInspectionId: string) {
-        return this.service.getByLeaseInspection(leaseInspectionId);
+    @Get('step/:leaseInspectionStepId')
+    getByLeaseInspetionStep(@Param('leaseInspectionStepId', ParseUUIDPipe) leaseInspectionStepId: string) {
+        return this.service.getByLeaseInspectionStep(leaseInspectionStepId);
+    }
+
+    @ApiParam({
+        name: 'id',
+        type: 'string',
+        description: 'The id of the lease inspection sub step',
+        format: 'uuid',
+        example: '123e4567-e89b-12d3-a456-426614174000',
+        required: true,
+    })
+    @ApiBody({
+        type: LeaseInspectionSubStepWithFileDto,
+        description: 'The lease inspection sub step to update',
+        required: true
+    })
+    @ApiOkResponse({
+        description: 'The lease inspection sub step has been successfully updated',
+        type: LeaseInspectionSubStepWithFileDto
+    })
+    @ApiNotFoundResponse({
+        description: 'The lease inspection sub step does not exist',
+        schema: {
+            example: {
+                message: 'The lease inspection sub step does not exist',
+                statusCode: 404
+            }
+        }
+    })
+    @HttpCode(HttpStatus.OK)
+    @Put(':id')
+    @UseInterceptors(new ParseIntFieldsInterceptor(['rating']))
+    @FormDataRequest()
+    update(@Param('id', ParseUUIDPipe) id: string, @Body() leaseInspectionStepDto: LeaseInspectionSubStepWithFileDto) {
+        return this.service.update(id, leaseInspectionStepDto);
     }
 
 
