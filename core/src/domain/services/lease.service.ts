@@ -7,6 +7,7 @@ import { ThirdRepository } from '@domain/repositories/third.repository';
 import { LeaseDtoMapper } from '@infrastructure/mappers/lease.dto.mapper';
 import { EstateRepository } from '@domain/repositories/estate.repository';
 import {Third} from "@domain/entities/third.entity";
+import {Estate} from "@domain/entities/estate.entity";
 
 @Injectable()
 export class LeaseService {
@@ -47,6 +48,18 @@ export class LeaseService {
         }
         const leases: Lease[] = await this.leaseRepository.findByTenant(tenantId);
         return leases.map(lease => LeaseDtoMapper.fromModel(lease));
+    }
+
+    async getByEstate(estateId: string): Promise<LeaseDto> {
+        const estate: Estate = await this.estateRepository.findById(estateId);
+        if (!estate) {
+            throw new NotFoundException('estate does not exist');
+        }
+        const lease: Lease = await this.leaseRepository.findByEstate(estateId);
+        if (!lease) {
+            throw new NotFoundException('no actual lease for this estate');
+        }
+        return LeaseDtoMapper.fromModel(lease);
     }
 
     async get(leaseId: string): Promise<LeaseDto> {
