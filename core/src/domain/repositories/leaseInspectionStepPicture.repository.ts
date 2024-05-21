@@ -7,13 +7,13 @@ export class LeaseInspectionStepPictureRepository extends Repository<LeaseInspec
     constructor(
         private dataSource: DataSource)
     {
-        super(LeaseInspectionStepPictureRepository, dataSource.createEntityManager());
+        super(LeaseInspectionStepPicture, dataSource.createEntityManager());
     }
 
     async findByLeaseInspectionStep(leaseInspectionStepId: string): Promise<LeaseInspectionStepPicture[]> {
-        return this.createQueryBuilder("lease_inspection_step_picture")
-            .leftJoinAndSelect("lease_inspection_step_picture.leaseInspectionStep", "lease_inspection_step")
-            .where("lease_inspection_step.id = :leaseInspectionStepId", { leaseInspectionStepId })
+        return this.createQueryBuilder('leaseInspectionStepPicture')
+            .leftJoinAndSelect('leaseInspectionStepPicture.picture', 'picture')
+            .where('leaseInspectionStepPicture.leaseInspectionStepId = :leaseInspectionStepId', { leaseInspectionStepId })
             .getMany();
     }
 

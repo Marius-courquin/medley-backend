@@ -6,6 +6,8 @@ import { LeaseInspectionStepDtoMapper } from '@infrastructure/mappers/leaseInspe
 import { LeaseInspectionRepository } from '@domain/repositories/leaseInspection.repository';
 import { LeaseInspectionStepWithFileDto } from '@infrastructure/dtos/leaseInspectionStepWithFile.dto';
 import { LeaseInspectionStepPictureService } from '@domain/services/leaseInspectionStepPicture.service';
+import { PictureDto } from '@infrastructure/dtos/picture.dto';
+import { isArray } from 'class-validator';
 
 @Injectable()
 export class LeaseInspectionStepService {
@@ -22,10 +24,11 @@ export class LeaseInspectionStepService {
         }
 
         const leaseInspectionStep = await this.repository.save(LeaseInspectionStepDtoMapper.toModel(leaseInspectionStepDto, leaseInspection));
-        for (const picture of leaseInspectionStepDto.pictures) {
+        const pictures = isArray(leaseInspectionStepDto.pictures) ? leaseInspectionStepDto.pictures : [leaseInspectionStepDto.pictures];
+        for (const picture of pictures) {
             await this.leaseInspectionStepPictureService.create(leaseInspectionStep, picture);
         }
-        const picturesUrls: string[] = await this.leaseInspectionStepPictureService.getPicturesUrl(leaseInspectionStep.id);
+        const picturesUrls: PictureDto[] = await this.leaseInspectionStepPictureService.getPicturesUrl(leaseInspectionStep.id);
         return LeaseInspectionStepDtoMapper.fromModelWithLink(leaseInspectionStep, picturesUrls);
     }
 
@@ -36,7 +39,7 @@ export class LeaseInspectionStepService {
         }
 
         const leaseInspectionStepWithLinkDtos = leaseInspectionSteps.map(async leaseInspectionStep => {
-            const picturesUrls: string[] = await this.leaseInspectionStepPictureService.getPicturesUrl(leaseInspectionStep.id);
+            const picturesUrls: PictureDto[] = await this.leaseInspectionStepPictureService.getPicturesUrl(leaseInspectionStep.id);
             return LeaseInspectionStepDtoMapper.fromModelWithLink(leaseInspectionStep, picturesUrls);
         });
         return Promise.all(leaseInspectionStepWithLinkDtos);
@@ -47,7 +50,7 @@ export class LeaseInspectionStepService {
         if (!leaseInspectionStep) {
             throw new NotFoundException('Lease inspection step does not exist');
         }
-        const picturesUrls: string[] = await this.leaseInspectionStepPictureService.getPicturesUrl(leaseInspectionStepId);
+        const picturesUrls: PictureDto[] = await this.leaseInspectionStepPictureService.getPicturesUrl(leaseInspectionStepId);
         return LeaseInspectionStepDtoMapper.fromModelWithLink(leaseInspectionStep, picturesUrls);
     }
 
@@ -57,12 +60,17 @@ export class LeaseInspectionStepService {
         if (!leaseInspection) {
             throw new NotFoundException('Lease inspection does not exist');
         }
+        const pictures = isArray(leaseInspectionStepDto.pictures) ? leaseInspectionStepDto.pictures : [leaseInspectionStepDto.pictures];
+        const leaseInspectionStepUpdated = LeaseInspectionStepDtoMapper.toModel(leaseInspectionStepDto, leaseInspection);
+        for (const picture of pictures) {
+            await this.leaseInspectionStepPictureService.create(leaseInspectionStepUpdated, picture);
+        }
+        const picturesUrl: PictureDto[] = await this.leaseInspectionStepPictureService.getPicturesUrl(leaseInspectionStepId); 
+        return LeaseInspectionStepDtoMapper.fromModelWithLink(await this.repository.updateElement(leaseInspectionStepUpdated), picturesUrl);
+    }
 
-        await this.leaseInspectionStepPictureService.updateLeaseInspectionStepPicture(leaseInspectionStepId, leaseInspectionStepDto.pictures);
-        const picturesUrl: string[] = await this.leaseInspectionStepPictureService.getPicturesUrl(leaseInspectionStepId);
-        const leaseInspectionStep = LeaseInspectionStepDtoMapper.toModel(leaseInspectionStepDto, leaseInspection);
-
-        return LeaseInspectionStepDtoMapper.fromModelWithLink(await this.repository.updateElement(leaseInspectionStep), picturesUrl);
+    async deletePicturesByPictureId(PicturesId : string) {
+        return await this.leaseInspectionStepPictureService.delete(PicturesId);
     }
 
 }

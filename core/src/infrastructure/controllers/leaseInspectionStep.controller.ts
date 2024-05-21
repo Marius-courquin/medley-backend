@@ -1,9 +1,10 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, UseInterceptors } from '@nestjs/common';
 import { LeaseInspectionStepWithFileDto } from '@/infrastructure/dtos/leaseInspectionStepWithFile.dto';
 import { LeaseInspectionStepService } from '@domain/services/leaseInspectionStep.service';
-import { ApiBody, ApiCreatedResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiCreatedResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { ParseIntFieldsInterceptor } from '@infrastructure/interceptors/floatParser.interceptor';
 import { FormDataRequest } from 'nestjs-form-data';
+import { LeaseInspectionStepWithLinkDto } from '../dtos/leaseInspectionStepWithLink.dto';
 
 
 @ApiTags('lease_inspection/step')
@@ -19,7 +20,7 @@ export class LeaseInspectionStepController {
     })
     @ApiCreatedResponse({ 
         description: 'The lease inspection step has been successfully created' ,
-        type: LeaseInspectionStepWithFileDto
+        type: LeaseInspectionStepWithLinkDto
     })
     @ApiNotFoundResponse({
         description: 'The lease inspection step does not exist',
@@ -32,7 +33,7 @@ export class LeaseInspectionStepController {
     })
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    @UseInterceptors(new ParseIntFieldsInterceptor(['state', 'description', 'rating']))
+    @UseInterceptors(new ParseIntFieldsInterceptor(['rating']))
     @FormDataRequest()
     create(@Body() leaseInspectionStepDto : LeaseInspectionStepWithFileDto) {
         return this.service.create(leaseInspectionStepDto);
@@ -48,7 +49,7 @@ export class LeaseInspectionStepController {
     })
     @ApiOkResponse({
         description: 'The lease inspection step has been successfully found',
-        type: LeaseInspectionStepWithFileDto
+        type: LeaseInspectionStepWithLinkDto
     })
     @ApiNotFoundResponse({
         description: 'The lease inspection step does not exist',
@@ -80,7 +81,7 @@ export class LeaseInspectionStepController {
     })
     @ApiOkResponse({
         description: 'The lease inspection step has been successfully updated',
-        type: LeaseInspectionStepWithFileDto
+        type: LeaseInspectionStepWithLinkDto
     })
     @ApiNotFoundResponse({
         description: 'The lease inspection step does not exist',
@@ -109,7 +110,7 @@ export class LeaseInspectionStepController {
     })
     @ApiOkResponse({
         description: 'The lease inspection step has been successfully found',
-        type: LeaseInspectionStepWithFileDto
+        type: LeaseInspectionStepWithLinkDto
     })
     @ApiNotFoundResponse({
         description: 'The lease inspection step does not exist',
@@ -125,5 +126,33 @@ export class LeaseInspectionStepController {
     getByLeaseInspetion(@Param('leaseId', ParseUUIDPipe) leaseId: string) {
         return this.service.getByLeaseInspection(leaseId);
     }
+
+
+    @ApiParam({
+        name: 'picturesId',
+        type: 'string',
+        description: 'The id of the picture',
+        format: 'uuid',
+        example: '123e4567-e89b-12d3-a456-426614174000',
+        required: true,
+    })
+    @ApiNoContentResponse({
+        description: 'The picture has been successfully deleted'
+    })
+    @ApiNotFoundResponse({
+        description: 'The picture does not exist',
+        schema: {
+            example: {
+                message: 'The picture does not exist',
+                statusCode: 404
+            }
+        }
+    })
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @Delete("picture/:picturesId")
+    deletePicturesByPictureId(@Param('picturesId', ParseUUIDPipe) picturesId: string) {
+        return this.service.deletePicturesByPictureId(picturesId);
+    }
+
 
 }

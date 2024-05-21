@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
 import { IsOptional, IsUUID } from 'class-validator';
 import { LeaseInspectionStep } from '@domain/entities/leaseInspectionStep.entity';
 import { Picture } from '@domain/entities/picture.entity';
@@ -15,8 +15,8 @@ export class LeaseInspectionStepPicture {
     @IsOptional()
     picture?: Picture
 
-    @OneToOne(() => LeaseInspectionStep, leaseInspectionStep  => leaseInspectionStep.id, { onDelete: 'CASCADE', eager: true})
-    @JoinColumn()
+    
+    @ManyToOne(() => LeaseInspectionStep, leaseInspectionStep => leaseInspectionStep.id, { onDelete: 'CASCADE', eager: false})
     @IsOptional()
     leaseInspectionStep?: LeaseInspectionStep;
 

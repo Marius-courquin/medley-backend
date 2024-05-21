@@ -4,6 +4,8 @@ import { FileService } from "@domain/services/file.service";
 import { Picture } from "@domain/entities/picture.entity";
 import { LeaseInspectionStepPicture } from "@domain/entities/leaseInspectionStepPicture.entity";
 import { LeaseInspectionStep } from "@domain/entities/leaseInspectionStep.entity";
+import { PictureDto } from "@/infrastructure/dtos/picture.dto";
+import { DeleteResult } from "typeorm";
 
 
 @Injectable()
@@ -19,32 +21,28 @@ export class LeaseInspectionStepPictureService {
             picture = await this.fileService.savePicture(file, LeaseInspectionStepPicture);
         }
         const leaseInspectionStepPicture = new LeaseInspectionStepPicture(picture, leaseInspectionStep);
-        console.log(leaseInspectionStepPicture);
         return this.repository.save(leaseInspectionStepPicture);
     }
 
-    async updateLeaseInspectionStepPicture(leaseInspectionStepPictureId: string, file: any): Promise<LeaseInspectionStepPicture> {
-        const leaseInspectionStepPicture: LeaseInspectionStepPicture = await this.repository.findById(leaseInspectionStepPictureId);
-        if (!leaseInspectionStepPicture) {
+    async delete(leaseInspectionStepPictureId : string): Promise<DeleteResult> {
+        if (!await this.repository.findById(leaseInspectionStepPictureId)) {
             throw new NotFoundException('Lease inspection step picture does not exist');
         }
-        const picture: Picture = await this.fileService.savePicture(file, LeaseInspectionStepPicture);
-        leaseInspectionStepPicture.picture = picture;
-        return this.repository.updateElement(leaseInspectionStepPicture);
+        return await this.repository.delete(leaseInspectionStepPictureId);
     }
-
-    async getPicturesUrl(leaseInspectionStepPictureId: string): Promise<string[]> {
+    
+    async getPicturesUrl(leaseInspectionStepPictureId: string): Promise<PictureDto[]> {
         const leaseInspectionStepPictures: LeaseInspectionStepPicture[] = await this.repository.findByLeaseInspectionStep(leaseInspectionStepPictureId);
         if (leaseInspectionStepPictures.length === 0) {
             throw new NotFoundException('Lease inspection step picture does not exist');
         }
-        console.log(leaseInspectionStepPictures);
-        const picturesUrls = [];
-        leaseInspectionStepPictures.forEach(leaseInspectionStepPicture => {
-            picturesUrls.push(this.fileService.generateSignedUrlForPicture(leaseInspectionStepPicture.picture, LeaseInspectionStepPicture));
-        });
-
-        return picturesUrls;
+        const picturesDto : PictureDto[] = [];
+        for (const leaseInspectionStepPicture of leaseInspectionStepPictures) {
+            picturesDto.push(
+                new PictureDto(leaseInspectionStepPicture.id, await this.fileService.generateSignedUrlForPicture(leaseInspectionStepPicture.picture, LeaseInspectionStepPicture))
+            );
+        }
+        return picturesDto;
     }
 
     async getLeaseInspectionStepPicture(leaseInspectionStepPictureId: string): Promise<LeaseInspectionStepPicture> {
@@ -58,6 +56,7 @@ export class LeaseInspectionStepPictureService {
     async getLeaseInspectionStepPicturesByLeaseInspectionStep(leaseInspectionStepId: string): Promise<LeaseInspectionStepPicture[]> {
         return this.repository.findByLeaseInspectionStep(leaseInspectionStepId);
     }
+
     
 }
 

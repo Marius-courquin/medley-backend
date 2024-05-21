@@ -4,9 +4,10 @@ import { LeaseInspectionStepState } from '@domain/entities/enum/leaseInspectionS
 import { LeaseInspectionStepStateDto } from '@infrastructure/dtos/enum/leaseInspectionStep.enum.dto';
 import { LeaseInspection } from '@domain/entities/leaseInspection.entity';
 import { LeaseInspectionStep } from '@domain/entities/leaseInspectionStep.entity';
+import { PictureDto } from '@infrastructure/dtos/picture.dto';
 
 export class LeaseInspectionStepDtoMapper {
-    public static fromModelWithLink(leaseInspectionStep : LeaseInspectionStep, pictures : string[]) : LeaseInspectionStepWithLinkDto {
+    public static fromModelWithLink(leaseInspectionStep : LeaseInspectionStep, pictures : PictureDto[]) : LeaseInspectionStepWithLinkDto {
         return new LeaseInspectionStepWithLinkDto(
             this.leaseInspectionStepStateFromModel(leaseInspectionStep.state),
             leaseInspectionStep.description,

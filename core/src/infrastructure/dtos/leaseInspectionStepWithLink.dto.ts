@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsArray, IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 import {  LeaseInspectionStepStateDto } from "@infrastructure/dtos/enum/leaseInspectionStep.enum.dto";
+import { PictureDto } from "./picture.dto";
 
 export class LeaseInspectionStepWithLinkDto {
     @IsOptional()
@@ -48,18 +49,16 @@ export class LeaseInspectionStepWithLinkDto {
     })
     leaseInspectionId: string;
 
-    @IsArray({message: 'pictures must be an array'})
-    @IsString({each: true, message: 'pictures must be an array of strings'})
     @ApiProperty({
         required: true,
-        type: 'string',
+        type: PictureDto,
         isArray: true,
-        description: 'Contains the links to the pictures of the lease inspection step',
-        example: 'https://medley-minio.m-w-s.fr/pictures/estate/123e4567-e89b-12d3-a456-426614174000',
+        description: 'Contains the links and ids of the pictures ',
+        example: '[ {"id": "123e4567-e89b-12d3-a456-426614174000", "url": "https://example.com/picture.jpg" } ]',
     })
-    pictures?: string[];
+    pictures?: PictureDto[];
 
-    constructor(state: LeaseInspectionStepStateDto, description: string, rating: number, leaseInspectionId: string, id: string, pictures?: string[]) {
+    constructor(state: LeaseInspectionStepStateDto, description: string, rating: number, leaseInspectionId: string, id: string, pictures?: PictureDto[]) {
         this.id = id;
         this.state = state;
         this.description = description;
