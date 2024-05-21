@@ -133,17 +133,9 @@ export class LeaseController {
   }
 
   @ApiParam({
-      name: 'tenantId',
-      type: 'string',
-      description: 'The id of the tenant',
-      format: 'uuid',
-      example: '123e4567-e89b-12d3-a456-426614174000',
-      required: true,
-  })
-
-  @ApiQuery({
     name: 'tenantId',
     type: 'string',
+    format: 'uuid',
     description: 'The id of the tenant',
     example: '123e4567-e89b-12d3-a456-426614174000',
     required: true,
@@ -163,9 +155,44 @@ export class LeaseController {
         }
   })
   @HttpCode(HttpStatus.OK)
-  @Get()
-  getByTenant(@Query('tenantId', ParseUUIDPipe) tenantId: string) {
+  @Get('tenant/')
+  getByTenant(@Param('tenantId', ParseUUIDPipe) tenantId: string) {
     return this.service.getByTenant(tenantId);
+  }
+
+  @ApiQuery({
+    name: 'estateId',
+    type: 'string',
+    description: 'The id of the estate',
+    example: '123e4567-e89b-12d3-a456-426614174000',
+    required: true,
+  })
+  @ApiOkResponse({
+    description: 'The leases have been successfully found.',
+    type: LeaseDto
+  })
+  @ApiNotFoundResponse({
+    description: 'The estate does not exist',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'estate does not exist',
+      },
+    }
+  })
+  @ApiNotFoundResponse({
+    description: 'No actual lease for this estate',
+    schema: {
+      example: {
+        statusCode: 404,
+        message: 'no actual lease for this estate',
+      },
+    }
+  })
+  @HttpCode(HttpStatus.OK)
+  @Get()
+  getActualByEstate(@Query('estateId', ParseUUIDPipe) estateId: string) {
+    return this.service.getByEstate(estateId);
   }
 
 }
