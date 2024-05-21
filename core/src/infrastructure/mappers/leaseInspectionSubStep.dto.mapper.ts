@@ -6,36 +6,29 @@ import { LeaseInspectionSubStepWithFileDto } from "@infrastructure/dtos/leaseIns
 import { LeaseInspectionSubStep } from '@domain/entities/leaseInspectionSubStep.entity';
 import { LeaseInspectionSubStepState } from '@domain/entities/enum/leaseInspectionSubStep.enum.entity';
 import { LeaseInspectionSubStepStateDto } from '@infrastructure/dtos/enum/leaseInspectionSubStep.enum.dto';
+import { SubElementDtoMapper } from '@infrastructure/mappers/subElement.dto.mapper';
+import { SubElement } from '@domain/entities/subElement.entity';
 
 export class LeaseInspectionSubStepDtoMapper {
     public static fromModelWithLink(leaseInspectionSubStep : LeaseInspectionSubStep, pictures : PictureDto[]) : LeaseInspectionSubStepWithLinkDto {
         return new LeaseInspectionSubStepWithLinkDto(
             this.leaseInspectionSubStepStateFromModel(leaseInspectionSubStep.state),
-            leaseInspectionSubStep.rating,
+            SubElementDtoMapper.fromModel(leaseInspectionSubStep.subElement),
             leaseInspectionSubStep.description,
+            leaseInspectionSubStep.rating,
             leaseInspectionSubStep.leaseInspectionStep.id,
             leaseInspectionSubStep.id,
             pictures
         );
     }
 
-    public static fromModelWithFile(leaseInspectionSubStep : LeaseInspectionSubStep) : LeaseInspectionSubStepWithFileDto {
-        return new LeaseInspectionSubStepWithFileDto(
-            this.leaseInspectionSubStepStateFromModel(leaseInspectionSubStep.state),
-            leaseInspectionSubStep.description,
-            leaseInspectionSubStep.rating,
-            leaseInspectionSubStep.leaseInspectionStep.id,
-            leaseInspectionSubStep.id,
-        );
-    }
-
-
-    public static toModel(leaseInspectionStepWithFileDto : LeaseInspectionSubStepWithFileDto , leaseInspectionStep: LeaseInspectionStep) : LeaseInspectionSubStep {
+    public static toModel(leaseInspectionStepWithFileDto : LeaseInspectionSubStepWithFileDto , leaseInspectionStep: LeaseInspectionStep, subElement : SubElement) : LeaseInspectionSubStep {
         return new LeaseInspectionSubStep(
             this.leaseInspectionSubStepStateToModel(leaseInspectionStepWithFileDto.state),
             leaseInspectionStepWithFileDto.rating,
             leaseInspectionStepWithFileDto.description,
             leaseInspectionStep,
+            subElement,
             leaseInspectionStepWithFileDto.id
         );
     }

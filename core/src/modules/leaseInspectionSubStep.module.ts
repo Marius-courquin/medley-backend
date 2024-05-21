@@ -8,6 +8,7 @@ import { LeaseInspectionSubStepController } from '@infrastructure/controllers/le
 import { LeaseInspectionSubStepService } from '@domain/services/leaseInspectionSubStep.service';
 import { LeaseInspectionSubStepRepository } from '@domain/repositories/leaseInspectionSubStep.repository';
 import { LeaseInspectionSubStepPictureModule } from '@modules/leaseInspectionSubStepPicture.module';
+import { SubElementModule } from '@modules/subElement.module';
 
 
 @Module({
@@ -16,7 +17,8 @@ import { LeaseInspectionSubStepPictureModule } from '@modules/leaseInspectionSub
         LeaseInspectionStepModule,
         forwardRef( () => LeaseInspectionSubStepPictureModule),
         FileModule,
-        NestjsFormDataModule
+        NestjsFormDataModule,
+        SubElementModule
     ],
     providers: [
         LeaseInspectionSubStepService,

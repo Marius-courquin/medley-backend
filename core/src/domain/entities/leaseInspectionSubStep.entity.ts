@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } f
 import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 import { LeaseInspectionSubStepState } from '@domain/entities/enum/leaseInspectionSubStep.enum.entity';
 import { LeaseInspectionStep } from '@domain/entities/leaseInspectionStep.entity';
+import { SubElement } from "@domain/entities/subElement.entity";
 
 @Entity("lease_inspection_sub_step")
 export class LeaseInspectionSubStep {
@@ -26,15 +27,20 @@ export class LeaseInspectionSubStep {
     @IsOptional()
     leaseInspectionStep?: LeaseInspectionStep;
 
+    @ManyToOne(() => SubElement, subElement => subElement.id, {nullable: true, eager: true})
+    @IsOptional()
+    subElement?: SubElement;
+
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" , name : "created_at"})
     createdAt: Date;
 
-    constructor (state: LeaseInspectionSubStepState, rating: number, description: string, leaseInspectionStep: LeaseInspectionStep, id?: string) {
+    constructor (state: LeaseInspectionSubStepState, rating: number, description: string, leaseInspectionStep: LeaseInspectionStep, subElement: SubElement, id?: string) {
         this.id = id ?? undefined;
         this.state = state;
         this.rating = rating;
         this.description = description;
         this.leaseInspectionStep = leaseInspectionStep ?? undefined;
+        this.subElement = subElement ?? undefined;
     }
 
 }
