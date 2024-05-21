@@ -8,6 +8,7 @@ import { LeaseInspectionStepService } from '@domain/services/leaseInspectionStep
 import { LeaseInspectionStepPictureModule } from '@modules/leaseInspectionStepPicture.module';
 import { FileModule } from '@modules/file.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
+import { ElementModule } from '@modules/element.module';
 
 
 @Module({
@@ -16,7 +17,8 @@ import { NestjsFormDataModule } from 'nestjs-form-data';
         LeaseInspectionModule,
         forwardRef( () => LeaseInspectionStepPictureModule),
         FileModule,
-        NestjsFormDataModule
+        NestjsFormDataModule,
+        ElementModule
     ],
     providers: [
         LeaseInspectionStepService,

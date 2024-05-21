@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import {  IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 import { HasMimeType, IsFiles, MemoryStoredFile } from "nestjs-form-data";
 import { LeaseInspectionSubStepStateDto } from "@infrastructure/dtos/enum/leaseInspectionSubStep.enum.dto";
+import { SubElementDto } from "@infrastructure/dtos/subElement.dto";
 
 export class LeaseInspectionSubStepWithFileDto {
     @IsOptional()
@@ -22,6 +23,14 @@ export class LeaseInspectionSubStepWithFileDto {
         enum: LeaseInspectionSubStepStateDto
     })
     state: LeaseInspectionSubStepStateDto;
+
+    @IsUUID(4, { message: 'subElementId must be a valid uuid' })
+    @ApiProperty({
+        type: 'string',
+        description: 'The element of the lease inspection sub step',
+        required: true,
+    })
+    subElementId: string;
 
     @IsString({ message: 'description must be a valid string' })
     @ApiProperty({
@@ -60,13 +69,14 @@ export class LeaseInspectionSubStepWithFileDto {
     })
     pictures?: MemoryStoredFile[];
 
-    constructor(state: LeaseInspectionSubStepStateDto, description: string, rating: number, leaseInspectionStepId: string, id: string, pictures?: MemoryStoredFile[]) {
+    constructor (state: LeaseInspectionSubStepStateDto, subElementId: string, description: string, rating: number, leaseInspectionStepId: string, pictures?: MemoryStoredFile[], id?: string) {
         this.id = id ?? undefined;
         this.state = state;
+        this.subElementId = subElementId;
         this.description = description;
         this.rating = rating;
         this.leaseInspectionStepId = leaseInspectionStepId;
-        this.pictures = pictures;
+        this.pictures = pictures ?? undefined;
     }
 
 }
