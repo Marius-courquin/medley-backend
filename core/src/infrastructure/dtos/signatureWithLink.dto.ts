@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsDate, IsOptional, IsString, IsUUID } from "class-validator";
 import { HasMimeType, IsFile, MemoryStoredFile } from "nestjs-form-data";
 
-export class SignatureWithFileDto{
+export class SignatureWithLinkDto{
     @IsOptional()
     @IsUUID(4, { message: 'id must be a valid uuid' })
     @ApiProperty({

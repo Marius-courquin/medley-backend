@@ -1,3 +1,4 @@
+import { Picture } from "@/domain/entities/picture.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDate, IsOptional, IsString, IsUUID } from "class-validator";
 import { HasMimeType, IsFile, MemoryStoredFile } from "nestjs-form-data";
@@ -31,7 +32,7 @@ export class SignatureWithFileDto{
         description: 'The picture of the signature',
         example: 'monkey.png',
     })
-    picture: MemoryStoredFile;3
+    picture: MemoryStoredFile;
 
     constructor(
         signedOn: Date,
@@ -40,6 +41,6 @@ export class SignatureWithFileDto{
     ){
         this.id = id ?? undefined;
         this.signedOn = signedOn;
-        this.picture = picture;
+        this.picture = picture ?? undefined;
     }
 }
