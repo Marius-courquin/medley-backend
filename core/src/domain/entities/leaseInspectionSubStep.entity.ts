@@ -15,11 +15,11 @@ export class LeaseInspectionSubStep {
     @IsEnum(LeaseInspectionSubStepState, { message: 'state must be a valid type' })
     state: LeaseInspectionSubStepState;
 
-    @Column({nullable: false, name : "rating"})
+    @Column({nullable: true, name : "rating"})
     @IsNumber({}, { message: 'rating must be a valid number' })
     rating: number;
 
-    @Column({nullable: false, name : "description"})
+    @Column({nullable: true, name : "description"})
     @IsString({ message: 'description must be a valid string' })
     description: string;
 
