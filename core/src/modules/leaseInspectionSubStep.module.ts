@@ -9,6 +9,9 @@ import { LeaseInspectionSubStepService } from '@domain/services/leaseInspectionS
 import { LeaseInspectionSubStepRepository } from '@domain/repositories/leaseInspectionSubStep.repository';
 import { LeaseInspectionSubStepPictureModule } from '@modules/leaseInspectionSubStepPicture.module';
 import { SubElementModule } from '@modules/subElement.module';
+import {
+    ElementCreatedOnLeaseInspectionCreationListener
+} from "@domain/listeners/ElementCreatedOnLeaseInspectionCreation.listener";
 
 
 @Module({
@@ -22,7 +25,8 @@ import { SubElementModule } from '@modules/subElement.module';
     ],
     providers: [
         LeaseInspectionSubStepService,
-        LeaseInspectionSubStepRepository
+        LeaseInspectionSubStepRepository,
+        ElementCreatedOnLeaseInspectionCreationListener
     ],
     exports: [
         LeaseInspectionSubStepRepository

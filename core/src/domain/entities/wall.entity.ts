@@ -10,7 +10,7 @@ export class Wall {
     id?: string;
 
     @Column({nullable: false, name : "order"})
-    @IsNumber({}, { message: 'roomCount must be a valid number' })
+    @IsNumber({}, { message: 'order must be a valid number' })
     order: number;
 
     @Column({nullable: false, type: 'enum', enum : WallType})

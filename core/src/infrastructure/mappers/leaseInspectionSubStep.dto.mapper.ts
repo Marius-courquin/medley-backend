@@ -25,10 +25,10 @@ export class LeaseInspectionSubStepDtoMapper {
     public static toModel(leaseInspectionStepWithFileDto : LeaseInspectionSubStepWithFileDto , leaseInspectionStep: LeaseInspectionStep, subElement : SubElement) : LeaseInspectionSubStep {
         return new LeaseInspectionSubStep(
             this.leaseInspectionSubStepStateToModel(leaseInspectionStepWithFileDto.state),
-            leaseInspectionStepWithFileDto.rating,
-            leaseInspectionStepWithFileDto.description,
             leaseInspectionStep,
             subElement,
+            leaseInspectionStepWithFileDto.rating,
+            leaseInspectionStepWithFileDto.description,
             leaseInspectionStepWithFileDto.id
         );
     }

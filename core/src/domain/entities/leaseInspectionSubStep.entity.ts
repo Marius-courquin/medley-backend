@@ -34,12 +34,12 @@ export class LeaseInspectionSubStep {
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" , name : "created_at"})
     createdAt: Date;
 
-    constructor (state: LeaseInspectionSubStepState, rating: number, description: string, leaseInspectionStep: LeaseInspectionStep, subElement: SubElement, id?: string) {
+    constructor (state: LeaseInspectionSubStepState, leaseInspectionStep: LeaseInspectionStep, subElement: SubElement, rating?: number, description?: string, id?: string) {
         this.id = id ?? undefined;
         this.state = state;
-        this.rating = rating;
-        this.description = description;
-        this.leaseInspectionStep = leaseInspectionStep ?? undefined;
+        this.rating = rating ?? undefined;
+        this.description = description ?? undefined;
+        this.leaseInspectionStep = leaseInspectionStep;
         this.subElement = subElement ?? undefined;
     }
 
