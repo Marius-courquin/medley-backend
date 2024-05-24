@@ -55,4 +55,8 @@ export class Lease {
         this.tenant = tenant;
     }
 
+    getEstate(): Estate {
+        return this.estate;
+    }
+
 }

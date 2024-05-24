@@ -1,10 +1,10 @@
-import { Module, forwardRef } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { LeaseInspectionStepPicture } from '@domain/entities/leaseInspectionStepPicture.entity';
-import { LeaseInspectionStepPictureRepository } from '@/domain/repositories/leaseInspectionStepPicture.repository';
-import { LeaseInspectionStepPictureService } from '@/domain/services/leaseInspectionStepPicture.service';
-import { LeaseInspectionStepModule } from "@modules/leaseInspectionStep.module";
-import { FileModule } from "@modules/file.module";
+import {forwardRef, Module} from '@nestjs/common';
+import {TypeOrmModule} from '@nestjs/typeorm';
+import {LeaseInspectionStepPicture} from '@domain/entities/leaseInspectionStepPicture.entity';
+import {LeaseInspectionStepPictureRepository} from '@/domain/repositories/leaseInspectionStepPicture.repository';
+import {LeaseInspectionStepPictureService} from '@/domain/services/leaseInspectionStepPicture.service';
+import {LeaseInspectionStepModule} from "@modules/leaseInspectionStep.module";
+import {FileModule} from "@modules/file.module";
 
 
 @Module({
@@ -12,11 +12,10 @@ import { FileModule } from "@modules/file.module";
         TypeOrmModule.forFeature([LeaseInspectionStepPicture]),
         forwardRef( () => LeaseInspectionStepModule),
         FileModule,
-
     ],
     providers: [
         LeaseInspectionStepPictureService,
-        LeaseInspectionStepPictureRepository
+        LeaseInspectionStepPictureRepository,
     ],
     exports: [
         LeaseInspectionStepPictureRepository,

@@ -15,11 +15,11 @@ export class LeaseInspectionStep {
     @IsEnum(LeaseInspectionStepState, { message: 'state must be a valid type' })
     state: LeaseInspectionStepState;
 
-    @Column({nullable: false, name : "rating"})
+    @Column({nullable: true, name : "rating"})
     @IsNumber({}, { message: 'rating must be a valid number' })
     rating: number;
 
-    @Column({nullable: false, name : "description"})
+    @Column({nullable: true, name : "description"})
     @IsString({ message: 'description must be a valid string' })
     description: string;
 
@@ -34,12 +34,12 @@ export class LeaseInspectionStep {
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" , name : "created_at"})
     createdAt: Date;
 
-    constructor (state: LeaseInspectionStepState, rating: number, description: string, leaseInspection: LeaseInspection, element: Element, id?: string) {
+    constructor (state: LeaseInspectionStepState, leaseInspection: LeaseInspection, element: Element, rating?: number, description?: string, id?: string) {
         this.id = id ?? undefined;
         this.state = state;
-        this.rating = rating;
-        this.description = description;
-        this.leaseInspection = leaseInspection ?? undefined;
+        this.rating = rating ?? undefined
+        this.description = description ?? undefined;
+        this.leaseInspection = leaseInspection;
         this.element = element ?? undefined;
     }
 

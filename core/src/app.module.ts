@@ -27,6 +27,7 @@ import { LeaseInspectionStepModule } from '@modules/leaseInspectionStep.module';
 import { LeaseInspectionStepPictureModule } from '@modules/leaseInspectionStepPicture.module';
 import { LeaseInspectionSubStepPictureModule } from '@modules/leaseInspectionSubStepPicture.module';
 import { LeaseInspectionSubStepModule } from '@modules/leaseInspectionSubStep.module';
+import {EventEmitterModule} from "@nestjs/event-emitter";
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { LeaseInspectionSubStepModule } from '@modules/leaseInspectionSubStep.mo
     LeaseInspectionSubStepModule,
     LeaseInspectionSubStepPictureModule,
     FileModule,
+    EventEmitterModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

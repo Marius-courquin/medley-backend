@@ -9,6 +9,8 @@ import { LeaseInspectionStepPictureModule } from '@modules/leaseInspectionStepPi
 import { FileModule } from '@modules/file.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { ElementModule } from '@modules/element.module';
+import {LeaseInspectionCreatedListener} from "@domain/listeners/leaseInspectionCreated.listener";
+import {RoomModule} from "@modules/room.module";
 
 
 @Module({
@@ -18,11 +20,13 @@ import { ElementModule } from '@modules/element.module';
         forwardRef( () => LeaseInspectionStepPictureModule),
         FileModule,
         NestjsFormDataModule,
-        ElementModule
+        ElementModule,
+        RoomModule
     ],
     providers: [
         LeaseInspectionStepService,
-        LeaseInspectionStepRepository
+        LeaseInspectionStepRepository,
+        LeaseInspectionCreatedListener
     ],
     exports: [
         LeaseInspectionStepRepository
