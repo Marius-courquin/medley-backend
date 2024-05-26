@@ -48,11 +48,11 @@ export class ThirdDto {
     @IsCustomDate({ message: 'dob must be a valid date in YYYY-MM-DD format' })
     @ApiProperty({
         required: true,
-        type: 'string',
+        type: 'Date',
         description: 'The date of birth of the third',
         example: '2021-12-31'
     })
-    dob: string;
+    dob: Date;
 
     @IsOptional()
     @IsString({ message: 'iban must be a valid string' })
@@ -64,7 +64,7 @@ export class ThirdDto {
     })
     iban: string;
 
-    constructor (id: string, type: ThirdTypeDto, lastName: string, firstName: string, dob: string, iban: string) {
+    constructor (id: string, type: ThirdTypeDto, lastName: string, firstName: string, dob: Date, iban: string) {
         this.id = id ?? undefined;
         this.type = type;
         this.lastName = lastName;

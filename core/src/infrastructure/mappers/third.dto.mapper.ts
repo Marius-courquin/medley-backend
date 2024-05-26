@@ -11,7 +11,7 @@ export class ThirdDtoMapper {
             this.enumToDto(third.type),
             third.lastName,
             third.firstName,
-            third.dob.toISOString().slice(0, 10),
+            third.dob,
             third.iban
         );
     }
