@@ -38,11 +38,11 @@ export class LeaseInspectionDto {
     @IsCustomDate({ message: 'endDate must be a valid date in YYYY-MM-DD format' })
     @ApiProperty({
         required: true,
-        type: 'string',
+        type: 'Date',
         description: 'The end date of the lease inspection',
         example: '2021-12-31'
     })
-    endDate: string;
+    endDate: Date;
 
 
     @IsUUID(4, { message: 'leaseId must be a valid uuid' })
@@ -66,7 +66,7 @@ export class LeaseInspectionDto {
     })
     agentId?: string;
 
-    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, endDate: string, leaseId: string, agentId?: string, id?: string) {
+    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, endDate: Date, leaseId: string, agentId?: string, id?: string) {
         this.id = id ?? undefined;
         this.type = type;
         this.state = state;
