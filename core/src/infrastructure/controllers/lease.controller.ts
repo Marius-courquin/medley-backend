@@ -23,6 +23,7 @@ import {
   ApiQuery,
   ApiTags
 } from "@nestjs/swagger";
+import { SignatureService } from '@domain/services/signature.service';
 
 @ApiTags('Lease')
 @Controller('lease')
@@ -197,7 +198,7 @@ export class LeaseController {
 
   @Get(':id/signature')
   getSignature(@Param('id', ParseUUIDPipe) id: string) {
-    return this.signatureService.
+    return this.signatureService.getByLeaseInspectionId(id);
   }
 
 }

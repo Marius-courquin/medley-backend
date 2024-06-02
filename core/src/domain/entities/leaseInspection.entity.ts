@@ -52,9 +52,9 @@ export class LeaseInspection {
         state: LeaseInspectionState,
         endDate: Date, lease: Lease,
         agent: Agent,
-        agentSignature: Signature,
-        thirdSignature: Signature,
-        id?: string)
+        id?: string,
+        agentSignature?: Signature,
+        thirdSignature?: Signature,)
     {
         this.id = id ?? undefined;
         this.type = type;
