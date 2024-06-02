@@ -14,7 +14,7 @@ import { WallDto } from '@infrastructure/dtos/wall.dto';
 import { CeilingDto } from '@infrastructure/dtos/ceiling.dto';
 import { GroundDto } from '@infrastructure/dtos/ground.dto';
 import { StairDto } from '@infrastructure/dtos/stair.dto';
-import { FurnishingDto } from '@infrastructure/dtos/furninshing.dto';
+import { FurnishingDto } from '@infrastructure/dtos/furnishing.dto';
 import { WallDtoMapper } from '@infrastructure/mappers/wall.dto.mapper';
 import { CeilingDtoMapper } from '@infrastructure/mappers/ceiling.dto.mapper';
 import { GroundDtoMapper } from '@infrastructure/mappers/ground.dto.mapper';

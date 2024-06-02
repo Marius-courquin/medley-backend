@@ -1,24 +1,36 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { LeaseInspectionStepRepository } from '@domain/repositories/leaseInspectionStep.repository';
-import { LeaseInspectionSubStepWithLinkDto } from '@infrastructure/dtos/leaseInspectionSubStepWithLink.dto';
-import { LeaseInspectionSubStepDtoMapper } from '@infrastructure/mappers/leaseInspectionSubStep.dto.mapper';
-import { LeaseInspectionSubStepWithFileDto } from '@infrastructure/dtos/leaseInspectionSubStepWithFile.dto';
-import { PictureDto } from '@infrastructure/dtos/picture.dto';
-import { isArray } from 'class-validator';
-import { LeaseInspectionSubStepPictureService } from '@domain/services/leaseInspectionSubStepPicture.service';
-import { LeaseInspectionSubStepRepository } from '@domain/repositories/leaseInspectionSubStep.repository';
-import { LeaseInspectionSubStep } from '@domain/entities/leaseInspectionSubStep.entity';
-import { SubElement } from '@domain/entities/subElement.entity';
-import { SubElementRepository } from '@domain/repositories/subElement.repository';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {LeaseInspectionStepRepository} from '@domain/repositories/leaseInspectionStep.repository';
+import {LeaseInspectionSubStepWithLinkDto} from '@infrastructure/dtos/leaseInspectionSubStepWithLink.dto';
+import {LeaseInspectionSubStepDtoMapper} from '@infrastructure/mappers/leaseInspectionSubStep.dto.mapper';
+import {LeaseInspectionSubStepWithFileDto} from '@infrastructure/dtos/leaseInspectionSubStepWithFile.dto';
+import {PictureDto} from '@infrastructure/dtos/picture.dto';
+import {isArray} from 'class-validator';
+import {LeaseInspectionSubStepPictureService} from '@domain/services/leaseInspectionSubStepPicture.service';
+import {LeaseInspectionSubStepRepository} from '@domain/repositories/leaseInspectionSubStep.repository';
+import {LeaseInspectionSubStep} from '@domain/entities/leaseInspectionSubStep.entity';
+import {SubElementRepository} from '@domain/repositories/subElement.repository';
+import {SubElementService} from "@domain/services/subElement.service";
+import {WallSocketDto} from "@infrastructure/dtos/wallSocket.dto";
+import {
+    leaseInspectionContextGenericDto,
+    leaseInspectionContextWallSocketDto,
+    leaseInspectionContextWindowDto
+} from "@infrastructure/dtos/leaseInspectionContext.dto";
+import {GenericSubElementDto} from "@infrastructure/dtos/genericSubElement.dto";
+import {WindowDto} from "@infrastructure/dtos/window.dto";
+import {SubElementType} from "@domain/entities/enum/subElement.enum.entity";
+
 
 @Injectable()
 export class LeaseInspectionSubStepService {
     constructor(
         private readonly repository: LeaseInspectionSubStepRepository,
-        private readonly leaseInspectionSubStepPictureService: LeaseInspectionSubStepPictureService,  
+        private readonly leaseInspectionSubStepPictureService: LeaseInspectionSubStepPictureService,
         private readonly leaseInspectionStepRepository: LeaseInspectionStepRepository,
-        private readonly subElementRepository: SubElementRepository
-    ) {}
+        private readonly subElementRepository: SubElementRepository,
+        private readonly subElementService: SubElementService
+    ) {
+    }
 
     async create(leaseInspectionSubStepDto: LeaseInspectionSubStepWithFileDto): Promise<LeaseInspectionSubStepWithLinkDto> {
         const leaseInspectionStep = await this.leaseInspectionStepRepository.findById(leaseInspectionSubStepDto.leaseInspectionStepId);
@@ -77,12 +89,32 @@ export class LeaseInspectionSubStepService {
         for (const picture of pictures) {
             await this.leaseInspectionSubStepPictureService.create(leaseInspectionSubStepUpdated, picture);
         }
-        const picturesUrl: PictureDto[] = await this.leaseInspectionSubStepPictureService.getPicturesUrl(leaseInspectionSubStepId); 
+        const picturesUrl: PictureDto[] = await this.leaseInspectionSubStepPictureService.getPicturesUrl(leaseInspectionSubStepId);
         return LeaseInspectionSubStepDtoMapper.fromModelWithLink(await this.repository.updateElement(leaseInspectionSubStepUpdated), picturesUrl);
     }
 
-    async deletePicturesByPictureId(PicturesId : string) {
+    async deletePicturesByPictureId(PicturesId: string) {
         return await this.leaseInspectionSubStepPictureService.delete(PicturesId);
+    }
+
+    async getContext(leaseInspectionSubStep: LeaseInspectionSubStep) {
+        const picturesUrls: PictureDto[] = await this.leaseInspectionSubStepPictureService.getPicturesUrl(leaseInspectionSubStep.id);
+        const leaseInspectionStepDto = LeaseInspectionSubStepDtoMapper.fromModelWithLink(leaseInspectionSubStep, picturesUrls);
+
+        const relatedSubElement = await this.subElementService.getRelatedEntity(leaseInspectionSubStep.subElement.id);
+
+        switch (leaseInspectionSubStep.subElement.type) {
+            case SubElementType.WALL_SOCKET:
+                 const wallSocket = relatedSubElement as WallSocketDto;
+                 return new leaseInspectionContextWallSocketDto(leaseInspectionStepDto, wallSocket);
+            case SubElementType.GENERIC_SUB_ELEMENT:
+                const generic = relatedSubElement as GenericSubElementDto;
+                return new leaseInspectionContextGenericDto(leaseInspectionStepDto, generic);
+            case SubElementType.WINDOW:
+                const window = relatedSubElement as WindowDto;
+                return new leaseInspectionContextWindowDto(leaseInspectionStepDto, window);
+        }
+
     }
 
 }

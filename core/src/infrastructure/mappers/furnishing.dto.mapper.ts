@@ -1,7 +1,7 @@
 
 import { Element } from "@domain/entities/element.entity";
 import { Furnishing } from "@domain/entities/furnishing.entity";
-import { FurnishingDto } from "@infrastructure/dtos/furninshing.dto";
+import { FurnishingDto } from "@infrastructure/dtos/furnishing.dto";
 import { FurnishingType } from "@domain/entities/enum/furnishing.enum.entity";
 import { FurnishingTypeDto } from "@infrastructure/dtos/enum/furnishing.enum.dto";
 

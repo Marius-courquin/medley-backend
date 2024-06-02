@@ -33,9 +33,6 @@ export class LeaseInspectionStepPictureService {
     
     async getPicturesUrl(leaseInspectionStepPictureId: string): Promise<PictureDto[]> {
         const leaseInspectionStepPictures: LeaseInspectionStepPicture[] = await this.repository.findByLeaseInspectionStep(leaseInspectionStepPictureId);
-        if (leaseInspectionStepPictures.length === 0) {
-            throw new NotFoundException('Lease inspection step picture does not exist');
-        }
         const picturesDto : PictureDto[] = [];
         for (const leaseInspectionStepPicture of leaseInspectionStepPictures) {
             picturesDto.push(

@@ -4,7 +4,7 @@ import { FurnishingRepository } from "@domain/repositories/furnishing.repository
 import { FurnishingDtoMapper  } from '@infrastructure/mappers/furnishing.dto.mapper';
 import { Element } from '@domain/entities/element.entity';
 import { ElementRepository } from '@domain/repositories/element.repository';
-import { FurnishingDto } from '@infrastructure/dtos/furninshing.dto';
+import { FurnishingDto } from '@infrastructure/dtos/furnishing.dto';
 import { ElementType } from '@domain/entities/enum/element.enum.entity';
 
 @Injectable()
