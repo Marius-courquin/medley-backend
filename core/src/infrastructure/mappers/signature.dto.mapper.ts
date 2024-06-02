@@ -4,15 +4,7 @@ import { SignatureWithLinkDto } from "../dtos/signatureWithLink.dto";
 import { Picture } from "@/domain/entities/picture.entity";
 
 export class SignatureDtoMapper{
-    static fromModelWithLink(signature: Signature, picture: MemorySavedFile): SignatureWithLinkDto {
-        return new SignatureWithFileDto(
-            signature.signedOn,
-            picture,
-            signature.id
-        );
-    }
-
-    static fromModelWithFile(signature: Signature, picture: string): SignatureWithLinkDto {
+    static fromModelWithLink(signature: Signature, picture: string): SignatureWithLinkDto {
         return new SignatureWithLinkDto(
             signature.signedOn,
             picture,

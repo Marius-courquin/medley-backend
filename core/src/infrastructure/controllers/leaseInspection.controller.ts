@@ -13,12 +13,17 @@ import {
     ApiTags
 } from "@nestjs/swagger";
 import {LeaseInspectionContextDto} from "@infrastructure/dtos/leaseInspectionContextDto";
+import { SignatureService } from '@/domain/services/signature.service';
+import { SignatureWithLinkDto } from '../dtos/signatureWithLink.dto';
 
 @ApiTags('Lease Inspection')
 @Controller('lease_inspection')
 export class LeaseInspectionController {
 
-    constructor(private service: LeaseInspectionService) {}
+    constructor(
+        private service: LeaseInspectionService,
+        private signatureService: SignatureService,
+    ) {}
 
     @ApiBody({
         type: LeaseInspectionDto,
@@ -178,6 +183,31 @@ export class LeaseInspectionController {
     @Get(':id/context')
     getContext(@Param('id', ParseUUIDPipe) id: string) {
         return this.service.getContext(id);
+    }
+    @ApiParam({
+        name: 'id',
+        type: 'string',
+        description: 'The id of the lease inspection',
+        format: 'uuid',
+        example: '123e4567-e89b-12d3-a456-426614174000',
+    })
+    @ApiOkResponse({
+        description: 'The signatures of the lease inspection has been successfully retrieved.',
+        type: SignatureWithLinkDto,
+        isArray: true,
+    })
+    @ApiNotFoundResponse({
+        description: 'The lease inspection does not exist',
+        schema: {
+            example: {
+                statusCode: 404,
+                message: 'lease inspection or signatures does not exist',
+            },
+        }
+    })
+    @Get(':id/signatures')
+    getSignatures(@Param('id', ParseUUIDPipe) id: string) {
+        return this.signatureService.getByLeaseInspectionId(id);
     }
 
 }

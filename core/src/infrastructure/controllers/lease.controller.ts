@@ -27,7 +27,7 @@ import {
 @ApiTags('Lease')
 @Controller('lease')
 export class LeaseController {
-  constructor(private service: LeaseService) {}
+  constructor(private service: LeaseService, private signatureService: SignatureService) {}
 
   @ApiBody({
     type: LeaseDto,
@@ -193,6 +193,11 @@ export class LeaseController {
   @Get()
   getActualByEstate(@Query('estateId', ParseUUIDPipe) estateId: string) {
     return this.service.getByEstate(estateId);
+  }
+
+  @Get(':id/signature')
+  getSignature(@Param('id', ParseUUIDPipe) id: string) {
+    return this.signatureService.
   }
 
 }

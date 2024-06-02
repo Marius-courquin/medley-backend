@@ -3,7 +3,7 @@ import { Signature } from "../entities/signature.entity";
 import { DataSource, Repository } from "typeorm";
 
 @Injectable()
-export class SignatureRepository {
+export class SignatureRepository extends Repository<Signature>{
     constructor(
         private dataSource: DataSource)
     {
@@ -18,7 +18,7 @@ export class SignatureRepository {
         return this.save(signature);
     }
 
-    async findByLease(leaseId: string): Promise<Signature[]> {
+    async findByLeaseInspection(leaseId: string): Promise<Signature[]> {
         return this.createQueryBuilder("signature")
             .leftJoinAndSelect("signature.lease", "lease")
             .where("lease.id = :leaseId", { leaseId })
