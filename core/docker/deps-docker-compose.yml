@@ -37,7 +37,7 @@ services:
       - AUTH_DB_NAME=${AUTH_DB_NAME}
       - JWT_KEY=${JWT_KEY}
     ports:
-      - "8081:8081"
+      - "8082:8082"
     networks:
       - medley-auth-network
 
