@@ -9,6 +9,11 @@ import { AgentModule } from '@modules/agent.module';
 import {LeaseInspectionClosedListener} from "@domain/listeners/leaseInspectionClosed.listener";
 import {RoomModule} from "@modules/room.module";
 import {LeaseInspectionStepModule} from "@modules/leaseInspectionStep.module";
+import { Signature } from '@/domain/entities/signature.entity';
+import { SignatureService } from '@/domain/services/signature.service';
+import { SignatureModule } from './signature.module';
+import { SignatureRepository } from '@/domain/repositories/signature.repository';
+import { FileModule } from './file.module';
 
 @Module({
     imports: [
@@ -17,9 +22,14 @@ import {LeaseInspectionStepModule} from "@modules/leaseInspectionStep.module";
         AgentModule,
         RoomModule,
         forwardRef(() => LeaseInspectionStepModule)
+        AgentModule,
+        FileModule,
     ],
     providers: [
         LeaseInspectionService,
+        LeaseInspectionRepository,
+        SignatureService,
+        SignatureRepository,
         LeaseInspectionRepository,
         LeaseInspectionClosedListener
     ],

@@ -15,13 +15,11 @@ import { SignatureModule } from './signature.module';
         TypeOrmModule.forFeature([Lease]),
         ThirdModule,
         AgentModule,
-        SignatureModule,
     ],
     providers: [
         LeaseService,
         LeaseRepository,
         EstateRepository,
-        SignatureService,
     ],
     exports: [
         LeaseRepository

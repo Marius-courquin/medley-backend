@@ -23,12 +23,11 @@ import {
   ApiQuery,
   ApiTags
 } from "@nestjs/swagger";
-import { SignatureService } from '@domain/services/signature.service';
 
 @ApiTags('Lease')
 @Controller('lease')
 export class LeaseController {
-  constructor(private service: LeaseService, private signatureService: SignatureService) {}
+  constructor(private service: LeaseService) {}
 
   @ApiBody({
     type: LeaseDto,
@@ -195,10 +194,4 @@ export class LeaseController {
   getActualByEstate(@Query('estateId', ParseUUIDPipe) estateId: string) {
     return this.service.getByEstate(estateId);
   }
-
-  @Get(':id/signature')
-  getSignature(@Param('id', ParseUUIDPipe) id: string) {
-    return this.signatureService.getByLeaseInspectionId(id);
-  }
-
 }
