@@ -26,4 +26,15 @@ export class LeaseInspectionStepRepository extends Repository<LeaseInspectionSte
         .getMany();
     }
 
+    async findByLeaseInspectionAndElementTypeAndRoom(leaseInspectionId: string, elementType: string, roomId: string): Promise<LeaseInspectionStep[]> {
+        return this.createQueryBuilder("lease_inspection_step")
+            .leftJoinAndSelect("lease_inspection_step.leaseInspection", "lease_inspection")
+            .leftJoinAndSelect("lease_inspection_step.element", "element")
+            .leftJoinAndSelect("element.room", "room")
+            .where("lease_inspection.id = :leaseInspectionId", { leaseInspectionId })
+            .andWhere("element.type = :elementType", { elementType })
+            .andWhere("element.room = :roomId", { roomId })
+            .getMany();
+    }
+
 }

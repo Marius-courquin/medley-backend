@@ -12,6 +12,7 @@ import {
     ApiQuery,
     ApiTags
 } from "@nestjs/swagger";
+import {LeaseInspectionContextDto} from "@infrastructure/dtos/leaseInspectionContextDto";
 
 @ApiTags('Lease Inspection')
 @Controller('lease_inspection')
@@ -124,6 +125,59 @@ export class LeaseInspectionController {
     @Get()
     getByLease(@Query('leaseId', ParseUUIDPipe) leaseId: string) {
         return this.service.getByLease(leaseId);
+    }
+
+    @ApiParam({
+        name: 'id',
+        type: 'string',
+        description: 'The id of the lease inspection',
+        format: 'uuid',
+        example: '123e4567-e89b-12d3-a456-426614174000',
+        required: true,
+    })
+    @ApiNotFoundResponse({
+        description: 'The lease inspection does not exist',
+        schema: {
+            example: {
+                statusCode: 404,
+                message: 'lease inspection does not exist',
+            },
+        }
+    })
+    @ApiOkResponse({
+        description: 'The lease inspection has been successfully closed.',
+    })
+    @HttpCode(HttpStatus.OK)
+    @Post(':id/closure')
+    close(@Param('id', ParseUUIDPipe) id: string) {
+        return this.service.close(id);
+    }
+
+    @ApiParam({
+        name: 'id',
+        type: 'string',
+        description: 'The id of the lease inspection',
+        format: 'uuid',
+        example: '123e4567-e89b-12d3-a456-426614174000',
+        required: true,
+    })
+    @ApiNotFoundResponse({
+        description: 'The lease inspection does not exist',
+        schema: {
+            example: {
+                statusCode: 404,
+                message: 'lease inspection does not exist',
+            },
+        }
+    })
+    @ApiOkResponse({
+        description: 'The lease inspection context has been successfully retrieved.',
+        type: LeaseInspectionContextDto,
+    })
+    @HttpCode(HttpStatus.OK)
+    @Get(':id/context')
+    getContext(@Param('id', ParseUUIDPipe) id: string) {
+        return this.service.getContext(id);
     }
 
 }

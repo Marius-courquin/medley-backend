@@ -11,13 +11,13 @@ import { LeaseInspectionSubStepPictureModule } from '@modules/leaseInspectionSub
 import { SubElementModule } from '@modules/subElement.module';
 import {
     ElementCreatedOnLeaseInspectionCreationListener
-} from "@domain/listeners/ElementCreatedOnLeaseInspectionCreation.listener";
+} from "@domain/listeners/elementCreatedOnLeaseInspectionCreation.listener";
 
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([LeaseInspectionSubStep]),
-        LeaseInspectionStepModule,
+        forwardRef( () => LeaseInspectionStepModule),
         forwardRef( () => LeaseInspectionSubStepPictureModule),
         FileModule,
         NestjsFormDataModule,
@@ -29,7 +29,8 @@ import {
         ElementCreatedOnLeaseInspectionCreationListener
     ],
     exports: [
-        LeaseInspectionSubStepRepository
+        LeaseInspectionSubStepRepository,
+        LeaseInspectionSubStepService
     ],
     controllers: [LeaseInspectionSubStepController]
 })

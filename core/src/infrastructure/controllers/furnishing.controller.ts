@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
 import { FurnishingService } from '@domain/services/furnishing.service';
-import { FurnishingDto } from '@infrastructure/dtos/furninshing.dto';
+import { FurnishingDto } from '@infrastructure/dtos/furnishing.dto';
 import {
     ApiBadRequestResponse,
     ApiBody,

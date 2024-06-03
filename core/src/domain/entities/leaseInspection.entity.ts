@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
-import { IsDateString, IsEnum, IsOptional, IsUUID } from 'class-validator';
-import { LeaseInspectionType, LeaseInspectionState } from '@domain/entities/enum/leaseInspection.enum.entity';
-import { Lease } from '@domain/entities/lease.entity';
-import { Agent } from '@domain/entities/agent.entity';
-import { IsCustomDate } from '@shared/decorators/date.shared.decorator';
+import {Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {IsEnum, IsOptional, IsUUID} from 'class-validator';
+import {LeaseInspectionState, LeaseInspectionType} from '@domain/entities/enum/leaseInspection.enum.entity';
+import {Lease} from '@domain/entities/lease.entity';
+import {Agent} from '@domain/entities/agent.entity';
+import {IsCustomDate} from '@shared/decorators/date.shared.decorator';
 
 @Entity("lease_inspection")
 export class LeaseInspection {
@@ -46,6 +46,14 @@ export class LeaseInspection {
         this.endDate = endDate;
         this.lease = lease ?? undefined;
         this.agent = agent ?? undefined;
+    }
+
+    close() {
+        this.state = LeaseInspectionState.DONE;
+    }
+
+    isCheckIn() {
+        return this.type === LeaseInspectionType.CHECK_IN;
     }
 
 }
