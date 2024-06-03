@@ -41,11 +41,8 @@ export class LeaseInspectionSubStepPictureService {
         return this.repository.updateElement(leaseInspectionSubStepPicture);
     }
 
-    async getPicturesUrl(leaseInspectionSubStepPictureId: string): Promise<PictureDto[]> {
-        const leaseInspectionSubStepPictures: LeaseInspectionSubStepPicture[] = await this.repository.findByLeaseInspectionSubStep(leaseInspectionSubStepPictureId);
-        if (leaseInspectionSubStepPictures.length === 0) {
-            throw new NotFoundException('Lease inspection sub step picture does not exist');
-        }
+    async getPicturesUrl(leaseInspectionSubStepId: string): Promise<PictureDto[]> {
+        const leaseInspectionSubStepPictures: LeaseInspectionSubStepPicture[] = await this.repository.findByLeaseInspectionSubStep(leaseInspectionSubStepId);
         const picturesDto : PictureDto[] = [];
         for (const leaseInspectionSubStepPicture of leaseInspectionSubStepPictures) {
             picturesDto.push(

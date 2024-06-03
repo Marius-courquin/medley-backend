@@ -13,13 +13,13 @@ import {ElementService} from "@domain/services/element.service";
 import {ElementTypeDto} from "@infrastructure/dtos/enum/element.enum.dto";
 import {WallDto} from "@infrastructure/dtos/wall.dto";
 import {
-    leaseInspectionContextCeilingDto,
-    leaseInspectionContextGenericDto,
-    leaseInspectionContextGroundDto,
-    leaseInspectionContextWallDto,
-    leaseInspectionContextWallSocketDto,
-    leaseInspectionContextWindowDto
-} from "@infrastructure/dtos/leaseInspectionContext.dto";
+    LeaseInspectionContextCeilingDto,
+    LeaseInspectionContextGenericDto,
+    LeaseInspectionContextGroundDto,
+    LeaseInspectionContextWallDto,
+    LeaseInspectionContextWallSocketDto,
+    LeaseInspectionContextWindowDto
+} from "@infrastructure/dtos/leaseInspectionContextDto";
 import {CeilingDto} from "@infrastructure/dtos/ceiling.dto";
 import {SubElementType} from "@domain/entities/enum/subElement.enum.entity";
 import {LeaseInspectionSubStepService} from "@domain/services/leaseInspectionSubStep.service";
@@ -119,27 +119,31 @@ export class LeaseInspectionStepService {
 
         let wallSockets = [], windows = [], generics = [];
         if (ElementTypeDto.WALL === leaseInspectionStepDto.element.type || ElementTypeDto.CEILING === leaseInspectionStepDto.element.type) {
-            wallSockets = await this.getRelatedSubStepContext(leaseInspectionStep, SubElementType.WALL_SOCKET) as leaseInspectionContextWallSocketDto[];
-            windows = await this.getRelatedSubStepContext(leaseInspectionStep, SubElementType.WINDOW) as leaseInspectionContextWindowDto[];
-            generics = await this.getRelatedSubStepContext(leaseInspectionStep, SubElementType.GENERIC_SUB_ELEMENT) as leaseInspectionContextGenericDto[];
+            wallSockets = await this.getRelatedSubStepContext(leaseInspectionStep, SubElementType.WALL_SOCKET) as LeaseInspectionContextWallSocketDto[];
+            windows = await this.getRelatedSubStepContext(leaseInspectionStep, SubElementType.WINDOW) as LeaseInspectionContextWindowDto[];
+            generics = await this.getRelatedSubStepContext(leaseInspectionStep, SubElementType.GENERIC_SUB_ELEMENT) as LeaseInspectionContextGenericDto[];
+
+            wallSockets = wallSockets.sort((a, b) => a.subElement.order - b.subElement.order)
+            windows = windows.sort((a, b) => a.subElement.order - b.subElement.order)
+            generics = generics.sort((a, b) => a.subElement.order - b.subElement.order)
         }
 
         switch (leaseInspectionStepDto.element.type) {
             case ElementTypeDto.WALL:
                 const wall = relatedElement as WallDto;
-                return new leaseInspectionContextWallDto(leaseInspectionStepDto, wall, wallSockets, windows, generics);
+                return new LeaseInspectionContextWallDto(leaseInspectionStepDto, wall, wallSockets, windows, generics);
             case ElementTypeDto.CEILING:
                 const ceiling = relatedElement as CeilingDto;
-                return new leaseInspectionContextCeilingDto(leaseInspectionStepDto, ceiling, wallSockets, windows, generics);
+                return new LeaseInspectionContextCeilingDto(leaseInspectionStepDto, ceiling, wallSockets, windows, generics);
             case ElementTypeDto.GROUND:
                 const ground = relatedElement as GroundDto;
-                return new leaseInspectionContextGroundDto(leaseInspectionStepDto, ground);
+                return new LeaseInspectionContextGroundDto(leaseInspectionStepDto, ground);
             case ElementTypeDto.STAIR:
                 const stair = relatedElement as GroundDto;
-                return new leaseInspectionContextGroundDto(leaseInspectionStepDto, stair);
+                return new LeaseInspectionContextGroundDto(leaseInspectionStepDto, stair);
             case ElementTypeDto.FURNISHING:
                 const furnishing = relatedElement as GroundDto;
-                return new leaseInspectionContextGroundDto(leaseInspectionStepDto, furnishing);
+                return new LeaseInspectionContextGroundDto(leaseInspectionStepDto, furnishing);
         }
 
     }

@@ -15,14 +15,14 @@ import {ElementType} from "@domain/entities/enum/element.enum.entity";
 import {LeaseInspectionStepService} from "@domain/services/leaseInspectionStep.service";
 import {Room} from "@domain/entities/room.entity";
 import {
-    leaseInspectionContextCeilingDto,
-    leaseInspectionContextDto,
-    leaseInspectionContextFurnishingDto,
-    leaseInspectionContextGroundDto,
-    leaseInspectionContextRoomDto,
-    leaseInspectionContextStairDto,
-    leaseInspectionContextWallDto
-} from "@infrastructure/dtos/leaseInspectionContext.dto";
+    LeaseInspectionContextCeilingDto,
+    LeaseInspectionContextDto,
+    LeaseInspectionContextFurnishingDto,
+    LeaseInspectionContextGroundDto,
+    LeaseInspectionContextRoomDto,
+    LeaseInspectionContextStairDto,
+    LeaseInspectionContextWallDto
+} from "@infrastructure/dtos/leaseInspectionContextDto";
 import {RoomDtoMapper} from "@infrastructure/mappers/room.dto.mapper";
 import {RoomRepository} from "@domain/repositories/room.repository";
 
@@ -100,14 +100,16 @@ export class LeaseInspectionService {
     }
 
     async getRoomContext(leaseInspection: LeaseInspection, room: Room) {
-        const walls = await this.getRelatedStepContext(leaseInspection, ElementType.WALL, room) as leaseInspectionContextWallDto[];
-        const ceiling = (await this.getRelatedStepContext(leaseInspection, ElementType.CEILING, room))[0] as leaseInspectionContextCeilingDto;
-        const ground = (await this.getRelatedStepContext(leaseInspection, ElementType.GROUND, room))[0] as leaseInspectionContextGroundDto;
-        const stairs = await this.getRelatedStepContext(leaseInspection, ElementType.STAIR, room) as leaseInspectionContextStairDto[];
-        const furnishing = await this.getRelatedStepContext(leaseInspection, ElementType.FURNISHING, room) as leaseInspectionContextFurnishingDto[];
+        let walls = await this.getRelatedStepContext(leaseInspection, ElementType.WALL, room) as LeaseInspectionContextWallDto[];
+        const ceiling = (await this.getRelatedStepContext(leaseInspection, ElementType.CEILING, room))[0] as LeaseInspectionContextCeilingDto;
+        const ground = (await this.getRelatedStepContext(leaseInspection, ElementType.GROUND, room))[0] as LeaseInspectionContextGroundDto;
+        const stairs = await this.getRelatedStepContext(leaseInspection, ElementType.STAIR, room) as LeaseInspectionContextStairDto[];
+        const furnishing = await this.getRelatedStepContext(leaseInspection, ElementType.FURNISHING, room) as LeaseInspectionContextFurnishingDto[];
+
+        walls = walls.sort((a, b) => a.wall.order - b.wall.order);
 
         const roomDto = RoomDtoMapper.fromModel(room);
-        return new leaseInspectionContextRoomDto(roomDto, walls, ceiling, ground, stairs, furnishing);
+        return new LeaseInspectionContextRoomDto(roomDto, walls, ceiling, ground, stairs, furnishing);
     }
 
     async getContext(leaseInspectionId: string) {
@@ -117,13 +119,15 @@ export class LeaseInspectionService {
         }
 
         const rooms = await this.roomRepository.findAllByEstate(leaseInspection.lease.getEstate().id);
-        const leaseInspectionContextRooms = [];
+        let leaseInspectionContextRooms = [];
         for (const room of rooms) {
             leaseInspectionContextRooms.push(await this.getRoomContext(leaseInspection, room));
         }
 
+        leaseInspectionContextRooms = leaseInspectionContextRooms.sort((a, b) => a.order - b.order);
+
         const leaseInspectionDto = LeaseInspectionDtoMapper.fromModel(leaseInspection);
-        return new leaseInspectionContextDto(leaseInspectionDto, leaseInspectionContextRooms);
+        return new LeaseInspectionContextDto(leaseInspectionDto, leaseInspectionContextRooms);
     }
 
 

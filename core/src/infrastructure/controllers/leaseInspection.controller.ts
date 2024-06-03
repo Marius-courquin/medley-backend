@@ -12,6 +12,7 @@ import {
     ApiQuery,
     ApiTags
 } from "@nestjs/swagger";
+import {LeaseInspectionContextDto} from "@infrastructure/dtos/leaseInspectionContextDto";
 
 @ApiTags('Lease Inspection')
 @Controller('lease_inspection')
@@ -171,6 +172,7 @@ export class LeaseInspectionController {
     })
     @ApiOkResponse({
         description: 'The lease inspection context has been successfully retrieved.',
+        type: LeaseInspectionContextDto,
     })
     @HttpCode(HttpStatus.OK)
     @Get(':id/context')

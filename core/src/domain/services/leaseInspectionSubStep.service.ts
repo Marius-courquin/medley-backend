@@ -12,10 +12,10 @@ import {SubElementRepository} from '@domain/repositories/subElement.repository';
 import {SubElementService} from "@domain/services/subElement.service";
 import {WallSocketDto} from "@infrastructure/dtos/wallSocket.dto";
 import {
-    leaseInspectionContextGenericDto,
-    leaseInspectionContextWallSocketDto,
-    leaseInspectionContextWindowDto
-} from "@infrastructure/dtos/leaseInspectionContext.dto";
+    LeaseInspectionContextGenericDto,
+    LeaseInspectionContextWallSocketDto,
+    LeaseInspectionContextWindowDto
+} from "@infrastructure/dtos/leaseInspectionContextDto";
 import {GenericSubElementDto} from "@infrastructure/dtos/genericSubElement.dto";
 import {WindowDto} from "@infrastructure/dtos/window.dto";
 import {SubElementType} from "@domain/entities/enum/subElement.enum.entity";
@@ -106,13 +106,13 @@ export class LeaseInspectionSubStepService {
         switch (leaseInspectionSubStep.subElement.type) {
             case SubElementType.WALL_SOCKET:
                  const wallSocket = relatedSubElement as WallSocketDto;
-                 return new leaseInspectionContextWallSocketDto(leaseInspectionStepDto, wallSocket);
+                 return new LeaseInspectionContextWallSocketDto(leaseInspectionStepDto, wallSocket);
             case SubElementType.GENERIC_SUB_ELEMENT:
                 const generic = relatedSubElement as GenericSubElementDto;
-                return new leaseInspectionContextGenericDto(leaseInspectionStepDto, generic);
+                return new LeaseInspectionContextGenericDto(leaseInspectionStepDto, generic);
             case SubElementType.WINDOW:
                 const window = relatedSubElement as WindowDto;
-                return new leaseInspectionContextWindowDto(leaseInspectionStepDto, window);
+                return new LeaseInspectionContextWindowDto(leaseInspectionStepDto, window);
         }
 
     }
