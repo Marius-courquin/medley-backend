@@ -35,12 +35,12 @@ export class SignatureWithFileDto{
     picture: MemoryStoredFile;
 
     constructor(
-        signedOn: Date,
-        picture: MemoryStoredFile,
-        id?: string
+        id: string,
+        signedOn?: Date,
+        picture?: MemoryStoredFile,
     ){
-        this.id = id ?? undefined;
-        this.signedOn = signedOn;
+        this.id = id;
+        this.signedOn = signedOn ?? undefined;
         this.picture = picture ?? undefined;
     }
 }

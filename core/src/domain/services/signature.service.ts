@@ -16,13 +16,18 @@ export class SignatureService {
         private readonly fileService: FileService
     ){}
 
-
     async get(id: string): Promise<SignatureWithLinkDto> {
         const signature: Signature = await this.repository.findById(id);
         if (!signature) {
             throw new NotFoundException( 'signature does not exist'); 
         }
         return SignatureDtoMapper.fromModelWithLink(signature, signature.picture.getId());
+    }
+
+    async create(signatureWithFileDto: SignatureWithFileDto): Promise<SignatureWithLinkDto> {
+        const picture: Picture = await this.fileService.savePicture(signatureWithFileDto.picture, Picture);
+        const signature = await this.repository.save(new Signature(signatureWithFileDto.signedOn, picture));
+        return SignatureDtoMapper.fromModelWithLink(signature, picture.getId());
     }
 
     async getByLeaseInspectionId(leaseInspectionId: string): Promise<SignatureWithLinkDto[]> {

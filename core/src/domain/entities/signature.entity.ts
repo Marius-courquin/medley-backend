@@ -17,9 +17,9 @@ export class Signature {
     @JoinColumn()
     picture: Picture;
 
-    constructor(signedOn: Date, picture: Picture, id?: string) {
+    constructor(signedOn?: Date, picture?: Picture, id?: string) {
         this.id = id ?? undefined;
-        this.signedOn = signedOn;
-        this.picture = picture;
+        this.signedOn = signedOn ?? undefined;
+        this.picture = picture ?? undefined;
     }
 }

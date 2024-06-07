@@ -35,10 +35,10 @@ export class SignatureWithLinkDto{
     constructor(
         signedOn: Date,
         picture: string,
-        id?: string
+        id: string
     ){
-        this.id = id ?? undefined;
-        this.signedOn = signedOn;
-        this.picture = picture;
+        this.id = id;
+        this.signedOn = signedOn ?? undefined;
+        this.picture = picture ?? undefined;
     }
 }

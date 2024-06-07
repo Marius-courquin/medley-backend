@@ -66,13 +66,38 @@ export class LeaseInspectionDto {
     })
     agentId?: string;
 
-    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, endDate: Date, leaseId: string, agentId?: string, id?: string) {
+    @IsOptional()
+    @IsUUID(4, { message: 'agentSignatureId must be a valid uuid' })
+    @ApiProperty({
+        required: false,
+        type: 'string',
+        description: 'The id of the agent signature',
+        format: 'uuid',
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    })
+    agentSignatureId?: string;
+
+    @IsOptional()
+    @IsUUID(4, { message: 'thirdSignatureId must be a valid uuid' })
+    @ApiProperty({
+        required: false,
+        type: 'string',
+        description: 'The id of the third signature',
+        format: 'uuid',
+        example: '123e4567-e89b-12d3-a456-426614174000'
+    })
+    thirdSignatureId?: string;
+
+
+    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, endDate: Date, leaseId: string, agentId?: string, agentSignatureId?: string, thirdSignatureId?: string, id?: string) {
         this.id = id ?? undefined;
         this.type = type;
         this.state = state;
         this.endDate = endDate;
         this.leaseId = leaseId;
         this.agentId = agentId ?? undefined;
+        this.agentSignatureId = agentSignatureId ?? undefined;
+        this.thirdSignatureId = thirdSignatureId ?? undefined;
     }
 
 }
