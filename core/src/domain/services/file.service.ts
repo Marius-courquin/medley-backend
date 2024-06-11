@@ -2,7 +2,7 @@ import {BadRequestException, Inject, Injectable} from '@nestjs/common';
 import * as AWS from 'aws-sdk';
 import {Picture} from "@domain/entities/picture.entity";
 import {PictureRepository} from "@domain/repositories/picture.repository";
-import { v4 as uuid_v4 } from "uuid";
+import {v4 as uuid_v4} from "uuid";
 import {MemoryStoredFile} from "nestjs-form-data";
 
 @Injectable()
@@ -36,8 +36,22 @@ export class FileService {
         return await this.pictureRepository.save(new Picture(id, Picture.getTypeFromMime(this.decodeMimeType(file))));
     }
 
+    async savePictureWithKey(file: MemoryStoredFile, key: string): Promise<Picture> {
+        const id = uuid_v4();
+
+        const uploadParams = {
+            Bucket: this.PICTURE_BUCKET,
+            Key: key + '/' + id,
+            Body: file.buffer,
+            ContentType: file.mimetype,
+        };
+        await this.s3.upload(uploadParams).promise();
+
+        return await this.pictureRepository.save(new Picture(id, Picture.getTypeFromMime(this.decodeMimeType(file))));
+    }
+
     async generateSignedUrlForPicture(picture: Picture, classRef: Function, expires: number = 3600): Promise<string> {
-        if(picture && picture.id) {
+        if (picture && picture.id) {
             const params = {
                 Bucket: this.PICTURE_BUCKET,
                 Key: `${classRef.name.toLowerCase()}/${picture.getId()}`,
@@ -53,9 +67,26 @@ export class FileService {
         }
     }
 
+    async generateSignedUrlForPictureByKey(picture: Picture, key: string, expires: number = 3600): Promise<string> {
+        if (picture && picture.id) {
+            const params = {
+                Bucket: this.PICTURE_BUCKET,
+                Key: `${key}/${picture.getId()}`,
+                Expires: expires,
+            };
+            return this.s3.getSignedUrlPromise('getObject', params).then((url) => {
+                return url;
+            }).catch((err) => {
+                throw new BadRequestException(err.message);
+            });
+        } else {
+            return undefined;
+        }
+    }
+
     async ensureBucketExists(bucketName: string): Promise<void> {
         try {
-            await this.s3.headBucket({ Bucket: bucketName }).promise();
+            await this.s3.headBucket({Bucket: bucketName}).promise();
             console.log(`Bucket "${bucketName}" already exists.`);
         } catch (error) {
             if (error.statusCode === 404) {

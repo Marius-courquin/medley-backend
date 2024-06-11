@@ -5,17 +5,18 @@ import { LeaseInspection } from '@domain/entities/leaseInspection.entity';
 import { Lease } from '@domain/entities/lease.entity';
 import { Agent } from '@domain/entities/agent.entity';
 import { Signature } from '@domain/entities/signature.entity';
+import {SignatureWithLinkDto} from "@infrastructure/dtos/signatureWithLink.dto";
 
 export class LeaseInspectionDtoMapper {
-    public static fromModel(leaseInspection : LeaseInspection) : LeaseInspectionDto {
+    public static fromModel(leaseInspection : LeaseInspection, agentSignature?: SignatureWithLinkDto, tenantSignature?: SignatureWithLinkDto) : LeaseInspectionDto {
         return new LeaseInspectionDto(
             this.leaseInspectionTypeFromModel(leaseInspection.type),
             this.leaseInspectionStateFromModel(leaseInspection.state),
             leaseInspection.endDate,
             leaseInspection.lease.id,
             leaseInspection.agent.id,
-            leaseInspection.agentSignature.id,
-            leaseInspection.thirdSignature.id,
+            agentSignature ?? undefined,
+            tenantSignature ?? undefined,
             leaseInspection.id
         );
     }
@@ -24,8 +25,8 @@ export class LeaseInspectionDtoMapper {
         leaseInspectionDto : LeaseInspectionDto, 
         lease: Lease, 
         agent: Agent, 
-        agentSignature: Signature,
-        thirdSignature: Signature,
+        agentSignature?: Signature,
+        thirdSignature?: Signature,
     ) : LeaseInspection {
         return new LeaseInspection(
             this.leaseInspectionTypeToModel(leaseInspectionDto.type),

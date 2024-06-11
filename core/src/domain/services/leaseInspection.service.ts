@@ -1,4 +1,4 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import {Injectable, NotFoundException, UnauthorizedException} from '@nestjs/common';
 import {LeaseRepository} from '@domain/repositories/lease.repository';
 import {Agent} from '@domain/entities/agent.entity';
 import {AgentRepository} from '@domain/repositories/agent.repository';
@@ -25,9 +25,9 @@ import {
 } from "@infrastructure/dtos/leaseInspectionContextDto";
 import {RoomDtoMapper} from "@infrastructure/mappers/room.dto.mapper";
 import {RoomRepository} from "@domain/repositories/room.repository";
-import { SignatureRepository } from '@domain/repositories/signature.repository';
-import { SignatureWithFileDto } from '@/infrastructure/dtos/signatureWithFile.dto';
-import { SignatureDtoMapper } from '@/infrastructure/mappers/signature.dto.mapper';
+import {SignatureRepository} from '@domain/repositories/signature.repository';
+import {SignatureWithFileDto} from '@/infrastructure/dtos/signatureWithFile.dto';
+import {SignatureService} from "@domain/services/signature.service";
 
 @Injectable()
 export class LeaseInspectionService {
@@ -35,6 +35,7 @@ export class LeaseInspectionService {
         private readonly leaseRepository: LeaseRepository,
         private readonly agentRepository: AgentRepository,
         private readonly signatureRepository: SignatureRepository,
+        private readonly signatureService: SignatureService,
         private readonly repository: LeaseInspectionRepository,
         private readonly eventEmitter: EventEmitter2,
         private readonly leaseInspectionStepRepository: LeaseInspectionStepRepository,
@@ -43,7 +44,6 @@ export class LeaseInspectionService {
     ) {}
 
     async create(leaseInspectionDto: LeaseInspectionDto): Promise<LeaseInspectionDto> {
-        console.log("service create leaseInspectionDto:", leaseInspectionDto);
         const agent : Agent  = await this.agentRepository.findById(leaseInspectionDto.agentId);
         const lease: Lease = await this.leaseRepository.findById(leaseInspectionDto.leaseId);
         if (!lease) {
@@ -67,17 +67,13 @@ export class LeaseInspectionService {
     }
 
     async get(leaseId: string): Promise<LeaseInspectionDto> {
-        console.log("service leaseId:", leaseId);
         const leaseInspection: LeaseInspection = await this.repository.findById(leaseId);
-        console.log("service leaseInspection:", leaseInspection);
         if (!leaseInspection) {
             throw new NotFoundException('lease inspection does not exist');
         }
-
-        let leaseInspectionDto = LeaseInspectionDtoMapper.fromModel(leaseInspection);
-        console.log("service leaseId:", leaseId, "leaseInspectionDto:", leaseInspectionDto);
-        return leaseInspectionDto;
-        //return LeaseInspectionDtoMapper.fromModel(leaseInspection);
+        const agentSignature = leaseInspection.agentSignature ? await this.signatureService.get(leaseInspection.agentSignature.id, leaseInspection.id, SignatureService.AGENT_KEY) : undefined;
+        const tenantSignature = leaseInspection.tenantSignature ? await this.signatureService.get(leaseInspection.tenantSignature.id, leaseInspection.id, SignatureService.TENANT_KEY) : undefined;
+        return LeaseInspectionDtoMapper.fromModel(leaseInspection, agentSignature, tenantSignature);
     }
 
     async update(leaseInspectionId: string, leaseInspectionDto: LeaseInspectionDto): Promise<LeaseInspectionDto> {
@@ -87,10 +83,47 @@ export class LeaseInspectionService {
         if (!lease) {
             throw new NotFoundException('lease does not exist');
         }
-        const agentSignature = await this.signatureRepository.findById(leaseInspectionDto.agentSignatureId);
-        const thirdSignature = await this.signatureRepository.findById(leaseInspectionDto.thirdSignatureId);
-        const leaseInspection = LeaseInspectionDtoMapper.toModel(leaseInspectionDto, lease, agent, agentSignature, thirdSignature);
-        return LeaseInspectionDtoMapper.fromModel(await this.repository.updateElement(leaseInspection));
+        const agentSignature = await this.signatureRepository.findById(leaseInspectionDto.agentSignature.id);
+        const tenantSignature = await this.signatureRepository.findById(leaseInspectionDto.tenantSignature.id);
+
+        const leaseInspection = LeaseInspectionDtoMapper.toModel(leaseInspectionDto, lease, agent, agentSignature, tenantSignature);
+
+        const agentSignatureDto = leaseInspection.agentSignature ? await this.signatureService.get(leaseInspection.agentSignature.id, leaseInspection.id, SignatureService.AGENT_KEY) : undefined;
+        const tenantSignatureDto = leaseInspection.tenantSignature ? await this.signatureService.get(leaseInspection.tenantSignature.id, leaseInspection.id, SignatureService.TENANT_KEY) : undefined;
+
+        return LeaseInspectionDtoMapper.fromModel(await this.repository.updateElement(leaseInspection), agentSignatureDto, tenantSignatureDto);
+    }
+
+    async signByAgent(leaseInspectionId: string, signatureWithFileDto: SignatureWithFileDto): Promise<LeaseInspectionDto> {
+        const leaseInspection = await this.repository.findById(leaseInspectionId);
+        if (!leaseInspection) {
+            throw new NotFoundException('lease inspection does not exist');
+        }
+        if (leaseInspection.agentSignature) {
+            throw new UnauthorizedException('lease inspection already signed by tenant')
+        }
+        const agentSignatureCreated = await this.signatureService.create(signatureWithFileDto, leaseInspection.id, SignatureService.AGENT_KEY);
+        leaseInspection.agentSignature = agentSignatureCreated;
+
+        const agentSignatureDto = leaseInspection.agentSignature ? await this.signatureService.get(leaseInspection.agentSignature.id, leaseInspection.id, SignatureService.AGENT_KEY) : undefined;
+        const tenantSignatureDto = leaseInspection.tenantSignature ? await this.signatureService.get(leaseInspection.tenantSignature.id, leaseInspection.id, SignatureService.TENANT_KEY) : undefined;
+        return LeaseInspectionDtoMapper.fromModel(await this.repository.updateElement(leaseInspection), agentSignatureDto, tenantSignatureDto);
+    }
+
+    async signByTenant(leaseInspectionId: string, signatureWithFileDto: SignatureWithFileDto): Promise<LeaseInspectionDto> {
+        const leaseInspection = await this.repository.findById(leaseInspectionId);
+        if (!leaseInspection) {
+            throw new NotFoundException('lease inspection does not exist');
+        }
+        if (leaseInspection.tenantSignature) {
+            throw new UnauthorizedException('lease inspection already signed by tenant')
+        }
+        const tenantSignature = await this.signatureService.create(signatureWithFileDto, leaseInspection.id, SignatureService.TENANT_KEY);
+        leaseInspection.tenantSignature = tenantSignature;
+
+        const agentSignatureDto = leaseInspection.agentSignature ? await this.signatureService.get(leaseInspection.agentSignature.id, leaseInspection.id, SignatureService.AGENT_KEY) : undefined;
+        const tenantSignatureDto = leaseInspection.tenantSignature ? await this.signatureService.get(leaseInspection.tenantSignature.id, leaseInspection.id, SignatureService.TENANT_KEY) : undefined;
+        return LeaseInspectionDtoMapper.fromModel(await this.repository.updateElement(leaseInspection), agentSignatureDto, tenantSignatureDto);
     }
 
     async close(leaseInspectionId: string): Promise<void> {
@@ -139,7 +172,10 @@ export class LeaseInspectionService {
 
         leaseInspectionContextRooms = leaseInspectionContextRooms.sort((a, b) => a.order - b.order);
 
-        const leaseInspectionDto = LeaseInspectionDtoMapper.fromModel(leaseInspection);
+        const agentSignatureDto = leaseInspection.agentSignature ? await this.signatureService.get(leaseInspection.agentSignature.id, leaseInspection.id, SignatureService.AGENT_KEY) : undefined;
+        const tenantSignatureDto = leaseInspection.tenantSignature ? await this.signatureService.get(leaseInspection.tenantSignature.id, leaseInspection.id, SignatureService.TENANT_KEY) : undefined;
+
+        const leaseInspectionDto = LeaseInspectionDtoMapper.fromModel(leaseInspection, agentSignatureDto, tenantSignatureDto);
         return new LeaseInspectionContextDto(leaseInspectionDto, leaseInspectionContextRooms);
     }
 

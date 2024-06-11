@@ -1,7 +1,6 @@
-import { Picture } from "@/domain/entities/picture.entity";
-import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsOptional, IsString, IsUUID } from "class-validator";
-import { HasMimeType, IsFile, MemoryStoredFile } from "nestjs-form-data";
+import {ApiProperty} from "@nestjs/swagger";
+import {IsDateString, IsOptional, IsUUID} from "class-validator";
+import {HasMimeType, IsFile, MemoryStoredFile} from "nestjs-form-data";
 
 export class SignatureWithFileDto{
     @IsOptional()
@@ -15,13 +14,13 @@ export class SignatureWithFileDto{
     })
     id?: string;
 
-    @IsDate({ message: 'signedOn must be a valid date' })
     @ApiProperty({
         required: true,
         type: 'date',
         description: 'The date of the signature',
         example: new Date(),
     })
+    @IsDateString()
     signedOn: Date;
 
     @IsFile({ message: 'picture must be a file' })

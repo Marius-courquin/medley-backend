@@ -1,6 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsOptional, IsString, IsUUID } from "class-validator";
-import { HasMimeType, IsFile, MemoryStoredFile } from "nestjs-form-data";
+import {ApiProperty} from "@nestjs/swagger";
+import {IsDateString, IsOptional, IsString, IsUUID} from "class-validator";
 
 export class SignatureWithLinkDto{
     @IsOptional()
@@ -14,7 +13,7 @@ export class SignatureWithLinkDto{
     })
     id?: string;
 
-    @IsDate({ message: 'signedOn must be a valid date' })
+    @IsDateString()
     @ApiProperty({
         required: true,
         type: 'date',

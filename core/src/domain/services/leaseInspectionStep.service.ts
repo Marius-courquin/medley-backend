@@ -51,7 +51,7 @@ export class LeaseInspectionStepService {
         const leaseInspectionStep = await this.repository.save(LeaseInspectionStepDtoMapper.toModel(leaseInspectionStepDto, leaseInspection, element));
         const pictures = isArray(leaseInspectionStepDto.pictures) ? leaseInspectionStepDto.pictures : [leaseInspectionStepDto.pictures];
         for (const picture of pictures) {
-            await this.leaseInspectionStepPictureService.create(leaseInspectionStep, picture);
+            await this.leaseInspectionStepPictureService.create(leaseInspectionStep, leaseInspection.id, picture);
         }
         const picturesUrls: PictureDto[] = await this.leaseInspectionStepPictureService.getPicturesUrl(leaseInspectionStep.id);
         return LeaseInspectionStepDtoMapper.fromModelWithLink(leaseInspectionStep, picturesUrls);
@@ -92,7 +92,7 @@ export class LeaseInspectionStepService {
         const pictures = isArray(leaseInspectionStepDto.pictures) ? leaseInspectionStepDto.pictures : [leaseInspectionStepDto.pictures];
         const leaseInspectionStepUpdated = LeaseInspectionStepDtoMapper.toModel(leaseInspectionStepDto, leaseInspection, element);
         for (const picture of pictures) {
-            await this.leaseInspectionStepPictureService.create(leaseInspectionStepUpdated, picture);
+            await this.leaseInspectionStepPictureService.create(leaseInspectionStepUpdated, leaseInspection.id, picture);
         }
         const picturesUrl: PictureDto[] = await this.leaseInspectionStepPictureService.getPicturesUrl(leaseInspectionStepId);
         return LeaseInspectionStepDtoMapper.fromModelWithLink(await this.repository.updateElement(leaseInspectionStepUpdated), picturesUrl);

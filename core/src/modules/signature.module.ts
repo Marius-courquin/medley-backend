@@ -19,7 +19,6 @@ import { LeaseInspectionController } from "@/infrastructure/controllers/leaseIns
     ],
     exports: [
         SignatureRepository
-    ],
-    controllers: [LeaseInspectionController]
+    ]
 })
 export class SignatureModule {}

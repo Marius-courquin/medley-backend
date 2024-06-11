@@ -2,6 +2,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsOptional, IsUUID } from "class-validator";
 import { LeaseInspectionStateDto, LeaseInspectionTypeDto } from "@infrastructure/dtos/enum/leaseInspection.enum.dto";
 import { IsCustomDate } from "@shared/decorators/date.shared.decorator";
+import {Signature} from "@domain/entities/signature.entity";
+import {SignatureWithLinkDto} from "@infrastructure/dtos/signatureWithLink.dto";
 
 export class LeaseInspectionDto {
     @IsOptional()
@@ -67,37 +69,31 @@ export class LeaseInspectionDto {
     agentId?: string;
 
     @IsOptional()
-    @IsUUID(4, { message: 'agentSignatureId must be a valid uuid' })
     @ApiProperty({
         required: false,
-        type: 'string',
-        description: 'The id of the agent signature',
-        format: 'uuid',
-        example: '123e4567-e89b-12d3-a456-426614174000'
+        type: SignatureWithLinkDto,
+        description: 'The agent signature',
     })
-    agentSignatureId?: string;
+    agentSignature?: SignatureWithLinkDto;
 
     @IsOptional()
-    @IsUUID(4, { message: 'thirdSignatureId must be a valid uuid' })
     @ApiProperty({
         required: false,
-        type: 'string',
-        description: 'The id of the third signature',
-        format: 'uuid',
-        example: '123e4567-e89b-12d3-a456-426614174000'
+        type: SignatureWithLinkDto,
+        description: 'The tenant signature',
     })
-    thirdSignatureId?: string;
+    tenantSignature?: SignatureWithLinkDto;
 
 
-    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, endDate: Date, leaseId: string, agentId?: string, agentSignatureId?: string, thirdSignatureId?: string, id?: string) {
+    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, endDate: Date, leaseId: string, agentId?: string, agentSignature?: SignatureWithLinkDto, tenantSignature?: SignatureWithLinkDto, id?: string) {
         this.id = id ?? undefined;
         this.type = type;
         this.state = state;
         this.endDate = endDate;
         this.leaseId = leaseId;
         this.agentId = agentId ?? undefined;
-        this.agentSignatureId = agentSignatureId ?? undefined;
-        this.thirdSignatureId = thirdSignatureId ?? undefined;
+        this.agentSignature = agentSignature ?? undefined;
+        this.tenantSignature = tenantSignature ?? undefined;
     }
 
 }

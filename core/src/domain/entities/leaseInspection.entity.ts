@@ -1,9 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
-import { IsDateString, IsEnum, IsOptional, IsUUID } from 'class-validator';
-import { LeaseInspectionType, LeaseInspectionState } from '@domain/entities/enum/leaseInspection.enum.entity';
-import { Lease } from '@domain/entities/lease.entity';
-import { Agent } from '@domain/entities/agent.entity';
-import { IsCustomDate } from '@shared/decorators/date.shared.decorator';
+import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn} from 'typeorm';
+import {IsEnum, IsOptional, IsUUID} from 'class-validator';
+import {LeaseInspectionState, LeaseInspectionType} from '@domain/entities/enum/leaseInspection.enum.entity';
+import {Lease} from '@domain/entities/lease.entity';
+import {Agent} from '@domain/entities/agent.entity';
+import {IsCustomDate} from '@shared/decorators/date.shared.decorator';
+import {Signature} from "@domain/entities/signature.entity";
 
 @Entity("lease_inspection")
 export class LeaseInspection {
@@ -36,13 +37,15 @@ export class LeaseInspection {
     @IsOptional()
     agent?: Agent;
 
-    @OneToOne( () => Signature, signature => signature.id, { onDelete: 'CASCADE', eager: true})
+    @OneToOne( () => Signature, signature => signature.id, { nullable: true, onDelete: 'CASCADE', eager: true})
+    @JoinColumn()
     @IsOptional()
     agentSignature: Signature;
 
-    @OneToOne( () => Signature, signature => signature.id, { onDelete: 'CASCADE', eager: true})
+    @OneToOne( () => Signature, signature => signature.id, { nullable: true, onDelete: 'CASCADE', eager: true})
+    @JoinColumn()
     @IsOptional()
-    thirdSignature: Signature;
+    tenantSignature: Signature;
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" , name : "created_at"})
     createdAt: Date;
@@ -54,14 +57,14 @@ export class LeaseInspection {
         agent: Agent,
         id?: string,
         agentSignature?: Signature,
-        thirdSignature?: Signature,)
+        thirdSignature?: Signature)
     {
         this.id = id ?? undefined;
         this.type = type;
         this.state = state;
         this.endDate = endDate;
         this.agentSignature = agentSignature;
-        this.thirdSignature = thirdSignature;
+        this.tenantSignature = thirdSignature;
         this.lease = lease ?? undefined;
         this.agent = agent ?? undefined;
     }
