@@ -37,16 +37,20 @@ export class FileService {
     }
 
     async generateSignedUrlForPicture(picture: Picture, classRef: Function, expires: number = 3600): Promise<string> {
-        const params = {
-            Bucket: this.PICTURE_BUCKET,
-            Key: `${classRef.name.toLowerCase()}/${picture.getId()}`,
-            Expires: expires,
-        };
-        return this.s3.getSignedUrlPromise('getObject', params).then((url) => {
-            return url;
-        }).catch((err) => {
-            throw new BadRequestException(err.message);
-        });
+        if(picture.getId()) {
+            const params = {
+                Bucket: this.PICTURE_BUCKET,
+                Key: `${classRef.name.toLowerCase()}/${picture.getId()}`,
+                Expires: expires,
+            };
+            return this.s3.getSignedUrlPromise('getObject', params).then((url) => {
+                return url;
+            }).catch((err) => {
+                throw new BadRequestException(err.message);
+            });
+        } else {
+            return undefined;
+        }
     }
 
     async ensureBucketExists(bucketName: string): Promise<void> {
