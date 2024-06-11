@@ -37,7 +37,7 @@ export class FileService {
     }
 
     async generateSignedUrlForPicture(picture: Picture, classRef: Function, expires: number = 3600): Promise<string> {
-        if(picture.getId()) {
+        if(picture && picture.id) {
             const params = {
                 Bucket: this.PICTURE_BUCKET,
                 Key: `${classRef.name.toLowerCase()}/${picture.getId()}`,
