@@ -10,15 +10,22 @@ import {
     ApiOkResponse,
     ApiParam,
     ApiQuery,
-    ApiTags
+    ApiTags, ApiUnauthorizedResponse
 } from "@nestjs/swagger";
 import {LeaseInspectionContextDto} from "@infrastructure/dtos/leaseInspectionContextDto";
+import { SignatureService } from '@/domain/services/signature.service';
+import { SignatureWithLinkDto } from '../dtos/signatureWithLink.dto';
+import {SignatureWithFileDto} from "@infrastructure/dtos/signatureWithFile.dto";
+import {FormDataRequest} from "nestjs-form-data";
 
 @ApiTags('Lease Inspection')
 @Controller('lease_inspection')
 export class LeaseInspectionController {
 
-    constructor(private service: LeaseInspectionService) {}
+    constructor(
+        private service: LeaseInspectionService,
+        private signatureService: SignatureService,
+    ) {}
 
     @ApiBody({
         type: LeaseInspectionDto,
@@ -178,6 +185,90 @@ export class LeaseInspectionController {
     @Get(':id/context')
     getContext(@Param('id', ParseUUIDPipe) id: string) {
         return this.service.getContext(id);
+    }
+
+    @ApiBody({
+        type: SignatureWithFileDto,
+        description: 'The signature to create',
+        required: true
+    })
+    @ApiParam({
+        name: 'id',
+        type: 'string',
+        description: 'The id of the lease inspection',
+        format: 'uuid',
+        example: '123e4567-e89b-12d3-a456-426614174000',
+        required: true,
+    })
+    @ApiNotFoundResponse({
+        description: 'The lease inspection does not exist',
+        schema: {
+            example: {
+                statusCode: 404,
+                message: 'lease inspection does not exist',
+            },
+        }
+    })
+    @ApiUnauthorizedResponse({
+        description: 'The lease inspection has already been signed by the tenant',
+        schema: {
+            example: {
+                statusCode: 401,
+                message: 'lease inspection already signed by tenant',
+            },
+        }
+    })
+    @ApiCreatedResponse({
+        description: 'The agent signature has been successfully created.',
+        type: SignatureWithLinkDto,
+    })
+    @HttpCode(HttpStatus.CREATED)
+    @Post(':id/signature/agent')
+    @FormDataRequest()
+    signByAgent(@Param('id', ParseUUIDPipe) id: string, @Body() signatureWithFileDto : SignatureWithFileDto) {
+        return this.service.signByAgent(id, signatureWithFileDto);
+    }
+
+    @ApiBody({
+        type: SignatureWithFileDto,
+        description: 'The signature to create',
+        required: true
+    })
+    @ApiParam({
+        name: 'id',
+        type: 'string',
+        description: 'The id of the lease inspection',
+        format: 'uuid',
+        example: '123e4567-e89b-12d3-a456-426614174000',
+        required: true,
+    })
+    @ApiNotFoundResponse({
+        description: 'The lease inspection does not exist',
+        schema: {
+            example: {
+                statusCode: 404,
+                message: 'lease inspection does not exist',
+            },
+        }
+    })
+    @ApiUnauthorizedResponse({
+        description: 'The lease inspection has already been signed by the tenant',
+        schema: {
+            example: {
+                statusCode: 401,
+                message: 'lease inspection already signed by tenant',
+            },
+        }
+    })
+    @ApiCreatedResponse({
+        description: 'The tenant signature has been successfully created.',
+        type: SignatureWithLinkDto,
+    })
+    @HttpCode(HttpStatus.CREATED)
+    @Post(':id/signature/tenant')
+    @FormDataRequest()
+    signByTenant(@Param('id', ParseUUIDPipe) id: string, @Body() signatureWithFileDto : SignatureWithFileDto) {
+        return this.service.signByTenant(id, signatureWithFileDto);
     }
 
 }

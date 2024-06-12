@@ -7,17 +7,19 @@ import { ThirdModule } from '@modules/third.module';
 import { LeaseController } from '@/infrastructure/controllers/lease.controller';
 import { AgentModule } from '@/modules/agent.module';
 import {EstateRepository} from "@domain/repositories/estate.repository";
+import { SignatureService } from '@/domain/services/signature.service';
+import { SignatureModule } from './signature.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([Lease]),
         ThirdModule,
-        AgentModule
+        AgentModule,
     ],
     providers: [
         LeaseService,
         LeaseRepository,
-        EstateRepository
+        EstateRepository,
     ],
     exports: [
         LeaseRepository

@@ -2,6 +2,8 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsOptional, IsUUID } from "class-validator";
 import { LeaseInspectionStateDto, LeaseInspectionTypeDto } from "@infrastructure/dtos/enum/leaseInspection.enum.dto";
 import { IsCustomDate } from "@shared/decorators/date.shared.decorator";
+import {Signature} from "@domain/entities/signature.entity";
+import {SignatureWithLinkDto} from "@infrastructure/dtos/signatureWithLink.dto";
 
 export class LeaseInspectionDto {
     @IsOptional()
@@ -66,13 +68,32 @@ export class LeaseInspectionDto {
     })
     agentId?: string;
 
-    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, endDate: Date, leaseId: string, agentId?: string, id?: string) {
+    @IsOptional()
+    @ApiProperty({
+        required: false,
+        type: SignatureWithLinkDto,
+        description: 'The agent signature',
+    })
+    agentSignature?: SignatureWithLinkDto;
+
+    @IsOptional()
+    @ApiProperty({
+        required: false,
+        type: SignatureWithLinkDto,
+        description: 'The tenant signature',
+    })
+    tenantSignature?: SignatureWithLinkDto;
+
+
+    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, endDate: Date, leaseId: string, agentId?: string, agentSignature?: SignatureWithLinkDto, tenantSignature?: SignatureWithLinkDto, id?: string) {
         this.id = id ?? undefined;
         this.type = type;
         this.state = state;
         this.endDate = endDate;
         this.leaseId = leaseId;
         this.agentId = agentId ?? undefined;
+        this.agentSignature = agentSignature ?? undefined;
+        this.tenantSignature = tenantSignature ?? undefined;
     }
 
 }

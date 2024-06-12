@@ -11,6 +11,7 @@ import {GenericSubElementDto} from "@infrastructure/dtos/genericSubElement.dto";
 import {LeaseInspectionStepWithLinkDto} from "@infrastructure/dtos/leaseInspectionStepWithLink.dto";
 import {LeaseInspectionSubStepWithLinkDto} from "@infrastructure/dtos/leaseInspectionSubStepWithLink.dto";
 import {ApiProperty} from "@nestjs/swagger";
+import {SignatureWithLinkDto} from "@infrastructure/dtos/signatureWithLink.dto";
 
 export class LeaseInspectionContextWindowDto extends LeaseInspectionSubStepWithLinkDto {
     @ApiProperty({
@@ -235,7 +236,7 @@ export class LeaseInspectionContextDto extends LeaseInspectionDto {
     rooms: LeaseInspectionContextRoomDto[];
 
     constructor(leaseInspectionDto: LeaseInspectionDto, rooms: LeaseInspectionContextRoomDto[]) {
-        super(leaseInspectionDto.type, leaseInspectionDto.state, leaseInspectionDto.endDate, leaseInspectionDto.leaseId, leaseInspectionDto.agentId, leaseInspectionDto.id);
+        super(leaseInspectionDto.type, leaseInspectionDto.state, leaseInspectionDto.endDate, leaseInspectionDto.leaseId, leaseInspectionDto.agentId, leaseInspectionDto.agentSignature, leaseInspectionDto.tenantSignature, leaseInspectionDto.id);
         this.rooms = rooms;
     }
 }

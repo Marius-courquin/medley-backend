@@ -15,10 +15,10 @@ export class LeaseInspectionStepPictureService {
         private readonly fileService: FileService
     ) {}
 
-    async create(leaseInspectionStep: LeaseInspectionStep, file: any): Promise<LeaseInspectionStepPicture> {
+    async create(leaseInspectionStep: LeaseInspectionStep, leaseInspectionId: string, file: any): Promise<LeaseInspectionStepPicture> {
         let picture: Picture = null;
         if (file){
-            picture = await this.fileService.savePicture(file, LeaseInspectionStepPicture);
+            picture = await this.fileService.savePictureWithKey(file, this.getPictureKey(leaseInspectionId, leaseInspectionStep.id));
         }
         const leaseInspectionStepPicture = new LeaseInspectionStepPicture(picture, leaseInspectionStep);
         return this.repository.save(leaseInspectionStepPicture);
@@ -36,7 +36,7 @@ export class LeaseInspectionStepPictureService {
         const picturesDto : PictureDto[] = [];
         for (const leaseInspectionStepPicture of leaseInspectionStepPictures) {
             picturesDto.push(
-                new PictureDto(leaseInspectionStepPicture.id, await this.fileService.generateSignedUrlForPicture(leaseInspectionStepPicture.picture, LeaseInspectionStepPicture))
+                new PictureDto(leaseInspectionStepPicture.id, await this.fileService.generateSignedUrlForPictureByKey(leaseInspectionStepPicture.picture, this.getPictureKey(leaseInspectionStepPicture.leaseInspectionStep.leaseInspection.id, leaseInspectionStepPicture.leaseInspectionStep.id)))
             );
         }
         return picturesDto;
@@ -54,6 +54,10 @@ export class LeaseInspectionStepPictureService {
         return this.repository.findByLeaseInspectionStep(leaseInspectionStepId);
     }
 
+
+    private getPictureKey(leaseInspectionId: string, leaseInspectionStepId: string): string {
+        return `leaseInspections/${leaseInspectionId}/steps/${leaseInspectionStepId}/pictures`;
+    }
     
 }
 

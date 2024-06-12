@@ -13,6 +13,8 @@ export class LeaseInspectionStepPictureRepository extends Repository<LeaseInspec
     async findByLeaseInspectionStep(leaseInspectionStepId: string): Promise<LeaseInspectionStepPicture[]> {
         return this.createQueryBuilder('leaseInspectionStepPicture')
             .leftJoinAndSelect('leaseInspectionStepPicture.picture', 'picture')
+            .leftJoinAndSelect('leaseInspectionStepPicture.leaseInspectionStep', 'leaseInspectionStep')
+            .leftJoinAndSelect('leaseInspectionStep.leaseInspection', 'leaseInspection')
             .where('leaseInspectionStepPicture.leaseInspectionStepId = :leaseInspectionStepId', { leaseInspectionStepId })
             .getMany();
     }

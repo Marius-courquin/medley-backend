@@ -18,7 +18,7 @@ export class LeaseInspectionSubStepPictureService {
     async create(leaseInspectionSubStep: LeaseInspectionSubStep, file: any): Promise<LeaseInspectionSubStepPicture> {
         let picture: Picture = null;
         if (file){
-            picture = await this.fileService.savePicture(file, LeaseInspectionSubStepPicture);
+            picture = await this.fileService.savePictureWithKey(file, this.getPictureKey(leaseInspectionSubStep.leaseInspectionStep.leaseInspection.id, leaseInspectionSubStep.leaseInspectionStep.id, leaseInspectionSubStep.id));
         }
         const leaseInspectionStepPicture = new LeaseInspectionSubStepPicture(picture, leaseInspectionSubStep);
         return this.repository.save(leaseInspectionStepPicture);
@@ -46,7 +46,16 @@ export class LeaseInspectionSubStepPictureService {
         const picturesDto : PictureDto[] = [];
         for (const leaseInspectionSubStepPicture of leaseInspectionSubStepPictures) {
             picturesDto.push(
-                new PictureDto(leaseInspectionSubStepPicture.id, await this.fileService.generateSignedUrlForPicture(leaseInspectionSubStepPicture.picture, LeaseInspectionSubStepPicture))
+                new PictureDto(
+                    leaseInspectionSubStepPicture.id,
+                    await this.fileService.generateSignedUrlForPictureByKey(
+                        leaseInspectionSubStepPicture.picture,
+                        this.getPictureKey(
+                            leaseInspectionSubStepPicture.leaseInspectionSubStep.leaseInspectionStep.leaseInspection.id,
+                            leaseInspectionSubStepPicture.leaseInspectionSubStep.leaseInspectionStep.id,
+                            leaseInspectionSubStepPicture.leaseInspectionSubStep.id)
+                    )
+                )
             );
         }
 
@@ -63,6 +72,10 @@ export class LeaseInspectionSubStepPictureService {
 
     async getLeaseInspectionSubStepPicturesByLeaseInspectionStep(leaseInspectionSubStepId: string): Promise<LeaseInspectionSubStepPicture[]> {
         return this.repository.findByLeaseInspectionSubStep(leaseInspectionSubStepId);
+    }
+
+    private getPictureKey(leaseInspectionId: string, leaseInspectionStepId: string, leaseInspectionSubStepId: string): string {
+        return `leaseInspections/${leaseInspectionId}/steps/${leaseInspectionStepId}/subSteps/${leaseInspectionSubStepId}/pictures`;
     }
     
 }
