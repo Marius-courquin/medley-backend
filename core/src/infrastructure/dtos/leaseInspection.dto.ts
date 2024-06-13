@@ -44,7 +44,7 @@ export class LeaseInspectionDto {
         description: 'The end date of the lease inspection',
         example: '2021-12-31'
     })
-    endDate: Date;
+    endDate?: Date;
 
 
     @IsUUID(4, { message: 'leaseId must be a valid uuid' })
@@ -85,11 +85,11 @@ export class LeaseInspectionDto {
     tenantSignature?: SignatureWithLinkDto;
 
 
-    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, endDate: Date, leaseId: string, agentId?: string, agentSignature?: SignatureWithLinkDto, tenantSignature?: SignatureWithLinkDto, id?: string) {
+    constructor(type: LeaseInspectionTypeDto, state: LeaseInspectionStateDto, leaseId: string, endDate?: Date, agentId?: string, agentSignature?: SignatureWithLinkDto, tenantSignature?: SignatureWithLinkDto, id?: string) {
         this.id = id ?? undefined;
         this.type = type;
         this.state = state;
-        this.endDate = endDate;
+        this.endDate = endDate ?? undefined;
         this.leaseId = leaseId;
         this.agentId = agentId ?? undefined;
         this.agentSignature = agentSignature ?? undefined;

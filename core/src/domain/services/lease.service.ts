@@ -8,6 +8,8 @@ import { LeaseDtoMapper } from '@infrastructure/mappers/lease.dto.mapper';
 import { EstateRepository } from '@domain/repositories/estate.repository';
 import {Third} from "@domain/entities/third.entity";
 import {Estate} from "@domain/entities/estate.entity";
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import {LeaseInspectionCreationOnLeaseCreationEvent} from "@domain/events/LeaseInspectionCreationOnLeaseCreation.event";
 
 @Injectable()
 export class LeaseService {
@@ -15,7 +17,8 @@ export class LeaseService {
         private readonly leaseRepository: LeaseRepository,
         private readonly agentRepository: AgentRepository,
         private readonly thirdRepository: ThirdRepository,
-        private readonly estateRepository: EstateRepository
+        private readonly estateRepository: EstateRepository,
+        private readonly eventEmitter: EventEmitter2,
     ) {}
 
     async create(leaseDto: LeaseDto): Promise<LeaseDto> {
@@ -28,9 +31,10 @@ export class LeaseService {
         if (!estate) {
             throw new NotFoundException('Estate does not exist');
         }
-        const lease = LeaseDtoMapper.toModel(leaseDto, estate, agent, tenant);
-
-        return LeaseDtoMapper.fromModel(await this.leaseRepository.save(lease));
+        const lease = await this.leaseRepository.save(LeaseDtoMapper.toModel(leaseDto, estate, agent, tenant));
+        const event = new LeaseInspectionCreationOnLeaseCreationEvent(lease);
+        this.eventEmitter.emit(LeaseInspectionCreationOnLeaseCreationEvent.eventName, event);
+        return LeaseDtoMapper.fromModel(lease);
     }
 
     async getByAgent(agentId: string): Promise<LeaseDto[]> {
