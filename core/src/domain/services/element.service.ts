@@ -9,22 +9,20 @@ import { WallRepository } from "@domain/repositories/wall.repository"
 import { CeilingRepository } from '@domain/repositories/ceiling.repository';
 import { GroundRepository } from '@domain/repositories/ground.repository';
 import { StairRepository } from '@domain/repositories/stair.repository'
-import { FurnishingRepository } from '@/domain/repositories/furnishing.repository';
 import { WallDto } from '@infrastructure/dtos/wall.dto';
 import { CeilingDto } from '@infrastructure/dtos/ceiling.dto';
 import { GroundDto } from '@infrastructure/dtos/ground.dto';
 import { StairDto } from '@infrastructure/dtos/stair.dto';
-import { FurnishingDto } from '@infrastructure/dtos/furnishing.dto';
 import { WallDtoMapper } from '@infrastructure/mappers/wall.dto.mapper';
 import { CeilingDtoMapper } from '@infrastructure/mappers/ceiling.dto.mapper';
 import { GroundDtoMapper } from '@infrastructure/mappers/ground.dto.mapper';
 import { StairDtoMapper } from '@infrastructure/mappers/stair.dto.mapper';
-import { FurnishingDtoMapper } from '@infrastructure/mappers/furnishing.dto.mapper';
 import { Wall } from '@domain/entities/wall.entity';
 import { Ceiling } from '@domain/entities/ceiling.entity';
 import { Ground } from '@domain/entities/ground.entity';
 import { Stair } from '@domain/entities/stair.entity';
-import { Furnishing } from '@domain/entities/furnishing.entity';
+import { FurnishingService } from '@domain/services/furnishing.service';
+import { FurnishingWithLinkDto } from '@infrastructure/dtos/furnishingWithLink.dto';
 
 
 @Injectable()
@@ -36,7 +34,7 @@ export class ElementService {
         private readonly ceilingRepository: CeilingRepository,
         private readonly groundRepository: GroundRepository,
         private readonly stairRepository: StairRepository,
-        private readonly furnishingRepository: FurnishingRepository,
+        private readonly furnishingService : FurnishingService
     ) {}
 
     async create(elementDto: ElementDto): Promise<ElementDto> {
@@ -74,7 +72,7 @@ export class ElementService {
         return elements.map(element => ElementDtoMapper.fromModel(element));
     }
 
-    async getRelatedEntity(id: string): Promise<WallDto | CeilingDto  | GroundDto | StairDto | FurnishingDto> {
+    async getRelatedEntity(id: string): Promise<WallDto | CeilingDto  | GroundDto | StairDto | FurnishingWithLinkDto> {
         const element : Element = await this.repository.findById(id);
         if (!element) {
             throw new NotFoundException('Element does not exist');
@@ -105,11 +103,11 @@ export class ElementService {
                 }
                 return StairDtoMapper.fromModel(stairs);
             case 'FURNISHING':
-                const furnishing : Furnishing = await this.furnishingRepository.findByElement(id);
+                const furnishing  = await this.furnishingService.getFurnishingByElement(id);
                 if (!furnishing) {
                     throw new NotFoundException('no furnishing found for this element');
                 }
-                return FurnishingDtoMapper.fromModel(furnishing);
+                return furnishing;
             default:
                 throw new NotFoundException('element type not found');
         }

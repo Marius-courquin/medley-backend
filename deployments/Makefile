@@ -37,3 +37,6 @@ stop-minio:
 
 clean-minio:
     docker compose -f docker-compose.minio.yml --env-file .env.minio -p $(PROJECT_NAME) down -v
+
+clean-db:
+    docker compose -f docker-compose.db.yml --env-file .env.db -p $(PROJECT_NAME) down -v

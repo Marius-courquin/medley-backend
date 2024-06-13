@@ -52,7 +52,7 @@ export class LeaseInspectionSubStepWithLinkDto {
     @IsUUID(4, { message: 'leaseInspectionId must be a valid uuid' })
     @ApiProperty({
         type: 'string',
-        description: 'The id of the lease inspection step',
+        description: 'The id of the lease inspection sub step',
         example: '123e4567-e89b-12d3-a456-426614174000',
     })
     leaseInspectionStepId: string;

@@ -4,7 +4,7 @@ import {WallDto} from "@infrastructure/dtos/wall.dto";
 import {CeilingDto} from "@infrastructure/dtos/ceiling.dto";
 import {GroundDto} from "@infrastructure/dtos/ground.dto";
 import {StairDto} from "@infrastructure/dtos/stair.dto";
-import {FurnishingDto} from "@infrastructure/dtos/furnishing.dto";
+import {FurnishingWithLinkDto} from "@infrastructure/dtos/furnishingWithLink.dto";
 import {WindowDto} from "@infrastructure/dtos/window.dto";
 import {WallSocketDto} from "@infrastructure/dtos/wallSocket.dto";
 import {GenericSubElementDto} from "@infrastructure/dtos/genericSubElement.dto";
@@ -165,13 +165,13 @@ export class LeaseInspectionContextStairDto extends LeaseInspectionStepWithLinkD
 
 export class LeaseInspectionContextFurnishingDto extends LeaseInspectionStepWithLinkDto {
     @ApiProperty({
-        type: FurnishingDto,
+        type: FurnishingWithLinkDto,
         description: 'A furnishing step of the lease inspection',
         required: true,
     })
-    furnishing: FurnishingDto;
+    furnishing: FurnishingWithLinkDto;
 
-    constructor(leaseInspectionStepDto: LeaseInspectionStepWithLinkDto, furnishing: FurnishingDto) {
+    constructor(leaseInspectionStepDto: LeaseInspectionStepWithLinkDto, furnishing: FurnishingWithLinkDto) {
         super(leaseInspectionStepDto.state, leaseInspectionStepDto.rating, leaseInspectionStepDto.description, leaseInspectionStepDto.element, leaseInspectionStepDto.leaseInspectionId, leaseInspectionStepDto.id, leaseInspectionStepDto.pictures);
         this.furnishing = furnishing;
     }

@@ -1,8 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 import { FurnishingTypeDto } from "@infrastructure/dtos/enum/furnishing.enum.dto";
+import { HasMimeType, IsFile, MemoryStoredFile } from "nestjs-form-data";
 
-export class FurnishingDto {
+export class FurnishingWithFileDto {
     @IsOptional()
     @IsUUID(4, { message: 'id must be a valid uuid' })
     @ApiProperty({
@@ -52,11 +53,23 @@ export class FurnishingDto {
     })
     elementId: string;
 
-    constructor (order: number, type: FurnishingTypeDto, description: string, elementId: string, id?: string) {
-        this.id = id ?? undefined;
+    @IsFile()
+    @HasMimeType(['image/jpeg', 'image/png', 'image/jpg'])
+    @ApiProperty({
+        required: true,
+        type: 'file',
+        description: 'The picture of the estate with the format jpeg, jpg or png',
+        example: 'picture.png',
+        pattern: 'image/jpeg | image/png | image/jpg',
+    })
+    picture?: MemoryStoredFile;
+
+    constructor (order: number, type: FurnishingTypeDto, description: string, elementId: string, picture: MemoryStoredFile, id?: string) {
         this.order = order;
         this.type = type;
         this.description = description;
         this.elementId = elementId;
+        this.picture = picture;
+        this.id = id ?? undefined;
     }
 }

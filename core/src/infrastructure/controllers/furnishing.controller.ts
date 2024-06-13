@@ -1,6 +1,8 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseUUIDPipe, Post, Put, Query, UseInterceptors } from '@nestjs/common';
 import { FurnishingService } from '@domain/services/furnishing.service';
-import { FurnishingDto } from '@infrastructure/dtos/furnishing.dto';
+import { FurnishingWithLinkDto } from "@infrastructure/dtos/furnishingWithLink.dto";
+import { FurnishingWithFileDto } from "@infrastructure/dtos/furnishingWithFile.dto";
+
 import {
     ApiBadRequestResponse,
     ApiBody,
@@ -9,6 +11,8 @@ import {
     ApiParam, ApiQuery,
     ApiTags
 } from "@nestjs/swagger";
+import { ParseIntFieldsInterceptor } from "@infrastructure/interceptors/floatParser.interceptor";
+import {FormDataRequest} from "nestjs-form-data";
 
 @ApiTags('Furnishing')
 @Controller('furnishing')
@@ -18,13 +22,13 @@ export class FurnishingController {
     ) {}
 
     @ApiBody({
-        type: FurnishingDto,
+        type: FurnishingWithFileDto,
         description: 'The furnishing to create',
         required: true
     })
     @ApiCreatedResponse({
         description: 'The furnishing has been successfully created.',
-        type: FurnishingDto,
+        type: FurnishingWithLinkDto,
     })
     @ApiNotFoundResponse({
         description: 'The element does not exist',
@@ -46,7 +50,9 @@ export class FurnishingController {
     })
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    create(@Body() furnishingDto: FurnishingDto) {
+    @UseInterceptors(new ParseIntFieldsInterceptor(['order']))
+    @FormDataRequest()
+    create(@Body() furnishingDto: FurnishingWithFileDto) {
         return this.service.create(furnishingDto);
     }
 
@@ -69,53 +75,12 @@ export class FurnishingController {
     })
     @ApiOkResponse({
         description: 'The furnishing has been successfully found.',
-        type: FurnishingDto,
+        type: FurnishingWithLinkDto,
     })
     @HttpCode(HttpStatus.OK)
     @Get(":id")
     get(@Param('id', ParseUUIDPipe) id: string ) {
         return this.service.get(id);
-    }
-
-    @ApiBody({
-        type: FurnishingDto,
-        description: 'The furnishing to update',
-        required: true
-    })
-    @ApiParam({
-        name: 'id',
-        type: 'string',
-        description: 'The id of the furnishing to update',
-        format: 'uuid',
-        example: '123e4567-e89b-12d3-a456-426614174000',
-        required: true,
-    })
-    @ApiNotFoundResponse({
-        description: 'The element does not exist',
-        schema: {
-            example: {
-                statusCode: 404,
-                message: 'element does not exist',
-            },
-        }
-    })
-    @ApiBadRequestResponse({
-        description: 'The element is not a furnishing',
-        schema: {
-            example: {
-                statusCode: 400,
-                message: 'element is not a furnishing',
-            },
-        }
-    })
-    @ApiOkResponse({
-        description: 'The furnishing has been successfully updated.',
-        type: FurnishingDto,
-    })
-    @HttpCode(HttpStatus.OK)
-    @Put(":id")
-    update(@Param('id', ParseUUIDPipe) id: string, @Body() furnishingDto: FurnishingDto) {
-        return this.service.update(id, furnishingDto);
     }
 
     @ApiParam({
@@ -128,7 +93,7 @@ export class FurnishingController {
     })
     @ApiOkResponse({
         description: 'The furnishing has been successfully found.',
-        type: FurnishingDto,
+        type: FurnishingWithLinkDto,
     })
 
     @ApiQuery({
@@ -149,7 +114,7 @@ export class FurnishingController {
     })
     @ApiOkResponse({
         description: 'The furnishing has been successfully found.',
-        type: FurnishingDto,
+        type: FurnishingWithLinkDto,
     })
     @HttpCode(HttpStatus.OK)
     @Get()
