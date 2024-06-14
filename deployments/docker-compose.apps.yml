@@ -14,6 +14,8 @@ services:
       - MINIO_ENDPOINT=${MINIO_ENDPOINT}
       - MINIO_USER=${MINIO_USER}
       - MINIO_PASSWORD=${MINIO_PASSWORD}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
+      - ENV=${ENV}
     ports:
       - "8080:8080"
     networks:

@@ -28,6 +28,7 @@ import { LeaseInspectionStepPictureModule } from '@modules/leaseInspectionStepPi
 import { LeaseInspectionSubStepPictureModule } from '@modules/leaseInspectionSubStepPicture.module';
 import { LeaseInspectionSubStepModule } from '@modules/leaseInspectionSubStep.module';
 import {EventEmitterModule} from "@nestjs/event-emitter";
+import {DiscordNotificationAdapter} from "@infrastructure/adapters/DiscordNotificationAdapter";
 
 @Module({
   imports: [
@@ -79,7 +80,8 @@ import {EventEmitterModule} from "@nestjs/event-emitter";
     }
   ],
   exports: [
-      JwtModule
+      JwtModule,
+      DiscordNotificationAdapter
   ],
   providers: [
     {
@@ -89,7 +91,8 @@ import {EventEmitterModule} from "@nestjs/event-emitter";
     {
       provide: APP_INTERCEPTOR,
       useClass: AgentInterceptor
-    }
+    },
+      DiscordNotificationAdapter
   ]
 })
 export class AppModule {}

@@ -7,7 +7,7 @@ import { ThirdController } from '@infrastructure/controllers/third.controller';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([Third])
+        TypeOrmModule.forFeature([Third]),
     ],
     providers: [
         ThirdService,

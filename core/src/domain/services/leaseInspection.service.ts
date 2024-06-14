@@ -7,7 +7,7 @@ import {LeaseInspectionRepository} from '@domain/repositories/leaseInspection.re
 import {LeaseInspectionDto} from '@infrastructure/dtos/leaseInspection.dto';
 import {LeaseInspectionDtoMapper} from '@infrastructure/mappers/leaseInspection.dto.mapper';
 import {EventEmitter2} from "@nestjs/event-emitter";
-import {LeaseInspectionCreatedEvent} from "@domain/events/leaseInspectionCreated.event";
+import {LeaseInspectionCreatedEvent} from "@domain/events/LeaseInspectionCreated.event";
 import {Lease} from "@domain/entities/lease.entity";
 import {LeaseInspectionStep} from "@domain/entities/leaseInspectionStep.entity";
 import {LeaseInspectionStepRepository} from "@domain/repositories/leaseInspectionStep.repository";
@@ -52,7 +52,8 @@ export class LeaseInspectionService {
         const leaseInspection = LeaseInspectionDtoMapper.toModel(leaseInspectionDto, lease, agent);
         const leaseInspectionCreated = await this.repository.save(leaseInspection);
 
-        this.eventEmitter.emit(LeaseInspectionCreatedEvent.eventName, new LeaseInspectionCreatedEvent(leaseInspectionCreated, lease.getEstate()));
+        const event = new LeaseInspectionCreatedEvent(leaseInspectionCreated, lease.getEstate());
+        this.eventEmitter.emit(LeaseInspectionCreatedEvent.eventName, event);
 
         return LeaseInspectionDtoMapper.fromModel(leaseInspectionCreated);
     }
