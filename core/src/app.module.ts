@@ -28,6 +28,7 @@ import { LeaseInspectionStepPictureModule } from '@modules/leaseInspectionStepPi
 import { LeaseInspectionSubStepPictureModule } from '@modules/leaseInspectionSubStepPicture.module';
 import { LeaseInspectionSubStepModule } from '@modules/leaseInspectionSubStep.module';
 import {EventEmitterModule} from "@nestjs/event-emitter";
+import { furnishingPictureModule } from '@modules/furnishingPicture.module';
 import {DiscordNotificationAdapter} from "@infrastructure/adapters/DiscordNotificationAdapter";
 
 @Module({
@@ -37,6 +38,7 @@ import {DiscordNotificationAdapter} from "@infrastructure/adapters/DiscordNotifi
     RoomModule,
     ElementModule,
     FurnishingModule,
+    furnishingPictureModule,
     StairModule,
     CeilingModule,
     GroundModule,

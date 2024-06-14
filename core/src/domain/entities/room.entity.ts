@@ -42,7 +42,7 @@ export class Room {
     @IsString({ message: 'assignment must be a valid string' })
     assignment: string;
 
-    @ManyToOne(() => Estate, estate => estate.id, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Estate, estate => estate.id, { onDelete: 'CASCADE' , eager: true})
     @IsOptional()
     estate?: Estate;
 

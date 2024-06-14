@@ -53,7 +53,7 @@ export class LeaseInspectionSubStepWithFileDto {
     @IsUUID(4, { message: 'leaseInspectionId must be a valid uuid' })
     @ApiProperty({
         type: 'string',
-        description: 'The id of the lease inspection step',
+        description: 'The id of the lease inspection sub step',
         example: '123e4567-e89b-12d3-a456-426614174000',
     })
     leaseInspectionStepId: string;
@@ -63,7 +63,7 @@ export class LeaseInspectionSubStepWithFileDto {
     @ApiProperty({
         required: true,
         type: 'file',
-        description: 'The picture of the estate with the format jpeg, jpg or png',
+        description: 'The pictures of the lease Inspection Sub Step with the format jpeg, jpg or png',
         example: 'picture.png',
         pattern: 'image/jpeg | image/png | image/jpg',
     })

@@ -64,7 +64,7 @@ export class LeaseInspectionStepWithFileDto {
     @ApiProperty({
         required: true,
         type: 'file',
-        description: 'The picture of the estate with the format jpeg, jpg or png',
+        description: 'The pictures of the lease inspection with the format jpeg, jpg or png',
         example: 'picture.png',
         pattern: 'image/jpeg | image/png | image/jpg',
     })
