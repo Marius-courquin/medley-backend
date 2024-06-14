@@ -21,8 +21,9 @@ export class ThirdController {
     })
     @HttpCode(HttpStatus.CREATED)
     @Post()
-    createThird(@Body() thirdDto: ThirdDto) {
-        return this.service.createThird(thirdDto);
+    async createThird(@Body() thirdDto: ThirdDto) {
+        const thirdCreated = await this.service.createThird(thirdDto);
+        return thirdCreated;
     }
 
     @ApiParam({

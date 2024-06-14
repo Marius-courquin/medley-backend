@@ -12,6 +12,7 @@ import {ElementModule} from '@modules/element.module';
 import {LeaseInspectionCreatedListener} from "@domain/listeners/leaseInspectionCreated.listener";
 import {RoomModule} from "@modules/room.module";
 import {LeaseInspectionSubStepModule} from "@modules/leaseInspectionSubStep.module";
+import {AdaptersModule} from "@modules/adapters.module";
 
 
 @Module({
@@ -23,7 +24,8 @@ import {LeaseInspectionSubStepModule} from "@modules/leaseInspectionSubStep.modu
         NestjsFormDataModule,
         ElementModule,
         RoomModule,
-        forwardRef(() => LeaseInspectionSubStepModule)
+        forwardRef(() => LeaseInspectionSubStepModule),
+        AdaptersModule
     ],
     providers: [
         LeaseInspectionStepService,

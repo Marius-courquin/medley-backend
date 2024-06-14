@@ -13,6 +13,7 @@ import {SignatureService} from '@/domain/services/signature.service';
 import {SignatureRepository} from '@/domain/repositories/signature.repository';
 import {FileModule} from './file.module';
 import {NestjsFormDataModule} from "nestjs-form-data";
+import {AdaptersModule} from "@modules/adapters.module";
 
 @Module({
     imports: [
@@ -23,7 +24,8 @@ import {NestjsFormDataModule} from "nestjs-form-data";
         forwardRef(() => LeaseInspectionStepModule),
         AgentModule,
         FileModule,
-        NestjsFormDataModule
+        NestjsFormDataModule,
+        AdaptersModule
     ],
     providers: [
         LeaseInspectionService,
