@@ -12,8 +12,8 @@ export class LeaseInspectionDtoMapper {
         return new LeaseInspectionDto(
             this.leaseInspectionTypeFromModel(leaseInspection.type),
             this.leaseInspectionStateFromModel(leaseInspection.state),
-            leaseInspection.endDate,
             leaseInspection.lease.id,
+            leaseInspection.endDate,
             leaseInspection.agent.id,
             agentSignature ?? undefined,
             tenantSignature ?? undefined,

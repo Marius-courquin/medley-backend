@@ -18,7 +18,7 @@ import {AdaptersModule} from "@modules/adapters.module";
 @Module({
     imports: [
         TypeOrmModule.forFeature([LeaseInspection]),
-        LeaseModule,
+        forwardRef(() => LeaseModule),
         AgentModule,
         RoomModule,
         forwardRef(() => LeaseInspectionStepModule),
@@ -36,7 +36,8 @@ import {AdaptersModule} from "@modules/adapters.module";
         LeaseInspectionClosedListener
     ],
     exports: [
-        LeaseInspectionRepository
+        LeaseInspectionRepository,
+        LeaseInspectionService
     ],
     controllers: [LeaseInspectionController]
 })

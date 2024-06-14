@@ -236,7 +236,7 @@ export class LeaseInspectionContextDto extends LeaseInspectionDto {
     rooms: LeaseInspectionContextRoomDto[];
 
     constructor(leaseInspectionDto: LeaseInspectionDto, rooms: LeaseInspectionContextRoomDto[]) {
-        super(leaseInspectionDto.type, leaseInspectionDto.state, leaseInspectionDto.endDate, leaseInspectionDto.leaseId, leaseInspectionDto.agentId, leaseInspectionDto.agentSignature, leaseInspectionDto.tenantSignature, leaseInspectionDto.id);
+        super(leaseInspectionDto.type, leaseInspectionDto.state, leaseInspectionDto.leaseId, leaseInspectionDto.endDate, leaseInspectionDto.agentId, leaseInspectionDto.agentSignature, leaseInspectionDto.tenantSignature, leaseInspectionDto.id);
         this.rooms = rooms;
     }
 }

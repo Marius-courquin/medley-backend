@@ -32,6 +32,6 @@ export class LeaseInspectionCreatedListener {
                 this.eventEmitter.emit(ElementCreatedOnLeaseInspectionCreationEvent.eventName, new ElementCreatedOnLeaseInspectionCreationEvent(leaseInspectionStepCreated));
             }
         }
-        this.notificationService.pushEmbed(this.notificationService.buildEventEmbed(LeaseInspectionCreatedEvent.eventName, LeaseInspectionCreatedEvent.eventMessage, event.getEventEmbedFields()));
+        await this.notificationService.pushEmbed(this.notificationService.buildEventEmbed(LeaseInspectionCreatedEvent.eventName, LeaseInspectionCreatedEvent.eventMessage, event.getEventEmbedFields()));
     }
 }
