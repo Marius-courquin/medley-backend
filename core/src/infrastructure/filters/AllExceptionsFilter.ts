@@ -10,6 +10,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
         const request = ctx.getRequest();
+
+        const isRequestFromBot =
+            exception instanceof HttpException &&
+            exception.getStatus() === HttpStatus.NOT_FOUND &&
+            exception.message.toLowerCase().includes('cannot');
+
+        if (isRequestFromBot) {
+            return;
+        }
+
         const status = exception instanceof HttpException
             ? exception.getStatus()
             : HttpStatus.INTERNAL_SERVER_ERROR;
