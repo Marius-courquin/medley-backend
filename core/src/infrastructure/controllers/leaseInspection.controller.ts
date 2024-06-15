@@ -24,7 +24,6 @@ export class LeaseInspectionController {
 
     constructor(
         private service: LeaseInspectionService,
-        private signatureService: SignatureService,
     ) {}
 
     @ApiBody({
@@ -151,13 +150,68 @@ export class LeaseInspectionController {
             },
         }
     })
+    @ApiUnauthorizedResponse({
+        description: 'The lease inspection is already closed',
+        schema: {
+            example: {
+                statusCode: 401,
+                message: 'lease inspection already closed',
+            },
+        }
+    })
+    @ApiUnauthorizedResponse({
+        description: 'The lease inspection is not started yet',
+        schema: {
+            example: {
+                statusCode: 401,
+                message: 'lease inspection not started yet',
+            },
+        }
+    })
     @ApiOkResponse({
         description: 'The lease inspection has been successfully closed.',
+        type: LeaseInspectionDto,
     })
     @HttpCode(HttpStatus.OK)
     @Post(':id/closure')
     close(@Param('id', ParseUUIDPipe) id: string) {
         return this.service.close(id);
+    }
+
+    @ApiParam({
+        name: 'id',
+        type: 'string',
+        description: 'The id of the lease inspection',
+        format: 'uuid',
+        example: '123e4567-e89b-12d3-a456-426614174000',
+        required: true,
+    })
+    @ApiNotFoundResponse({
+        description: 'The lease inspection does not exist',
+        schema: {
+            example: {
+                statusCode: 404,
+                message: 'lease inspection does not exist',
+            },
+        }
+    })
+    @ApiUnauthorizedResponse({
+        description: 'The lease inspection is already closed',
+        schema: {
+            example: {
+                statusCode: 401,
+                message: 'lease inspection already closed',
+            },
+        }
+    })
+    @ApiOkResponse({
+        description: 'The lease inspection has been successfully started.',
+        type: LeaseInspectionDto,
+    })
+    @HttpCode(HttpStatus.OK)
+    @Post(':id/start')
+    start(@Param('id', ParseUUIDPipe) id: string) {
+        return this.service.start(id);
     }
 
     @ApiParam({

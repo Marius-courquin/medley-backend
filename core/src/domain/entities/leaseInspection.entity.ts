@@ -69,8 +69,20 @@ export class LeaseInspection {
         this.agent = agent ?? undefined;
     }
 
+    start() {
+        this.state = LeaseInspectionState.IN_PROGRESS;
+    }
+
     close() {
         this.state = LeaseInspectionState.DONE;
+    }
+
+    isPending() {
+        return this.state === LeaseInspectionState.PENDING;
+    }
+
+    isClosed() {
+        return this.state === LeaseInspectionState.DONE;
     }
 
     isCheckIn() {
