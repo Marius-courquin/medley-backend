@@ -22,6 +22,7 @@ async function bootstrap() {
             description: 'Bearer token',
         })
         .addBearerAuth()
+        .setExternalDoc('Posman collection', '/api-json')
         .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document);
