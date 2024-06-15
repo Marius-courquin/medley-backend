@@ -22,6 +22,9 @@ export class LeaseInspectionRepository extends Repository<LeaseInspection>{
     async findByLease(leaseId: string): Promise<LeaseInspection[]> {
     return this.createQueryBuilder("lease_inspection")
         .leftJoinAndSelect("lease_inspection.lease", "lease")
+        .leftJoinAndSelect("lease_inspection.agent", "agent")
+        .leftJoinAndSelect("lease_inspection.agentSignature", "agentSignature")
+        .leftJoinAndSelect("lease_inspection.tenantSignature", "tenantSignature")
         .where("lease.id = :leaseId", { leaseId })
         .getMany();
     }
