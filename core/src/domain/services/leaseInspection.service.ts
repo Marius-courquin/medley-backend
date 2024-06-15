@@ -127,14 +127,31 @@ export class LeaseInspectionService {
         return LeaseInspectionDtoMapper.fromModel(await this.repository.updateElement(leaseInspection), agentSignatureDto, tenantSignatureDto);
     }
 
-    async close(leaseInspectionId: string): Promise<void> {
+    async close(leaseInspectionId: string): Promise<LeaseInspectionDto> {
         const leaseInspection: LeaseInspection = await this.repository.findById(leaseInspectionId);
         if (!leaseInspection) {
             throw new NotFoundException('lease inspection does not exist');
         }
+        if (leaseInspection.isClosed()) {
+            throw new UnauthorizedException('lease inspection already closed');
+        }
+        if (leaseInspection.isPending()) {
+            throw new UnauthorizedException('lease inspection not started yet');
+        }
         leaseInspection.close();
-        await this.repository.updateElement(leaseInspection)
-        return;
+        return LeaseInspectionDtoMapper.fromModel(await this.repository.updateElement(leaseInspection));
+    }
+
+    async start(leaseInspectionId: string): Promise<LeaseInspectionDto> {
+        const leaseInspection: LeaseInspection = await this.repository.findById(leaseInspectionId);
+        if (!leaseInspection) {
+            throw new NotFoundException('lease inspection does not exist');
+        }
+        if(leaseInspection.isClosed()) {
+            throw new UnauthorizedException('lease inspection already closed');
+        }
+        leaseInspection.start();
+        return LeaseInspectionDtoMapper.fromModel(await this.repository.updateElement(leaseInspection));
     }
 
     async getRelatedStepContext(leaseInspection: LeaseInspection,  elementType: ElementType, room: Room) {
