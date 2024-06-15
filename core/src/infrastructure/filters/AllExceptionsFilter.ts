@@ -6,12 +6,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     constructor(private readonly notificationService: DiscordNotificationAdapter) {
     }
 
-    private isProd: boolean = process.env.ENV === 'production';
-
     async catch(exception: unknown, host: ArgumentsHost) {
-        if(!this.isProd) {
-            throw exception;
-        } else if (!(exception instanceof HttpException)) {
+        if (!(exception instanceof HttpException)) {
             console.log(exception);
         }
         const ctx = host.switchToHttp();
