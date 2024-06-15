@@ -12,8 +12,8 @@ export class LeaseDtoMapper {
             lease.startDate.toString(),
             lease.endDate.toString(),
             lease.estate.id,
-            lease.agent.id,
             lease.tenant.id,
+            lease.agent.id,
             lease.id
         );
     }
