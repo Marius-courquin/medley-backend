@@ -13,9 +13,9 @@ import {ElementService} from "@domain/services/element.service";
 import {ElementTypeDto} from "@infrastructure/dtos/enum/element.enum.dto";
 import {WallDto} from "@infrastructure/dtos/wall.dto";
 import {
-    LeaseInspectionContextCeilingDto,
+    LeaseInspectionContextCeilingDto, LeaseInspectionContextFurnishingDto,
     LeaseInspectionContextGenericDto,
-    LeaseInspectionContextGroundDto,
+    LeaseInspectionContextGroundDto, LeaseInspectionContextStairDto,
     LeaseInspectionContextWallDto,
     LeaseInspectionContextWallSocketDto,
     LeaseInspectionContextWindowDto
@@ -25,6 +25,8 @@ import {SubElementType} from "@domain/entities/enum/subElement.enum.entity";
 import {LeaseInspectionSubStepService} from "@domain/services/leaseInspectionSubStep.service";
 import {LeaseInspectionSubStepRepository} from "@domain/repositories/leaseInspectionSubStep.repository";
 import {GroundDto} from "@infrastructure/dtos/ground.dto";
+import {StairDto} from "@infrastructure/dtos/stair.dto";
+import {FurnishingWithLinkDto} from "@infrastructure/dtos/furnishingWithLink.dto";
 
 @Injectable()
 export class LeaseInspectionStepService {
@@ -139,11 +141,11 @@ export class LeaseInspectionStepService {
                 const ground = relatedElement as GroundDto;
                 return new LeaseInspectionContextGroundDto(leaseInspectionStepDto, ground);
             case ElementTypeDto.STAIR:
-                const stair = relatedElement as GroundDto;
-                return new LeaseInspectionContextGroundDto(leaseInspectionStepDto, stair);
+                const stair = relatedElement as StairDto;
+                return new LeaseInspectionContextStairDto(leaseInspectionStepDto, stair);
             case ElementTypeDto.FURNISHING:
-                const furnishing = relatedElement as GroundDto;
-                return new LeaseInspectionContextGroundDto(leaseInspectionStepDto, furnishing);
+                const furnishing = relatedElement as FurnishingWithLinkDto;
+                return new LeaseInspectionContextFurnishingDto(leaseInspectionStepDto, furnishing);
         }
 
     }
