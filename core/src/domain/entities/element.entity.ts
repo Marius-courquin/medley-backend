@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn } from 'typeorm';
-import { IsEnum, IsOptional, IsUUID } from 'class-validator';
+import {IsEnum, IsOptional, IsString, IsUUID} from 'class-validator';
 import { Room } from '@domain/entities/room.entity';
 import { ElementType } from '@domain/entities/enum/element.enum.entity';
 
@@ -9,6 +9,11 @@ export class Element {
     @IsOptional()
     @IsUUID(4, { message: 'id must be a valid uuid' })
     id?: string;
+
+    @IsString({ message: 'name must be a string' })
+    @IsOptional()
+    @Column({nullable: true})
+    help?: string;
 
     @ManyToOne(() => Room, room => room.id, {nullable: true, eager: true})
     @IsOptional()
@@ -21,10 +26,11 @@ export class Element {
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" , name : "created_at"})
     createdAt: Date;
 
-    constructor(type: ElementType,id : string, room?: Room){
+    constructor(type: ElementType,id : string, room?: Room, help?: string){
         this.id = id ?? undefined;
         this.type = type;
         this.room = room ?? undefined;
+        this.help = help ?? undefined;
     }
 
 }

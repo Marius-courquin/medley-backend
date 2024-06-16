@@ -9,7 +9,8 @@ export class ElementDtoMapper {
         return new ElementDto(
             this.enumToDto(element.type),
             element.room.id,
-            element.id
+            element.id,
+            element.help
         );
     }
 
@@ -17,7 +18,8 @@ export class ElementDtoMapper {
         return new Element(
             this.enumToModel(elementDto.type),
             elementDto.id,
-            room
+            room,
+            elementDto.help
         );
     }
 
