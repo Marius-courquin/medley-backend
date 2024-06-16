@@ -109,6 +109,19 @@ export class FileService {
         }
     }
 
+    async deletePictureByKey(picture: Picture, key: string): Promise<void> {
+        const params = {
+            Bucket: this.PICTURE_BUCKET,
+            Key: `${key}/${picture.getId()}`
+        };
+
+        try {
+            await this.s3.deleteObject(params).promise();
+        } catch (error) {
+            console.error(`Failed to delete picture with key "${key}": ${error.message}`);
+        }
+    }
+
     private decodeMimeType(file: MemoryStoredFile): string {
         return file.mimetype.split('/')[1];
     }

@@ -25,9 +25,11 @@ export class LeaseInspectionStepPictureService {
     }
 
     async delete(leaseInspectionStepPictureId : string): Promise<DeleteResult> {
-        if (!await this.repository.findById(leaseInspectionStepPictureId)) {
+        const leaseInspectionStepPicture: LeaseInspectionStepPicture = await this.repository.findById(leaseInspectionStepPictureId);
+        if (!leaseInspectionStepPicture) {
             throw new NotFoundException('Lease inspection step picture does not exist');
         }
+        this.fileService.deletePictureByKey(leaseInspectionStepPicture.picture, this.getPictureKey(leaseInspectionStepPicture.leaseInspectionStep.leaseInspection.id, leaseInspectionStepPicture.leaseInspectionStep.id));
         return await this.repository.delete(leaseInspectionStepPictureId);
     }
     

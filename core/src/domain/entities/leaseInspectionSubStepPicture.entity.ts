@@ -15,7 +15,7 @@ export class LeaseInspectionSubStepPicture {
     @IsOptional()
     picture?: Picture
     
-    @ManyToOne(() => LeaseInspectionSubStep, leaseInspectionSubStep => leaseInspectionSubStep.id, { onDelete: 'CASCADE', eager: false})
+    @ManyToOne(() => LeaseInspectionSubStep, leaseInspectionSubStep => leaseInspectionSubStep.id, { onDelete: 'CASCADE', eager: true})
     @IsOptional()
     leaseInspectionSubStep?: LeaseInspectionSubStep;
 
