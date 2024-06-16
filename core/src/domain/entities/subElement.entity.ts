@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
-import { IsEnum, IsNumber, IsOptional, IsUUID } from 'class-validator';
+import {IsEnum, IsNumber, IsOptional, IsString, IsUUID} from 'class-validator';
 import { SubElementType } from '@/domain/entities/enum/subElement.enum.entity';
 import { Element } from '@domain/entities/element.entity';
 @Entity("sub_element")
@@ -8,6 +8,11 @@ export class SubElement {
     @IsOptional()
     @IsUUID(4, { message: 'id must be a valid uuid' })
     id?: string;
+
+    @IsString({ message: 'name must be a string' })
+    @IsOptional()
+    @Column({nullable: true})
+    help?: string;
 
     @Column({nullable: false, name : "order"})
     @IsNumber({}, { message: 'order must be a valid number' })
@@ -24,11 +29,12 @@ export class SubElement {
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" , name : "created_at"})
     createdAt: Date;
 
-    constructor(type: SubElementType, order: number, element?: Element, id?: string){
+    constructor(type: SubElementType, order: number, element?: Element, id?: string, help?: string){
         this.id = id ?? undefined;
         this.type = type;
         this.order = order;
         this.element = element ?? undefined;
+        this.help = help ?? undefined;
     }
 
 }

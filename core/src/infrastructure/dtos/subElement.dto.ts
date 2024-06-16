@@ -1,4 +1,4 @@
-import { IsEnum, IsNumber, IsOptional, IsUUID } from 'class-validator';
+import {IsEnum, IsNumber, IsOptional, IsString, IsUUID} from 'class-validator';
 import { SubElementTypeDto } from '@infrastructure/dtos/enum/subElement.enum.dto';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -14,6 +14,16 @@ export class SubElementDto {
         example: '123e4567-e89b-12d3-a456-426614174000',
     })
     id?: string;
+
+    @IsOptional()
+    @IsString({ message: 'help must be a string' })
+    @ApiProperty({
+        required: false,
+        type: 'string',
+        description: 'The help of the sub element',
+        example: 'This is the first window on your right when you enter.',
+    })
+    help?: string;
 
     @IsNumber({}, { message: 'roomCount must be a valid number' })
     @ApiProperty({
@@ -44,11 +54,12 @@ export class SubElementDto {
     })
     elementId: string;   
 
-    constructor (type: SubElementTypeDto, order: number, elementId: string, id?: string) {
+    constructor (type: SubElementTypeDto, order: number, elementId: string, id?: string, help?: string) {
         this.id = id ?? undefined;
         this.order = order;
         this.type = type;
         this.elementId = elementId;
+        this.help = help ?? undefined;
     }
 
 }

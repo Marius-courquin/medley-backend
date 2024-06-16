@@ -10,7 +10,8 @@ export class SubElementDtoMapper {
             this.enumToDto(subElement.type),
             subElement.order,
             subElement.element.id,
-            subElement.id
+            subElement.id,
+            subElement.help
         );
     }
 
@@ -19,7 +20,8 @@ export class SubElementDtoMapper {
             this.enumToModel(subElementDto.type),
             subElementDto.order,
             element,
-            subElementDto.id
+            subElementDto.id,
+            subElementDto.help
         );
     }
 

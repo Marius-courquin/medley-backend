@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsOptional, IsUUID } from "class-validator";
+import {IsEnum, IsOptional, IsString, IsUUID} from "class-validator";
 import { ElementTypeDto } from "@infrastructure/dtos/enum/element.enum.dto";
 
 export class ElementDto {
@@ -13,6 +13,16 @@ export class ElementDto {
         example: '123e4567-e89b-12d3-a456-426614174000',
     })
     id?: string;
+
+    @IsOptional()
+    @IsString({ message: 'name must be a string' })
+    @ApiProperty({
+        required: false,
+        type: 'string',
+        description: 'The help of the element',
+        example: 'This is the first wall on your right when you enter.',
+    })
+    help?: string;
 
     @IsEnum(ElementTypeDto, { message: 'type must be a valid type' })
     @ApiProperty({
@@ -35,10 +45,11 @@ export class ElementDto {
     roomId: string;
 
 
-    constructor (type: ElementTypeDto,roomId: string, id?: string) {
+    constructor (type: ElementTypeDto,roomId: string, id?: string, help?: string) {
         this.id = id ?? undefined;
         this.type = type;
         this.roomId = roomId;
+        this.help = help ?? undefined;
     }
 
 }
