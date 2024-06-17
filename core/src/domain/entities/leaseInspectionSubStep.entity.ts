@@ -15,13 +15,15 @@ export class LeaseInspectionSubStep {
     @IsEnum(LeaseInspectionSubStepState, { message: 'state must be a valid type' })
     state: LeaseInspectionSubStepState;
 
+    @IsOptional()
     @Column({nullable: true, name : "rating"})
     @IsNumber({}, { message: 'rating must be a valid number' })
-    rating: number;
+    rating?: number;
 
+    @IsOptional()
     @Column({nullable: true, name : "description"})
     @IsString({ message: 'description must be a valid string' })
-    description: string;
+    description?: string;
 
     @ManyToOne(() => LeaseInspectionStep, leaseInspectionStep => leaseInspectionStep.id, {nullable: true, eager: true})
     @IsOptional()

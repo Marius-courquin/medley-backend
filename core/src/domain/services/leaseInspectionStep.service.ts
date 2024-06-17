@@ -13,9 +13,11 @@ import {ElementService} from "@domain/services/element.service";
 import {ElementTypeDto} from "@infrastructure/dtos/enum/element.enum.dto";
 import {WallDto} from "@infrastructure/dtos/wall.dto";
 import {
-    LeaseInspectionContextCeilingDto, LeaseInspectionContextFurnishingDto,
+    LeaseInspectionContextCeilingDto,
+    LeaseInspectionContextFurnishingDto,
     LeaseInspectionContextGenericDto,
-    LeaseInspectionContextGroundDto, LeaseInspectionContextStairDto,
+    LeaseInspectionContextGroundDto,
+    LeaseInspectionContextStairDto,
     LeaseInspectionContextWallDto,
     LeaseInspectionContextWallSocketDto,
     LeaseInspectionContextWindowDto
@@ -27,6 +29,7 @@ import {LeaseInspectionSubStepRepository} from "@domain/repositories/leaseInspec
 import {GroundDto} from "@infrastructure/dtos/ground.dto";
 import {StairDto} from "@infrastructure/dtos/stair.dto";
 import {FurnishingWithLinkDto} from "@infrastructure/dtos/furnishingWithLink.dto";
+import {LeaseInspectionStepState} from "@domain/entities/enum/leaseInspectionStep.enum.entity";
 
 @Injectable()
 export class LeaseInspectionStepService {
@@ -93,6 +96,7 @@ export class LeaseInspectionStepService {
         }
         const pictures = isArray(leaseInspectionStepDto.pictures) ? leaseInspectionStepDto.pictures : [leaseInspectionStepDto.pictures];
         const leaseInspectionStepUpdated = LeaseInspectionStepDtoMapper.toModel(leaseInspectionStepDto, leaseInspection, element);
+        this.updateState(leaseInspectionStepUpdated);
         for (const picture of pictures) {
             await this.leaseInspectionStepPictureService.create(leaseInspectionStepUpdated, leaseInspection.id, picture);
         }
@@ -148,6 +152,25 @@ export class LeaseInspectionStepService {
                 return new LeaseInspectionContextFurnishingDto(leaseInspectionStepDto, furnishing);
         }
 
+    }
+
+    updateState(leaseInspectionStep: LeaseInspectionStep) {
+        switch (leaseInspectionStep.state) {
+            case LeaseInspectionStepState.PENDING:
+                if (leaseInspectionStep.rating && leaseInspectionStep.rating >= 0) {
+                    leaseInspectionStep.state = LeaseInspectionStepState.DONE;
+                } else {
+                    leaseInspectionStep.state = LeaseInspectionStepState.IN_PROGRESS;
+                }
+                break;
+            case LeaseInspectionStepState.IN_PROGRESS:
+                if (leaseInspectionStep.rating && leaseInspectionStep.rating >= 0) {
+                    leaseInspectionStep.state = LeaseInspectionStepState.DONE;
+                }
+                break;
+            default:
+                break;
+        }
     }
 
 }

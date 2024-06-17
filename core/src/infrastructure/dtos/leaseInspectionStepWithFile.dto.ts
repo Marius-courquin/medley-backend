@@ -2,7 +2,6 @@ import { ApiProperty } from "@nestjs/swagger";
 import {  IsEnum, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 import {  LeaseInspectionStepStateDto } from "@infrastructure/dtos/enum/leaseInspectionStep.enum.dto";
 import { HasMimeType, IsFiles, MemoryStoredFile } from "nestjs-form-data";
-import { ElementDto } from "./element.dto";
 
 export class LeaseInspectionStepWithFileDto {
     @IsOptional()
@@ -34,22 +33,24 @@ export class LeaseInspectionStepWithFileDto {
     elementId: string;
 
     @IsString({ message: 'description must be a valid string' })
+    @IsOptional()
     @ApiProperty({
         type: 'string',
         description: 'The description of the lease inspection step',
         example: 'The kitchen is in a bad state',
-        required: true,
+        required: false,
     })
     description: string;
 
+    @IsOptional()
     @IsNumber({}, { message: 'rating must be a valid number' })
     @ApiProperty({
         type: 'number',
         description: 'The rating of the lease inspection step',
         example: 3,
-        required: true,
+        required: false,
     })
-    rating: number;
+    rating?: number;
 
     @IsUUID(4, { message: 'leaseInspectionId must be a valid uuid' })
     @ApiProperty({
@@ -70,11 +71,11 @@ export class LeaseInspectionStepWithFileDto {
     })
     pictures?: MemoryStoredFile[];
 
-    constructor(state: LeaseInspectionStepStateDto, description: string, rating: number, leaseInspectionId: string, elementId: string, id: string, pictures?: MemoryStoredFile[]) {
+    constructor(state: LeaseInspectionStepStateDto, leaseInspectionId: string, elementId: string, id: string, pictures?: MemoryStoredFile[], description?: string, rating?: number) {
         this.id = id;
         this.state = state;
-        this.description = description;
-        this.rating = rating;
+        this.description = description ?? undefined;
+        this.rating = rating ?? undefined;
         this.leaseInspectionId = leaseInspectionId;
         this.elementId = elementId;
         this.pictures = pictures ?? undefined;
