@@ -19,6 +19,7 @@ import {
 import {GenericSubElementDto} from "@infrastructure/dtos/genericSubElement.dto";
 import {WindowDto} from "@infrastructure/dtos/window.dto";
 import {SubElementType} from "@domain/entities/enum/subElement.enum.entity";
+import {LeaseInspectionSubStepState} from "@domain/entities/enum/leaseInspectionSubStep.enum.entity";
 
 
 @Injectable()
@@ -86,6 +87,7 @@ export class LeaseInspectionSubStepService {
 
         const pictures = isArray(leaseInspectionSubStepDto.pictures) ? leaseInspectionSubStepDto.pictures : [leaseInspectionSubStepDto.pictures];
         const leaseInspectionSubStepUpdated = LeaseInspectionSubStepDtoMapper.toModel(leaseInspectionSubStepDto, leaseInspectionStep, subElement);
+        this.updateState(leaseInspectionSubStepUpdated);
         for (const picture of pictures) {
             await this.leaseInspectionSubStepPictureService.create(leaseInspectionSubStepUpdated, picture);
         }
@@ -115,6 +117,25 @@ export class LeaseInspectionSubStepService {
                 return new LeaseInspectionContextWindowDto(leaseInspectionStepDto, window);
         }
 
+    }
+
+    updateState(leaseInspectionSubStep: LeaseInspectionSubStep) {
+        switch (leaseInspectionSubStep.state) {
+            case LeaseInspectionSubStepState.PENDING:
+                if (leaseInspectionSubStep.rating && leaseInspectionSubStep.rating >= 0) {
+                    leaseInspectionSubStep.state = LeaseInspectionSubStepState.DONE;
+                } else {
+                    leaseInspectionSubStep.state = LeaseInspectionSubStepState.IN_PROGRESS;
+                }
+                break;
+            case LeaseInspectionSubStepState.IN_PROGRESS:
+                if (leaseInspectionSubStep.rating && leaseInspectionSubStep.rating >= 0) {
+                    leaseInspectionSubStep.state = LeaseInspectionSubStepState.DONE;
+                }
+                break;
+            default:
+                break;
+        }
     }
 
 }

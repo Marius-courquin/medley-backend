@@ -17,11 +17,13 @@ export class LeaseInspectionStep {
 
     @Column({nullable: true, name : "rating"})
     @IsNumber({}, { message: 'rating must be a valid number' })
-    rating: number;
+    @IsOptional()
+    rating?: number;
 
     @Column({nullable: true, name : "description"})
     @IsString({ message: 'description must be a valid string' })
-    description: string;
+    @IsOptional()
+    description?: string;
 
     @ManyToOne(() => LeaseInspection, leaseInspection => leaseInspection.id, {nullable: true, eager: true})
     @IsOptional()
