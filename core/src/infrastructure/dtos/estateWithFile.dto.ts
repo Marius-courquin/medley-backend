@@ -156,6 +156,7 @@ export class EstateWithFileDto {
     })
     ownerId: string;
 
+    @IsOptional()
     @IsFile()
     @HasMimeType(['image/jpeg', 'image/png', 'image/jpg'])
     @ApiProperty({
