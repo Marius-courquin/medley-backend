@@ -54,6 +54,11 @@ export class LeaseInspectionStepService {
             throw new NotFoundException('Element does not exist');
         }
         const leaseInspectionStep = await this.repository.save(LeaseInspectionStepDtoMapper.toModel(leaseInspectionStepDto, leaseInspection, element));
+
+        if (!leaseInspectionStepDto.pictures) {
+            return LeaseInspectionStepDtoMapper.fromModelWithLink(leaseInspectionStep, undefined);
+        }
+
         const pictures = isArray(leaseInspectionStepDto.pictures) ? leaseInspectionStepDto.pictures : [leaseInspectionStepDto.pictures];
         for (const picture of pictures) {
             await this.leaseInspectionStepPictureService.create(leaseInspectionStep, leaseInspection.id, picture);
@@ -94,9 +99,15 @@ export class LeaseInspectionStepService {
         if (!element) {
             throw new NotFoundException('Element does not exist');
         }
-        const pictures = isArray(leaseInspectionStepDto.pictures) ? leaseInspectionStepDto.pictures : [leaseInspectionStepDto.pictures];
+
         const leaseInspectionStepUpdated = LeaseInspectionStepDtoMapper.toModel(leaseInspectionStepDto, leaseInspection, element);
         this.updateState(leaseInspectionStepUpdated);
+
+        if (!leaseInspectionStepDto.pictures) {
+            return LeaseInspectionStepDtoMapper.fromModelWithLink(await this.repository.updateElement(leaseInspectionStepUpdated), undefined);
+        }
+
+        const pictures = isArray(leaseInspectionStepDto.pictures) ? leaseInspectionStepDto.pictures : [leaseInspectionStepDto.pictures];
         for (const picture of pictures) {
             await this.leaseInspectionStepPictureService.create(leaseInspectionStepUpdated, leaseInspection.id, picture);
         }
