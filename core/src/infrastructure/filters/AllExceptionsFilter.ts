@@ -27,9 +27,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
             ? exception.getStatus()
             : HttpStatus.INTERNAL_SERVER_ERROR;
 
-        const message = exception instanceof HttpException
+        let message = exception instanceof HttpException
             ? exception.message
-            : 'Internal server error';
+            : 'Internal server error : ' + exception;
+
+        if(Array.isArray(message)) {
+            message = message.join(', ');
+        }
 
         const tagHere = status === HttpStatus.INTERNAL_SERVER_ERROR;
         const now = new Date();
