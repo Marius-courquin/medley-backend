@@ -43,6 +43,11 @@ export class LeaseInspectionSubStepService {
             throw new NotFoundException('Sub element does not exist');
         }
         const leaseInspectionSubStep = await this.repository.save(LeaseInspectionSubStepDtoMapper.toModel(leaseInspectionSubStepDto, leaseInspectionStep, subElement));
+        
+        if (!leaseInspectionSubStepDto.pictures){
+            return LeaseInspectionSubStepDtoMapper.fromModelWithLink(leaseInspectionSubStep, undefined);
+        }
+
         const pictures = isArray(leaseInspectionSubStepDto.pictures) ? leaseInspectionSubStepDto.pictures : [leaseInspectionSubStepDto.pictures];
         for (const picture of pictures) {
             await this.leaseInspectionSubStepPictureService.create(leaseInspectionSubStep, picture);
@@ -85,9 +90,15 @@ export class LeaseInspectionSubStepService {
             throw new NotFoundException('Sub element does not exist');
         }
 
-        const pictures = isArray(leaseInspectionSubStepDto.pictures) ? leaseInspectionSubStepDto.pictures : [leaseInspectionSubStepDto.pictures];
         const leaseInspectionSubStepUpdated = LeaseInspectionSubStepDtoMapper.toModel(leaseInspectionSubStepDto, leaseInspectionStep, subElement);
         this.updateState(leaseInspectionSubStepUpdated);
+        
+        if (!leaseInspectionSubStepDto.pictures){
+            return LeaseInspectionSubStepDtoMapper.fromModelWithLink(await this.repository.updateElement(LeaseInspectionSubStepDtoMapper.toModel(leaseInspectionSubStepDto, leaseInspectionStep, subElement)), undefined);
+        }
+        
+        const pictures = isArray(leaseInspectionSubStepDto.pictures) ? leaseInspectionSubStepDto.pictures : [leaseInspectionSubStepDto.pictures];
+
         for (const picture of pictures) {
             await this.leaseInspectionSubStepPictureService.create(leaseInspectionSubStepUpdated, picture);
         }
