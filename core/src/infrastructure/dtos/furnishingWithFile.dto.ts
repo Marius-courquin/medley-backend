@@ -53,6 +53,7 @@ export class FurnishingWithFileDto {
     })
     elementId: string;
 
+    @IsOptional()
     @IsFile()
     @HasMimeType(['image/jpeg', 'image/png', 'image/jpg'])
     @ApiProperty({

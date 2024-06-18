@@ -60,6 +60,7 @@ export class LeaseInspectionStepWithFileDto {
     })
     leaseInspectionId: string;
 
+    @IsOptional()
     @IsFiles()
     @HasMimeType(['image/jpeg', 'image/png', 'image/jpg'],  { each: true })
     @ApiProperty({

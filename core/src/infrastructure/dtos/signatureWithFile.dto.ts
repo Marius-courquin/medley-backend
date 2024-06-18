@@ -23,6 +23,7 @@ export class SignatureWithFileDto{
     @IsDateString()
     signedOn: Date;
 
+    @IsOptional()
     @IsFile({ message: 'picture must be a file' })
     @HasMimeType(['image/jpeg', 'image/png'], { message: 'picture must be a valid image' })
     @ApiProperty({
@@ -31,7 +32,7 @@ export class SignatureWithFileDto{
         description: 'The picture of the signature',
         example: 'monkey.png',
     })
-    picture: MemoryStoredFile;
+    picture?: MemoryStoredFile;
 
     constructor(
         id: string,
