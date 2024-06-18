@@ -1,5 +1,6 @@
 import {ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus} from '@nestjs/common';
 import {DiscordNotificationAdapter} from "@infrastructure/adapters/DiscordNotificationAdapter";
+import {isObject} from "@nestjs/common/utils/shared.utils";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -31,8 +32,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
             ? exception.message
             : 'Internal server error : ' + exception;
 
-        if(Array.isArray(message)) {
-            message = message.join(', ');
+        if ((exception instanceof HttpException)) {
+            const response = exception.getResponse();
+            if (isObject(response) && response['message'] && Array.isArray(response['message'])
+                && response['message'].length > 0) {
+                message = response['message'].join(', ');
+            }
         }
 
         const tagHere = status === HttpStatus.INTERNAL_SERVER_ERROR;
