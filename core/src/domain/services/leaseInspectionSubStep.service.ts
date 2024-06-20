@@ -133,14 +133,14 @@ export class LeaseInspectionSubStepService {
     updateState(leaseInspectionSubStep: LeaseInspectionSubStep) {
         switch (leaseInspectionSubStep.state) {
             case LeaseInspectionSubStepState.PENDING:
-                if (leaseInspectionSubStep.rating && leaseInspectionSubStep.rating >= 0) {
+                if (leaseInspectionSubStep.rating != null  && leaseInspectionSubStep.rating >= 0) {
                     leaseInspectionSubStep.state = LeaseInspectionSubStepState.DONE;
                 } else {
                     leaseInspectionSubStep.state = LeaseInspectionSubStepState.IN_PROGRESS;
                 }
                 break;
             case LeaseInspectionSubStepState.IN_PROGRESS:
-                if (leaseInspectionSubStep.rating && leaseInspectionSubStep.rating >= 0) {
+                if (leaseInspectionSubStep.rating != null && leaseInspectionSubStep.rating >= 0) {
                     leaseInspectionSubStep.state = LeaseInspectionSubStepState.DONE;
                 }
                 break;
