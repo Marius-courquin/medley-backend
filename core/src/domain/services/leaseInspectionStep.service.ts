@@ -168,14 +168,14 @@ export class LeaseInspectionStepService {
     updateState(leaseInspectionStep: LeaseInspectionStep) {
         switch (leaseInspectionStep.state) {
             case LeaseInspectionStepState.PENDING:
-                if (leaseInspectionStep.rating && leaseInspectionStep.rating >= 0) {
+                if (leaseInspectionStep.rating != null && leaseInspectionStep.rating >= 0) {
                     leaseInspectionStep.state = LeaseInspectionStepState.DONE;
                 } else {
                     leaseInspectionStep.state = LeaseInspectionStepState.IN_PROGRESS;
                 }
                 break;
             case LeaseInspectionStepState.IN_PROGRESS:
-                if (leaseInspectionStep.rating && leaseInspectionStep.rating >= 0) {
+                if (leaseInspectionStep.rating != null && leaseInspectionStep.rating >= 0) {
                     leaseInspectionStep.state = LeaseInspectionStepState.DONE;
                 }
                 break;
