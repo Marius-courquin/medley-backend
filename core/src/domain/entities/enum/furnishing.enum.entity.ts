@@ -4,4 +4,5 @@ export enum FurnishingType {
     SOFA = 'SOFA',
     BED = 'BED',
     CLOSET = 'CLOSET',
+    DOOR = 'DOOR',
 }
