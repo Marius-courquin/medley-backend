@@ -168,6 +168,15 @@ export class LeaseInspectionController {
             },
         }
     })
+    @ApiUnauthorizedResponse({
+        description: 'The lease inspection is not fully signed',
+        schema: {
+            example: {
+                statusCode: 401,
+                message: 'lease inspection not fully signed',
+            },
+        }
+    })
     @ApiOkResponse({
         description: 'The lease inspection has been successfully closed.',
         type: LeaseInspectionDto,

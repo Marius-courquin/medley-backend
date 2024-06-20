@@ -28,6 +28,7 @@ import {RoomRepository} from "@domain/repositories/room.repository";
 import {SignatureRepository} from '@domain/repositories/signature.repository';
 import {SignatureWithFileDto} from '@/infrastructure/dtos/signatureWithFile.dto';
 import {SignatureService} from "@domain/services/signature.service";
+import {LeaseInspectionClosedEvent} from "@domain/events/LeaseInspectionClosed.event";
 
 @Injectable()
 export class LeaseInspectionService {
@@ -138,7 +139,14 @@ export class LeaseInspectionService {
         if (leaseInspection.isPending()) {
             throw new UnauthorizedException('lease inspection not started yet');
         }
+        if (!leaseInspection.agentSignature || !leaseInspection.tenantSignature) {
+            throw new UnauthorizedException('lease inspection not fully signed');
+        }
         leaseInspection.close();
+
+        const event = new LeaseInspectionClosedEvent(leaseInspection);
+        this.eventEmitter.emit(LeaseInspectionClosedEvent.eventName, event);
+
         return LeaseInspectionDtoMapper.fromModel(await this.repository.updateElement(leaseInspection));
     }
 
