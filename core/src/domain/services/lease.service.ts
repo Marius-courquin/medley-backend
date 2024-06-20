@@ -1,15 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { LeaseRepository } from '@domain/repositories/lease.repository';
-import { LeaseDto } from '@infrastructure/dtos/lease.dto';
-import { Lease } from '@domain/entities/lease.entity';
-import { AgentRepository } from '@domain/repositories/agent.repository';
-import { ThirdRepository } from '@domain/repositories/third.repository';
-import { LeaseDtoMapper } from '@infrastructure/mappers/lease.dto.mapper';
-import { EstateRepository } from '@domain/repositories/estate.repository';
+import {Injectable, NotFoundException} from '@nestjs/common';
+import {LeaseRepository} from '@domain/repositories/lease.repository';
+import {LeaseDto} from '@infrastructure/dtos/lease.dto';
+import {Lease} from '@domain/entities/lease.entity';
+import {AgentRepository} from '@domain/repositories/agent.repository';
+import {ThirdRepository} from '@domain/repositories/third.repository';
+import {LeaseDtoMapper} from '@infrastructure/mappers/lease.dto.mapper';
+import {EstateRepository} from '@domain/repositories/estate.repository';
 import {Third} from "@domain/entities/third.entity";
 import {Estate} from "@domain/entities/estate.entity";
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import {EventEmitter2} from '@nestjs/event-emitter';
 import {LeaseInspectionCreationOnLeaseCreationEvent} from "@domain/events/LeaseInspectionCreationOnLeaseCreation.event";
+import {LeaseInspectionRepository} from "@domain/repositories/leaseInspection.repository";
+import {LeaseInspectionState} from "@domain/entities/enum/leaseInspection.enum.entity";
 
 @Injectable()
 export class LeaseService {
@@ -19,6 +21,7 @@ export class LeaseService {
         private readonly thirdRepository: ThirdRepository,
         private readonly estateRepository: EstateRepository,
         private readonly eventEmitter: EventEmitter2,
+        private readonly leaseInspectionRepository: LeaseInspectionRepository
     ) {}
 
     async create(leaseDto: LeaseDto): Promise<LeaseDto> {
@@ -63,6 +66,12 @@ export class LeaseService {
         if (!lease) {
             throw new NotFoundException('no actual lease for this estate');
         }
+        const leaseInspections = await this.leaseInspectionRepository.findByLease(lease.id);
+        const remainsLeaseInspections = leaseInspections.filter(leaseInspection => leaseInspection.state !== LeaseInspectionState.DONE);
+        if (remainsLeaseInspections.length === 0) {
+            throw new NotFoundException('no actual lease for this estate');
+        }
+
         return LeaseDtoMapper.fromModel(lease);
     }
 
