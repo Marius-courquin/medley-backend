@@ -11,7 +11,8 @@ import {GenericSubElementDto} from "@infrastructure/dtos/genericSubElement.dto";
 import {LeaseInspectionStepWithLinkDto} from "@infrastructure/dtos/leaseInspectionStepWithLink.dto";
 import {LeaseInspectionSubStepWithLinkDto} from "@infrastructure/dtos/leaseInspectionSubStepWithLink.dto";
 import {ApiProperty} from "@nestjs/swagger";
-import {SignatureWithLinkDto} from "@infrastructure/dtos/signatureWithLink.dto";
+import {LeaseInspectionStepStateDto} from "@infrastructure/dtos/enum/leaseInspectionStep.enum.dto";
+import {LeaseInspectionSubStepStateDto} from "@infrastructure/dtos/enum/leaseInspectionSubStep.enum.dto";
 
 export class LeaseInspectionContextWindowDto extends LeaseInspectionSubStepWithLinkDto {
     @ApiProperty({
@@ -177,7 +178,21 @@ export class LeaseInspectionContextFurnishingDto extends LeaseInspectionStepWith
     }
 }
 
+export enum LeaseInspectionContextRoomStateDto {
+    PENDING = 'PENDING',
+    IN_PROGRESS = 'IN_PROGRESS',
+    DONE = 'DONE',
+}
+
 export class LeaseInspectionContextRoomDto extends RoomDto {
+    @ApiProperty({
+        type: LeaseInspectionContextWindowDto,
+        description: 'The room inspection state',
+        required: true,
+        isArray: true,
+    })
+    state: LeaseInspectionContextRoomStateDto;
+
     @ApiProperty({
         type: LeaseInspectionContextWallDto,
         description: 'The walls steps of the room',
@@ -223,6 +238,101 @@ export class LeaseInspectionContextRoomDto extends RoomDto {
         this.ground = ground;
         this.stairs = stairs;
         this.furnishings = furnishing;
+        this.determineState();
+    }
+
+    determineState() {
+        let criteriaCount = 0;
+        let criteriaLength = 0;
+
+        criteriaLength += this.walls.length;
+
+        this.walls.forEach(wall => {
+
+            criteriaLength += wall.wallSockets.length + wall.windows.length + wall.generic.length;
+
+            wall.wallSockets.forEach(wallSocket => {
+                if (wallSocket.state === LeaseInspectionSubStepStateDto.DONE) {
+                    criteriaCount++;
+                }
+            });
+
+            wall.windows.forEach(window => {
+                if (window.state === LeaseInspectionSubStepStateDto.DONE) {
+                    criteriaCount++;
+                }
+            });
+
+            wall.generic.forEach(generic => {
+                if (generic.state === LeaseInspectionSubStepStateDto.DONE) {
+                    criteriaCount++;
+                }
+            });
+
+            if (wall.state === LeaseInspectionStepStateDto.DONE) {
+                criteriaCount++;
+            }
+        });
+
+        if (this.ceiling) {
+            criteriaLength++;
+            this.ceiling.wallSockets.forEach(wallSocket => {
+                if (wallSocket.state === LeaseInspectionSubStepStateDto.DONE) {
+                    criteriaCount++;
+                    criteriaLength++;
+                }
+            });
+            this.ceiling.windows.forEach(window => {
+                if (window.state === LeaseInspectionSubStepStateDto.DONE) {
+                    criteriaCount++;
+                    criteriaLength++;
+                }
+            });
+            this.ceiling.generics.forEach(generic => {
+                if (generic.state === LeaseInspectionSubStepStateDto.DONE) {
+                    criteriaCount++;
+                    criteriaLength++;
+                }
+            });
+
+            if (this.ceiling.state === LeaseInspectionStepStateDto.DONE) {
+                criteriaCount++;
+            }
+        }
+
+        if (this.ground) {
+            criteriaLength++;
+
+            if (this.ground.state === LeaseInspectionStepStateDto.DONE) {
+                criteriaCount++;
+            }
+        }
+
+        this.stairs.forEach(stair => {
+            if (stair.state === LeaseInspectionStepStateDto.DONE) {
+                criteriaCount++;
+            }
+        })
+        criteriaLength += this.stairs.length;
+
+        this.furnishings.forEach(furnishing => {
+            if (furnishing.state === LeaseInspectionStepStateDto.DONE) {
+                criteriaCount++;
+            }
+        })
+        criteriaLength += this.furnishings.length;
+
+        switch (criteriaCount) {
+            case 0:
+                this.state = LeaseInspectionContextRoomStateDto.PENDING;
+                break;
+            case criteriaLength:
+                this.state = LeaseInspectionContextRoomStateDto.DONE;
+                break;
+            default:
+                this.state = LeaseInspectionContextRoomStateDto.IN_PROGRESS;
+                break;
+        }
     }
 }
 
