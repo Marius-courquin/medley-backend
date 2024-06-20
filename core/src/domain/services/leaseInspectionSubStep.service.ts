@@ -94,7 +94,7 @@ export class LeaseInspectionSubStepService {
         this.updateState(leaseInspectionSubStepUpdated);
         
         if (!leaseInspectionSubStepDto.pictures){
-            return LeaseInspectionSubStepDtoMapper.fromModelWithLink(await this.repository.updateElement(LeaseInspectionSubStepDtoMapper.toModel(leaseInspectionSubStepDto, leaseInspectionStep, subElement)), undefined);
+            return LeaseInspectionSubStepDtoMapper.fromModelWithLink(await this.repository.updateElement(leaseInspectionSubStepUpdated), undefined);
         }
         
         const pictures = isArray(leaseInspectionSubStepDto.pictures) ? leaseInspectionSubStepDto.pictures : [leaseInspectionSubStepDto.pictures];
